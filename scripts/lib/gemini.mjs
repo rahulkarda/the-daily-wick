@@ -134,9 +134,10 @@ async function callGemini(prompt, apiKey) {
         generationConfig: {
           temperature: 0.85,
           topP: 0.95,
-          maxOutputTokens: 2048,
+          maxOutputTokens: 8192,
           responseMimeType: 'application/json',
           responseSchema: RESPONSE_SCHEMA,
+          thinkingConfig: { thinkingBudget: 0 },
         },
         safetySettings: [
           { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
@@ -154,11 +155,79 @@ async function callGemini(prompt, apiKey) {
   const data = await res.json();
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Gemini returned no text');
+
+  // First try a clean parse
   try {
     return JSON.parse(text);
   } catch (err) {
-    throw new Error(`Gemini JSON parse failed: ${err.message}`);
+    // Common Gemini issue: occasional raw newlines or unescaped control chars
+    // inside string values. Try a repair pass before giving up.
+    try {
+      return JSON.parse(repairJson(text));
+    } catch (err2) {
+      // Log a window around the failure point so debugging is easy
+      if (process.env.DEBUG_GEMINI) {
+        console.error('[gemini] raw response (first 1200 chars):');
+        console.error(text.slice(0, 1200));
+      }
+      throw new Error(`Gemini JSON parse failed: ${err.message}`);
+    }
   }
+}
+
+/**
+ * Best-effort repair for common LLM JSON issues:
+ *  - strip ```json fences if present
+ *  - escape raw newlines/tabs that appear *inside* string values
+ *  - drop trailing commas
+ *
+ * State machine — walk through the text, track whether we're inside a string,
+ * and replace literal control chars with their JSON-escaped equivalents.
+ */
+function repairJson(text) {
+  // Strip code fences
+  let s = text.trim();
+  if (s.startsWith('```')) {
+    s = s.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
+  }
+
+  let out = '';
+  let inString = false;
+  let escape = false;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (escape) {
+      out += ch;
+      escape = false;
+      continue;
+    }
+    if (ch === '\\') {
+      out += ch;
+      escape = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      out += ch;
+      continue;
+    }
+    if (inString) {
+      // Replace raw control chars inside strings with their escaped forms
+      if (ch === '\n') { out += '\\n'; continue; }
+      if (ch === '\r') { out += '\\r'; continue; }
+      if (ch === '\t') { out += '\\t'; continue; }
+      const code = ch.charCodeAt(0);
+      if (code < 0x20) {
+        out += '\\u' + code.toString(16).padStart(4, '0');
+        continue;
+      }
+    }
+    out += ch;
+  }
+
+  // Drop trailing commas before } or ]
+  out = out.replace(/,\s*([}\]])/g, '$1');
+  return out;
 }
 
 export async function generateDraft({ prompt, apiKey }) {

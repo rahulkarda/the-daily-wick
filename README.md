@@ -4,7 +4,8 @@
 
 A fully-automated daily blog + newsletter for curious minds. One short, careful post — 250-500 words, two to three minutes to read — every weekday morning. Drafted by a language model, edited by a human, delivered to your inbox by 06:30 Pacific time.
 
-Live: **https://the-daily-wick.pages.dev**
+Live: **https://rahulkarda.github.io/the-daily-wick/**
+Repo: **https://github.com/rahulkarda/the-daily-wick**
 Newsletter archive: **https://buttondown.com/the-daily-wick**
 
 ---
@@ -43,7 +44,7 @@ Every issue follows the same shape:
                │
    2. git commit + push to main
                │
-   3. Cloudflare Pages auto-rebuilds the static site
+   3. GitHub Pages auto-rebuilds the static site (via `.github/workflows/deploy.yml`)
                │
    4. send-daily-newsletter.mjs
       │
@@ -61,13 +62,13 @@ All free tier. Public repo. Zero ongoing cost (until you cross 100 newsletter su
 
 ```bash
 # 1. Clone + install
-git clone https://github.com/<your-handle>/the-daily-wick
+git clone https://github.com/rahulkarda/the-daily-wick
 cd the-daily-wick
 nvm use            # Node 22 LTS
 npm install
 
 # 2. Local dev
-npm run dev        # http://localhost:4321
+npm run dev        # http://localhost:4321/the-daily-wick/
 
 # 3. Build for production (also runs Pagefind for search)
 npm run build
@@ -158,20 +159,19 @@ git revert HEAD
 git push
 ```
 
-Cloudflare Pages will rebuild within ~2 minutes and the post is gone from the site. Buttondown sends are immutable — if it already went out, send a correction issue.
+GitHub Pages will rebuild within ~1 minute and the post is gone from the site. Buttondown sends are immutable — if it already went out, send a correction issue.
 
 ---
 
-## Cloudflare Pages setup (one-time)
+## GitHub Pages setup (already done)
 
-1. Sign in at https://dash.cloudflare.com → **Pages** → **Create a project** → **Connect to Git**.
-2. Pick this repo, branch `main`.
-3. Build settings:
-   - **Framework preset:** Astro
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Environment variable:** `NODE_VERSION` = `22`
-4. Save and deploy. The site auto-rebuilds on every push to `main`.
+The site is deployed via the [`deploy.yml`](.github/workflows/deploy.yml) workflow — it builds Astro + Pagefind on every push to `main` and publishes the `dist/` artifact to GitHub Pages. The site lives at `https://rahulkarda.github.io/the-daily-wick/`.
+
+If you fork or adapt this:
+
+1. Repo Settings → **Pages** → set **Source** to "GitHub Actions"
+2. Push to `main` — the workflow handles the rest
+3. Site is live within ~1 minute
 
 ---
 
@@ -191,7 +191,8 @@ Cloudflare Pages will rebuild within ~2 minutes and the post is gone from the si
 | Gemini 2.5 Flash | ~250-1500 req/day             | 1 + ≤2 retries     |
 | Unsplash demo    | 50 req/hr                     | 2/day              |
 | Buttondown       | 100 subscribers, no email cap | Stay under 100     |
-| Cloudflare Pages | 500 builds/mo                 | ~22 builds/mo      |
+| Cloudflare Pages | n/a (using GitHub Pages)      | n/a                |
+| GitHub Pages     | unlimited (public repo)       | ~1 build/day       |
 | GitHub Actions   | Public repo: unlimited        | ~5 min/day          |
 
 Buttondown's $9/mo upgrade unlocks 1k subs and is the only paid step on the path. Plan to upgrade at ~90 subscribers.
@@ -211,7 +212,7 @@ Every post has a short AI-disclosure footer linking to [`/editorial-standards`](
 ## Tech
 
 - **Framework:** [Astro](https://astro.build) (static output)
-- **Hosting:** [Cloudflare Pages](https://pages.cloudflare.com) (free)
+- **Hosting:** [GitHub Pages](https://pages.github.com) (free, deployed via Actions)
 - **Search:** [Pagefind](https://pagefind.app) (built at deploy time, zero JS framework)
 - **Fonts:** [Fraunces](https://fonts.google.com/specimen/Fraunces) headlines + [Inter](https://rsms.me/inter/) body, self-hosted via `@fontsource`
 - **Newsletter:** [Buttondown](https://buttondown.com) free tier
