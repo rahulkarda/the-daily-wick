@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import InlineSubscribe from '@/components/InlineSubscribe.astro';
+import { SITE } from '@/consts';
+import { path } from '@/lib/path';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+const sorted = all.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const [featured, ...rest] = sorted;
+const cards = rest.slice(0, 8);
+const monthlyTheme = featured?.data.monthlyTheme;
+---
+
+<BaseLayout title={SITE.name} description={SITE.description}>
+  <section class="hero">
+    <div class="container hero__inner">
+      {monthlyTheme && <span class="theme-tag">This month: {monthlyTheme}</span>}
+      <h1 class="hero__title">{SITE.tagline}.</h1>
+      <p class="hero__lede">
+        A daily byte-size newsletter for curious minds. <br />
+        One idea, one question, one action — every weekday morning.
+      </p>
+      <div class="hero__cta">
+        <a href={path('/subscribe')} class="btn btn-primary">Read the next one</a>
+        <a href={path('/articles')} class="btn btn-ghost">Browse the archive →</a>
+      </div>
+    </div>
+  </section>
+
+  {featured && (
+    <section class="featured container">
+      <p class="eyebrow">Most recent</p>
+      <PostCard post={featured} featured={true} />
+    </section>
+  )}
+
+  {cards.length > 0 && (
+    <section class="grid-section container">
+      <p class="eyebrow">Lately on the wick</p>
+      <div class="card-grid">
+        {cards.map((p) => <PostCard post={p} />)}
+      </div>
+      <p class="see-all">
+        <a href={path('/articles')}>See every post →</a>
+      </p>
+    </section>
+  )}
+
+  <section class="container container--narrow subscribe-section">
+    <InlineSubscribe variant="hero" />
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 5rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero__inner {
+    max-width: 42rem;
+  }
+  .theme-tag {
+    margin-bottom: 1.5rem;
+  }
+  .hero__title {
+    font-size: var(--step-4);
+    margin: 0 0 1.5rem;
+    text-wrap: balance;
+  }
+  .hero__lede {
+    color: var(--text-muted);
+    font-size: var(--step-1);
+    font-style: italic;
+    font-family: var(--font-serif);
+    margin: 0 0 2rem;
+    text-wrap: balance;
+  }
+  .hero__cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--step--1);
+    transition: transform 150ms ease, background-color 150ms ease;
+  }
+  .btn:hover { transform: translateY(-1px); text-decoration: none; }
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-ghost {
+    color: var(--text);
+    border: 1px solid var(--rule);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .featured {
+    padding-block: 4rem 2rem;
+  }
+  .featured .eyebrow {
+    margin-bottom: 1.5rem;
+  }
+
+  .grid-section {
+    padding-block: 3rem;
+  }
+  .grid-section .eyebrow {
+    margin-bottom: 1.5rem;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem 2rem;
+  }
+  .see-all {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+  .see-all a {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+  .see-all a:hover { color: var(--accent); }
+
+  .subscribe-section {
+    padding-block: 4rem;
+  }
+</style>

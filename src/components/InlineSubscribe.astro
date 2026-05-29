@@ -1,0 +1,113 @@
+---
+/**
+ * InlineSubscribe — reused on hero, post bottom, /subscribe page.
+ * Posts directly to Buttondown's embed endpoint; no JS required.
+ *
+ * Variant `inline` is the post-bottom CTA ("Worth your minute?")
+ * Variant `hero` is bigger, used on homepage and /subscribe.
+ */
+import { SITE, SUBSCRIBE_COPY } from '@/consts';
+
+interface Props {
+  variant?: 'inline' | 'hero';
+}
+
+const { variant = 'inline' } = Astro.props;
+const action = `https://buttondown.com/api/emails/embed-subscribe/${SITE.buttondownHandle}`;
+const popup = `https://buttondown.com/${SITE.buttondownHandle}`;
+const heading =
+  variant === 'hero' ? SUBSCRIBE_COPY.hero : SUBSCRIBE_COPY.inlinePromptHeading;
+const sub =
+  variant === 'hero' ? SUBSCRIBE_COPY.subhero : SUBSCRIBE_COPY.inlinePromptBody;
+---
+
+<div class:list={['subscribe', variant === 'hero' && 'subscribe--hero']}>
+  <h2 class="subscribe__heading">{heading}</h2>
+  <p class="subscribe__sub">{sub}</p>
+  <form
+    action={action}
+    method="post"
+    target="popupwindow"
+    onsubmit={`window.open('${popup}','popupwindow')`}
+    class="subscribe__form"
+  >
+    <label for={`bd-email-${variant}`} class="sr-only">Your email</label>
+    <input
+      type="email"
+      name="email"
+      id={`bd-email-${variant}`}
+      required
+      placeholder="you@example.com"
+      autocomplete="email"
+    />
+    <input type="hidden" value="1" name="embed" />
+    <button type="submit">{SUBSCRIBE_COPY.buttonLabel}</button>
+  </form>
+  <p class="subscribe__fineprint">{SUBSCRIBE_COPY.fineprint}</p>
+</div>
+
+<style>
+  .subscribe {
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+  }
+  .subscribe--hero {
+    padding: 3rem 2rem;
+  }
+  .subscribe__heading {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    margin: 0 0 0.5rem;
+  }
+  .subscribe--hero .subscribe__heading {
+    font-size: var(--step-3);
+  }
+  .subscribe__sub {
+    color: var(--text-muted);
+    margin: 0 auto 1.5rem;
+    max-width: 36ch;
+  }
+  .subscribe__form {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 28rem;
+    margin: 0 auto;
+  }
+  .subscribe__form input[type='email'] {
+    flex: 1 1 16rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: var(--radius);
+    font-size: var(--step-0);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .subscribe__form input[type='email']:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .subscribe__form button {
+    padding: 0.75rem 1.5rem;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: var(--radius);
+    font-weight: 500;
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+  .subscribe__form button:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+  .subscribe__fineprint {
+    margin: 1rem 0 0;
+    font-size: var(--step--2);
+    color: var(--text-muted);
+  }
+</style>

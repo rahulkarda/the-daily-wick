@@ -1,0 +1,65 @@
+---
+interface Props {
+  prevUrl?: string;
+  nextUrl?: string;
+  current: number;
+  last: number;
+}
+
+const { prevUrl, nextUrl, current, last } = Astro.props;
+---
+
+<nav class="pagination" aria-label="Pagination">
+  <a
+    href={prevUrl ?? '#'}
+    class="pagination__btn"
+    aria-disabled={!prevUrl}
+    tabindex={prevUrl ? 0 : -1}
+  >
+    ← Newer
+  </a>
+  <span class="pagination__count">{current} / {last}</span>
+  <a
+    href={nextUrl ?? '#'}
+    class="pagination__btn"
+    aria-disabled={!nextUrl}
+    tabindex={nextUrl ? 0 : -1}
+  >
+    Older →
+  </a>
+</nav>
+
+<style>
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+  .pagination__btn {
+    color: var(--text);
+    text-decoration: none;
+    font-size: var(--step--1);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+  .pagination__btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .pagination__btn[aria-disabled='true'] {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .pagination__count {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

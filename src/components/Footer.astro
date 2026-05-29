@@ -1,0 +1,123 @@
+---
+import { SITE, NAV, FOOTER_NAV } from '@/consts';
+import { path } from '@/lib/path';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="brand__name">{SITE.name}</p>
+      <p class="brand__tagline">{SITE.tagline}</p>
+      <p class="brand__manifesto">
+        A daily byte-size newsletter for curious minds — one idea, one question,
+        one action, every weekday morning.
+      </p>
+    </div>
+
+    <div class="site-footer__nav">
+      <h3>Read</h3>
+      <ul>
+        {NAV.map(({ label, href }) => (
+          <li><a href={path(href)}>{label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="site-footer__nav">
+      <h3>About</h3>
+      <ul>
+        {FOOTER_NAV.map(({ label, href }) => (
+          <li><a href={path(href)}>{label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>© {year} {SITE.name}. Built openly on GitHub. <a href={path('/editorial-standards')}>How posts are made.</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 6rem;
+    padding-block: 3rem 1.5rem;
+    background: var(--bg-elev);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .site-footer__brand .brand__name {
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    font-weight: 600;
+    margin: 0;
+  }
+  .site-footer__brand .brand__tagline {
+    font-style: italic;
+    color: var(--text-muted);
+    margin: 0.25rem 0 1rem;
+  }
+  .site-footer__brand .brand__manifesto {
+    color: var(--text-muted);
+    max-width: 36ch;
+    font-size: var(--step--1);
+    margin: 0;
+  }
+
+  .site-footer__nav h3 {
+    font-family: var(--font-sans);
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+  }
+  .site-footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-footer__nav li + li {
+    margin-top: 0.4rem;
+  }
+  .site-footer__nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: var(--step--1);
+  }
+  .site-footer__nav a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .site-footer__bottom {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    text-align: center;
+  }
+  .site-footer__bottom a {
+    color: var(--text-muted);
+  }
+  .site-footer__bottom a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

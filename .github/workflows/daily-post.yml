@@ -1,0 +1,83 @@
+name: Daily post + newsletter
+
+on:
+  schedule:
+    # 06:30 PT (Mon-Fri) = 13:30 UTC during PDT, 14:30 UTC during PST.
+    # We pick 13:30 UTC; it lands at 06:30 in summer and 05:30 in winter.
+    # Adjust to '30 14 * * 1-5' if you prefer a fixed 06:30 PST anchor.
+    - cron: '30 13 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'If true, generate to tmp/ without committing or sending'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-post
+  cancel-in-progress: false
+
+jobs:
+  generate-and-send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+      SITE_URL: https://rahulkarda.github.io/the-daily-wick
+      CURATOR_NAME: ${{ vars.CURATOR_NAME || 'the Editor' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate today's post
+        id: gen
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            node scripts/generate-daily-post.mjs --dry-run
+          else
+            node scripts/generate-daily-post.mjs
+          fi
+
+      - name: Commit and push
+        if: ${{ inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "daily-wick-bot"
+          git config user.email "actions@github.com"
+          git add src/content/posts/ content/state/ src/content/newsletter-issues/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit (post may already exist for today)."
+            exit 0
+          fi
+          git commit -m "post: $(date -u +%Y-%m-%d) [skip ci]"
+          git push origin main
+
+      - name: Send newsletter
+        if: ${{ inputs.dry_run != 'true' }}
+        run: node scripts/send-daily-newsletter.mjs
+
+      - name: Commit newsletter archive marker
+        if: ${{ inputs.dry_run != 'true' }}
+        run: |
+          git add src/content/newsletter-issues/ content/state/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No newsletter archive changes."
+            exit 0
+          fi
+          git commit -m "newsletter: $(date -u +%Y-%m-%d) [skip ci]"
+          git push origin main

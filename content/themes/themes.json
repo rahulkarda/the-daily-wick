@@ -1,0 +1,17 @@
+{
+  "themes": [
+    { "month": "2026-05", "theme": "Attention", "description": "Where we look becomes who we are." },
+    { "month": "2026-06", "theme": "Foundations", "description": "Habits, first principles, the things that hold the rest up." },
+    { "month": "2026-07", "theme": "Attention", "description": "Where we look becomes who we are." },
+    { "month": "2026-08", "theme": "Resilience", "description": "Bending without breaking; recovery as a skill." },
+    { "month": "2026-09", "theme": "Craft", "description": "The patient pursuit of better work." },
+    { "month": "2026-10", "theme": "Friction", "description": "Useful resistance and the costs of ease." },
+    { "month": "2026-11", "theme": "Gratitude", "description": "Noticing what was already enough." },
+    { "month": "2026-12", "theme": "Endings", "description": "Closing loops, year-in-review, what to keep." },
+    { "month": "2027-01", "theme": "Beginnings", "description": "Starting small, starting again." },
+    { "month": "2027-02", "theme": "Discipline", "description": "Showing up when motivation has left the room." },
+    { "month": "2027-03", "theme": "Curiosity", "description": "Questions worth carrying around." },
+    { "month": "2027-04", "theme": "Connection", "description": "The other people in our story." },
+    { "month": "2027-05", "theme": "Stillness", "description": "Doing less, on purpose." }
+  ]
+}

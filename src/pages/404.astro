@@ -1,0 +1,43 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/path';
+---
+
+<BaseLayout title="Not found" description="This wick hasn't been lit yet.">
+  <section class="container container--narrow notfound">
+    <p class="eyebrow">Error 404</p>
+    <h1>This wick hasn't been lit.</h1>
+    <p>
+      The page you were looking for isn't here. Maybe it was never written, maybe
+      it was renamed, or maybe you just got redirected by an enthusiastic spell-checker.
+    </p>
+    <p class="notfound__cta">
+      <a href={path('/')}>← Back to the homepage</a>
+      <a href={path('/articles')}>See every post</a>
+      <a href={path('/subscribe')}>Subscribe</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding-block: 6rem 4rem;
+    text-align: center;
+  }
+  .notfound h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+  .notfound p {
+    color: var(--text-muted);
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+  .notfound__cta {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

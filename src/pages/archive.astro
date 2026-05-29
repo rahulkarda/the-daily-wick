@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatDateShort, getYear, getMonthKey } from '@/lib/format-date';
+import { path } from '@/lib/path';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+all.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+// Group by year, then by month
+type Post = (typeof all)[number];
+const byYear: Record<string, Record<string, Post[]>> = {};
+for (const p of all) {
+  const y = String(getYear(p.data.pubDate));
+  const m = getMonthKey(p.data.pubDate);
+  byYear[y] ??= {};
+  byYear[y][m] ??= [];
+  byYear[y][m].push(p);
+}
+const years = Object.keys(byYear).sort((a, b) => Number(b) - Number(a));
+
+// Theme by month-key for the badges
+const themesByMonth: Record<string, string> = {};
+for (const p of all) {
+  themesByMonth[getMonthKey(p.data.pubDate)] = p.data.monthlyTheme;
+}
+---
+
+<BaseLayout title="Archive" description="Every post, grouped by month.">
+  <section class="archive container">
+    <header class="archive__header">
+      <p class="eyebrow">The whole shelf</p>
+      <h1>Archive</h1>
+      <p>{all.length} posts. Grouped by month, newest first.</p>
+    </header>
+
+    {years.map((y) => {
+      const months = Object.keys(byYear[y]).sort((a, b) => b.localeCompare(a));
+      return (
+        <section class="year">
+          <h2 class="year__heading">{y}</h2>
+          {months.map((m) => {
+            const posts = byYear[y][m];
+            const monthName = MONTH_NAMES[Number(m.split('-')[1]) - 1];
+            const theme = themesByMonth[m];
+            return (
+              <details class="month" open>
+                <summary>
+                  <span class="month__name">{monthName}</span>
+                  <span class="month__count">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</span>
+                  {theme && <span class="theme-tag">{theme}</span>}
+                </summary>
+                <ul class="month__list">
+                  {posts.map((p) => (
+                    <li>
+                      <time datetime={p.data.pubDate.toISOString()}>{formatDateShort(p.data.pubDate)}</time>
+                      <a href={path(`/articles/${p.slug}`)}>{p.data.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            );
+          })}
+        </section>
+      );
+    })}
+  </section>
+</BaseLayout>
+
+<style>
+  .archive {
+    padding-block: 4rem 2rem;
+    max-width: 48rem;
+  }
+  .archive__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .archive__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+
+  .year {
+    margin-bottom: 3rem;
+  }
+  .year__heading {
+    font-size: var(--step-2);
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .month {
+    margin-bottom: 1.5rem;
+  }
+  .month summary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    list-style: none;
+  }
+  .month summary::-webkit-details-marker {
+    display: none;
+  }
+  .month summary::before {
+    content: '▾';
+    color: var(--text-muted);
+    transition: transform 150ms ease;
+  }
+  .month:not([open]) summary::before {
+    transform: rotate(-90deg);
+    display: inline-block;
+  }
+  .month__name {
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    font-weight: 500;
+  }
+  .month__count {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+  .month__list {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin: 0.75rem 0 0;
+  }
+  .month__list li {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    padding-block: 0.4rem;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .month__list time {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+  .month__list a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+  .month__list a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 540px) {
+    .month__list li {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

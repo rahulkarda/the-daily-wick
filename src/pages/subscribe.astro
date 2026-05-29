@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import InlineSubscribe from '@/components/InlineSubscribe.astro';
+import { SITE } from '@/consts';
+import { path } from '@/lib/path';
+---
+
+<BaseLayout
+  title="Subscribe"
+  description={`Subscribe to ${SITE.name}. One email each weekday morning.`}
+>
+  <article class="sub-page">
+    <header class="container container--narrow sub-page__header">
+      <p class="eyebrow">Free · Weekday mornings · Unsubscribe anytime</p>
+      <h1>Light the wick.</h1>
+      <p class="sub-page__lede">
+        One small flame in your inbox each weekday morning. <br />
+        Read it before your second sip of coffee.
+      </p>
+    </header>
+
+    <section class="container container--narrow sub-page__form">
+      <InlineSubscribe variant="hero" />
+    </section>
+
+    <section class="container container--narrow prose sub-page__what">
+      <h2>What you'll get</h2>
+      <p>Every weekday, before breakfast, a single short post in this format:</p>
+      <ol>
+        <li>
+          <strong>The Idea</strong> — one concept, defined plainly, illustrated with
+          a real example. ~250-400 words.
+        </li>
+        <li>
+          <strong>One Question</strong> — a single sentence to sit with. The kind of
+          question whose answer takes the rest of the day.
+        </li>
+        <li>
+          <strong>Today's Action</strong> — one to three concrete things you can do
+          in the next twelve hours. Not aspirational. Doable.
+        </li>
+        <li>
+          <strong>Go Deeper</strong> — a few cited links if the rabbit hole calls.
+        </li>
+      </ol>
+
+      <h2>The cadence</h2>
+      <p>
+        One email each weekday morning, at 06:30 Pacific (09:30 Eastern, 14:30 UTC,
+        19:00 Indian Standard). Most issues take about 2-3 minutes to read.
+      </p>
+      <p>
+        Each calendar month follows a single theme — <em>Foundations</em>, <em>Attention</em>,
+        <em>Resilience</em>, <em>Craft</em>, <em>Friction</em>, <em>Gratitude</em> — and each issue is one
+        angle on it.
+      </p>
+
+      <h2>How posts are made</h2>
+      <p>
+        Each issue is drafted with help from a language model and edited by a human
+        curator before it ships. Sources are real. Quotes are checked. Read our
+        <a href={path('/editorial-standards')}>editorial standards</a> if you'd like the full picture.
+      </p>
+
+      <h2>The fine print</h2>
+      <ul>
+        <li>Free. No paywall. No upsell.</li>
+        <li>Unsubscribe in one click — every email has the link at the bottom.</li>
+        <li>
+          The full archive lives at <a href={`https://buttondown.com/${SITE.buttondownHandle}`} target="_blank" rel="noopener">buttondown.com/{SITE.buttondownHandle}</a>.
+        </li>
+        <li>You can also subscribe via <a href={path('/rss.xml')}>RSS</a>.</li>
+      </ul>
+    </section>
+
+    <section class="container container--narrow sub-page__footer-cta">
+      <InlineSubscribe variant="inline" />
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .sub-page { padding-block: 4rem 2rem; }
+  .sub-page__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .sub-page__header h1 {
+    font-size: var(--step-4);
+    margin: 0.75rem 0 1rem;
+  }
+  .sub-page__lede {
+    color: var(--text-muted);
+    font-size: var(--step-1);
+    font-style: italic;
+    font-family: var(--font-serif);
+    text-wrap: balance;
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+  .sub-page__form { margin-bottom: 4rem; }
+  .sub-page__what { margin-bottom: 4rem; }
+  .sub-page__what h2 { margin-top: 2.5em; }
+  .sub-page__footer-cta { margin-top: 3rem; }
+</style>

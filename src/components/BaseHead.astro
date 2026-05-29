@@ -1,0 +1,63 @@
+---
+/**
+ * BaseHead — meta + OG + favicon + font preloads.
+ * Used inside BaseLayout's <head>.
+ */
+import { SITE } from '@/consts';
+import { path } from '@/lib/path';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  pubDate?: Date;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = '/og-default.png',
+  pubDate,
+  type = 'website',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const imageURL = new URL(path(image), Astro.site).toString();
+const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+
+<link rel="canonical" href={canonicalURL} />
+
+<link rel="icon" type="image/svg+xml" href={path('/favicon.svg')} />
+<link rel="apple-touch-icon" href={path('/apple-touch-icon.png')} />
+<link rel="alternate" type="application/rss+xml" title={SITE.name} href={path('/rss.xml')} />
+
+<meta name="theme-color" content="#f8f4ec" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#161312" media="(prefers-color-scheme: dark)" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content={SITE.locale} />
+{pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+
+<!-- Sitemap -->
+<link rel="sitemap" href={path('/sitemap-index.xml')} />

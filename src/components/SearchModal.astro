@@ -1,0 +1,118 @@
+---
+/**
+ * SearchModal — wraps Pagefind's default UI in our themed modal.
+ * Triggered by the Header's "open-search" button or Cmd/Ctrl+K.
+ */
+import { path } from '@/lib/path';
+const pagefindCssHref = path('/pagefind/pagefind-ui.css');
+const pagefindJsHref = path('/pagefind/pagefind-ui.js');
+---
+
+<dialog id="search-dialog" class="search-dialog" aria-label="Search">
+  <div class="search-dialog__inner">
+    <button id="close-search" type="button" class="search-dialog__close" aria-label="Close">×</button>
+    <div id="search"></div>
+  </div>
+</dialog>
+
+<link rel="stylesheet" href={pagefindCssHref} />
+<script is:inline define:vars={{ pagefindJsHref }}>
+  // Expose the resolved URL so the module script below can read it.
+  window.__pagefindJsHref = pagefindJsHref;
+</script>
+
+<style>
+  .search-dialog {
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    width: min(90vw, 36rem);
+    max-height: 70vh;
+    box-shadow: var(--shadow-modal);
+  }
+  .search-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+  }
+  .search-dialog__inner {
+    padding: 1.5rem 1.5rem 1rem;
+    position: relative;
+  }
+  .search-dialog__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+  }
+  .search-dialog__close:hover { color: var(--accent); }
+
+  /* Override Pagefind's defaults to match our theme */
+  :global(.pagefind-ui__form) {
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--bg);
+    --pagefind-ui-border: var(--rule);
+    --pagefind-ui-tag: var(--accent-soft);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: var(--radius);
+    --pagefind-ui-font: var(--font-sans);
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement | null;
+  const openBtn = document.getElementById('open-search');
+  const closeBtn = document.getElementById('close-search');
+  let initialized = false;
+
+  async function ensureInitialized() {
+    if (initialized) return;
+    initialized = true;
+    // Load Pagefind UI's prebuilt module from /public at runtime.
+    // Vite can't resolve this at build time (it doesn't exist yet — Pagefind
+    // generates it during `postbuild`), so we use a string variable to bypass
+    // Vite's static analysis.
+    // The base-prefixed URL was injected into window by the inline script above.
+    const url = (window as any).__pagefindJsHref ?? '/pagefind/pagefind-ui.js';
+    // @ts-ignore
+    const mod = await import(/* @vite-ignore */ url);
+    new mod.PagefindUI({
+      element: '#search',
+      showImages: false,
+      showSubResults: true,
+      resetStyles: false,
+    });
+  }
+
+  function open() {
+    if (!dialog) return;
+    ensureInitialized().catch((err) => console.error('Search init failed', err));
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    setTimeout(() => {
+      const input = dialog.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
+      input?.focus();
+    }, 50);
+  }
+
+  function close() {
+    if (dialog?.open) dialog.close();
+  }
+
+  openBtn?.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (dialog?.open) close(); else open();
+    }
+  });
+</script>

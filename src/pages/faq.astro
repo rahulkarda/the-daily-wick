@@ -1,0 +1,82 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { SITE } from '@/consts';
+import { path } from '@/lib/path';
+---
+
+<PageLayout
+  title="FAQ"
+  description={`Common questions about ${SITE.name}.`}
+  eyebrow="Common questions"
+  heading="FAQ"
+>
+  <h2>Is this written by a real person?</h2>
+  <p>
+    Each issue is <strong>drafted by an AI model</strong> (Gemini 2.5 Flash) against
+    a long, opinionated prompt, and <strong>edited and approved by a human</strong> before
+    it ships. We disclose the process on every post and on our
+    <a href={path('/editorial-standards')}>editorial standards</a> page. Sources are real. Quotes
+    are checked. We'd rather skip a day than publish something we couldn't stand
+    behind.
+  </p>
+
+  <h2>How often will you email me?</h2>
+  <p>
+    One short email each <strong>weekday morning</strong>, around 06:30 Pacific time. No
+    weekends, no surprises, no "we noticed you haven't opened our last 3 emails"
+    re-engagement spam.
+  </p>
+
+  <h2>How long are the emails?</h2>
+  <p>
+    Two to three minutes to read. Hard ceiling around 600 words — usually less.
+    The whole point is that you can finish it before your second sip of coffee.
+  </p>
+
+  <h2>Can I read the back archive?</h2>
+  <p>
+    Yes. Every issue lives in two places: the <a href={path('/articles')}>articles archive</a>
+    on this site, and the
+    <a href={`https://buttondown.com/${SITE.buttondownHandle}`} target="_blank" rel="noopener">public newsletter archive</a>
+    at Buttondown. Both are free and require no signup.
+  </p>
+
+  <h2>Where do the emails land?</h2>
+  <p>
+    Sometimes Promotions, sometimes Spam — both are easy to fix. After your first
+    issue arrives, drag it to your Inbox or Primary tab, or add the sender to your
+    contacts. After that, every issue should land where it belongs.
+  </p>
+
+  <h2>How do I unsubscribe?</h2>
+  <p>
+    There's a one-click unsubscribe link at the bottom of every issue. No
+    questions, no friction.
+  </p>
+
+  <h2>Can I follow without giving you my email?</h2>
+  <p>
+    Yes. There's an <a href={path('/rss.xml')}>RSS feed</a> and the
+    <a href={path('/articles')}>on-site archive</a> is fully readable without any
+    signup. The newsletter just makes the daily ritual easier.
+  </p>
+
+  <h2>Is there a paid tier?</h2>
+  <p>
+    No. {SITE.name} is free, no paywall, no upsell.
+  </p>
+
+  <h2>How is this site built?</h2>
+  <p>
+    The whole thing is open-source. The site is an Astro static build, deployed
+    to Cloudflare Pages. The daily generation runs in a GitHub Action. Every line
+    of the build, the prompt, and the editorial schema is public on GitHub —
+    you can read it, fork it, or copy it.
+  </p>
+
+  <h2>Found a typo or a bad source?</h2>
+  <p>
+    Tell us. Open a GitHub issue or reply to any issue of the newsletter — we
+    correct fast and credit publicly.
+  </p>
+</PageLayout>

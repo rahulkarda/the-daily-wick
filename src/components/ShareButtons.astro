@@ -1,0 +1,109 @@
+---
+import { SITE } from '@/consts';
+
+interface Props {
+  title: string;
+  url: string; // may be a path (with base) or an absolute URL
+}
+
+const { title, url } = Astro.props;
+// If `url` is already absolute, use it; otherwise compose against SITE.url
+const fullUrl = /^https?:\/\//.test(url) ? url : `${SITE.url.replace(/\/$/, '')}${url.startsWith('/') ? url : `/${url}`}`;
+const enc = encodeURIComponent;
+const xUrl = `https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(fullUrl)}`;
+const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${enc(fullUrl)}`;
+const emailUrl = `mailto:?subject=${enc(title)}&body=${enc(fullUrl)}`;
+---
+
+<div class="share">
+  <span class="share__label">Share</span>
+  <a href={xUrl} target="_blank" rel="noopener" aria-label="Share on X" title="Share on X">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  </a>
+  <a href={linkedinUrl} target="_blank" rel="noopener" aria-label="Share on LinkedIn" title="Share on LinkedIn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5V5c0-2.761-2.238-5-5-5zM8 19H5V8h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0V19h-3V8h3v1.765c1.396-2.586 7-2.777 7 2.476V19z"/>
+    </svg>
+  </a>
+  <a href={emailUrl} aria-label="Share by email" title="Share by email">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+      <path d="m22 6-10 7L2 6"></path>
+    </svg>
+  </a>
+  <button type="button" class="share__copy" data-url={fullUrl} aria-label="Copy link" title="Copy link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    <span class="share__copy-feedback">Copied</span>
+  </button>
+</div>
+
+<style>
+  .share {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+  .share__label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--step--2);
+  }
+  .share a, .share button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    color: var(--text-muted);
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+  .share a:hover, .share button:hover {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .share__copy {
+    position: relative;
+  }
+  .share__copy-feedback {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--step--2);
+    background: var(--text);
+    color: var(--bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease;
+    white-space: nowrap;
+  }
+  .share__copy.is-copied .share__copy-feedback {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.share__copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      if (!url) return;
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.classList.add('is-copied');
+        setTimeout(() => btn.classList.remove('is-copied'), 1500);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+    });
+  });
+</script>

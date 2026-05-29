@@ -1,0 +1,49 @@
+---
+import { formatDateLong } from '@/lib/format-date';
+import { readingTime } from '@/lib/reading-time';
+
+interface Props {
+  pubDate: Date;
+  body: string;
+  curator: string;
+  monthlyTheme?: string;
+}
+
+const { pubDate, body, curator, monthlyTheme } = Astro.props;
+const minutes = readingTime(body);
+---
+
+<div class="post-meta">
+  {monthlyTheme && <span class="theme-tag">{monthlyTheme}</span>}
+  <p class="post-meta__line">
+    <time datetime={pubDate.toISOString()}>{formatDateLong(pubDate)}</time>
+    <span aria-hidden="true">·</span>
+    <span>{minutes}</span>
+    <span aria-hidden="true">·</span>
+    <span>Curated by <em>{curator}</em></span>
+  </p>
+</div>
+
+<style>
+  .post-meta {
+    text-align: center;
+    margin-block: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .post-meta__line {
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .post-meta__line em {
+    font-style: italic;
+    color: var(--text);
+  }
+</style>

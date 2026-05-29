@@ -1,0 +1,123 @@
+/* The Daily Wick — prose styles for article body
+ * Applied to .prose class on article containers.
+ */
+
+.prose {
+  max-width: var(--measure-prose);
+  margin-inline: auto;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: var(--leading-prose);
+  color: var(--text);
+}
+
+.prose > * + * {
+  margin-top: 1.5em;
+}
+
+.prose h2 {
+  font-size: var(--step-2);
+  margin-top: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose h3 {
+  font-size: var(--step-1);
+  margin-top: 2em;
+  margin-bottom: 0.4em;
+}
+
+.prose p + p {
+  margin-top: 1.25em;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+  margin-block: 1.25em;
+}
+
+.prose ol {
+  counter-reset: prose-list;
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose ol > li {
+  counter-increment: prose-list;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.prose ol > li::before {
+  content: counter(prose-list);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.prose li + li {
+  margin-top: 0.5em;
+}
+
+.prose ul > li::marker {
+  color: var(--accent);
+}
+
+.prose blockquote {
+  margin-block: 2em;
+  font-size: var(--step-1);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.prose hr {
+  border: 0;
+  height: 1px;
+  background: var(--rule);
+  margin-block: 3em;
+}
+
+.prose a {
+  font-weight: 500;
+}
+
+.prose img,
+.prose figure {
+  margin-block: 2em;
+  border-radius: var(--radius-lg);
+}
+
+.prose figure figcaption {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.75em;
+}
+
+/* monthly theme hint at the top of the article */
+.theme-tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}

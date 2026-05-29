@@ -1,0 +1,118 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { SITE } from '@/consts';
+---
+
+<PageLayout
+  title="Editorial Standards"
+  description="How we draft, edit, source, and correct posts."
+  eyebrow="The standard we hold ourselves to"
+  heading="Editorial Standards"
+>
+  <p>
+    {SITE.name} sits at an unusual intersection: a daily newsletter drafted with help
+    from a language model, then edited by a human. We think the AI assist makes a
+    daily cadence sustainable; we don't think it removes our editorial responsibility.
+    This page is what we promise.
+  </p>
+
+  <h2>How a post is made</h2>
+  <ol>
+    <li>
+      <strong>Draft.</strong> Every weekday morning, an automated job calls Gemini
+      2.5 Flash with a long, opinionated prompt. The prompt fixes the format
+      (epigraph, the idea, one question, today's action, sources), enforces a voice,
+      lists banned phrases, and supplies the current month's theme plus the last
+      thirty topics so we don't repeat ourselves.
+    </li>
+    <li>
+      <strong>Validate.</strong> The draft is checked against our schema (title,
+      tags, length, structure) and against a banned-phrases list. Drafts that fail
+      validation are rewritten; drafts that fail twice are skipped.
+    </li>
+    <li>
+      <strong>Curate.</strong> A human curator reads the result, fact-checks the
+      claims and quotes, verifies the sources, and either approves the draft or
+      pulls it.
+    </li>
+    <li>
+      <strong>Ship.</strong> The approved post is committed to the public repo,
+      the site rebuilds, and the newsletter is delivered.
+    </li>
+  </ol>
+
+  <h2>Sourcing</h2>
+  <ul>
+    <li>
+      <strong>Quotes are real.</strong> If we can't verify the attribution, the
+      quote does not run. If a quote is paraphrased rather than verbatim, we say
+      so ("after Lao Tzu", "in the spirit of").
+    </li>
+    <li>
+      <strong>Statistics are cited.</strong> Numbers in posts link to the original
+      paper, dataset, or report whenever the source is reachable.
+    </li>
+    <li>
+      <strong>Books and papers are linked.</strong> The "Go Deeper" block at the
+      bottom of every post points to the actual source — book, paper, podcast, or
+      essay — never to a paywalled summary.
+    </li>
+    <li>
+      <strong>If we can't source it, we don't say it.</strong> An idea without a
+      provenance is rewritten or cut.
+    </li>
+  </ul>
+
+  <h2>Images</h2>
+  <p>
+    Every hero image comes from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
+    under their free license. The photographer's name and a link to their profile
+    appear directly under every image. We do not generate AI imagery in v1.
+  </p>
+
+  <h2>Corrections</h2>
+  <ul>
+    <li>
+      <strong>Errors get corrected, not quietly edited.</strong> If we publish
+      something inaccurate, we add a dated note ("Updated: 2026-06-04 to correct…")
+      to the bottom of the post. We do not pretend it never happened.
+    </li>
+    <li>
+      <strong>Found a mistake?</strong> Open an
+      <a href={`https://github.com/${SITE.buttondownHandle}/${SITE.buttondownHandle}/issues`} target="_blank" rel="noopener">issue on GitHub</a>
+      or reply to any issue of the newsletter. We aim to correct within 24 hours.
+    </li>
+  </ul>
+
+  <h2>What we won't do</h2>
+  <ul>
+    <li>
+      <strong>No fake authors.</strong> Posts are bylined by the publication and
+      curated by a real person. We don't invent personas or pretend the AI is a human.
+    </li>
+    <li>
+      <strong>No fabricated statistics.</strong> If a claim sounds too clean to be
+      true, our process treats that as a flag, not a feature.
+    </li>
+    <li>
+      <strong>No SEO listicles.</strong> The format is fixed, the length is short,
+      and the goal is one useful idea — not engagement-bait.
+    </li>
+    <li>
+      <strong>No surprise paid tier.</strong> If that ever changes, we'll say it
+      out loud, on this page, with months of notice.
+    </li>
+  </ul>
+
+  <h2>The disclosure on every post</h2>
+  <blockquote>
+    Drafted with AI (Gemini 2.5 Flash) and curated by <strong>{SITE.curator}</strong>.
+    Read our editorial standards.
+  </blockquote>
+
+  <p>
+    The whole pipeline — prompt, schema, validation, this page — is open-source on
+    GitHub. If you want to see exactly how the sausage is made, the source is the
+    record.
+  </p>
+</PageLayout>

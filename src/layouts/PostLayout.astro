@@ -1,0 +1,203 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import PostMeta from '@/components/PostMeta.astro';
+import RelatedPosts from '@/components/RelatedPosts.astro';
+import InlineSubscribe from '@/components/InlineSubscribe.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
+import AIDisclosure from '@/components/AIDisclosure.astro';
+import TagList from '@/components/TagList.astro';
+import { path } from '@/lib/path';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  related: CollectionEntry<'posts'>[];
+}
+
+const { post, related } = Astro.props;
+const {
+  title,
+  subtitle,
+  pubDate,
+  tags,
+  monthlyTheme,
+  heroImage,
+  heroAlt,
+  heroCredit,
+  epigraph,
+  sources,
+  curator,
+} = post.data;
+
+const slug = post.slug;
+const url = path(`/articles/${slug}`);
+const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').trim();
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  pubDate={pubDate}
+>
+  <article class="article">
+    <header class="article__header container container--narrow">
+      <PostMeta
+        pubDate={pubDate}
+        body={post.body}
+        curator={curator}
+        monthlyTheme={monthlyTheme}
+      />
+      <h1 class="article__title">{title}</h1>
+      {subtitle && <p class="article__subtitle">{subtitle}</p>}
+    </header>
+
+    <figure class="article__hero container">
+      <Image
+        src={heroImage}
+        alt={heroAlt}
+        widths={[800, 1200, 1800]}
+        sizes="(min-width: 768px) 768px, 100vw"
+        loading="eager"
+        decoding="async"
+      />
+      <figcaption>
+        Photo by
+        <a href={heroCredit.photographerUrl} target="_blank" rel="noopener">{heroCredit.photographer}</a>
+        on
+        <a href={heroCredit.unsplashUrl} target="_blank" rel="noopener">Unsplash</a>
+      </figcaption>
+    </figure>
+
+    {epigraph && (
+      <blockquote class="epigraph container container--narrow">
+        “{epigraph.text}”
+        <cite>— {epigraph.attribution}</cite>
+      </blockquote>
+    )}
+
+    <div class="prose container container--narrow">
+      <slot />
+
+      {sources && sources.length > 0 && (
+        <section class="sources">
+          <h2>Go deeper</h2>
+          <ul>
+            {sources.map((s) => (
+              <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+
+    <footer class="article__footer container container--narrow">
+      <TagList tags={tags} />
+      <div class="article__share">
+        <ShareButtons title={title} url={url} />
+      </div>
+      <AIDisclosure curator={curator} />
+    </footer>
+
+    <div class="container container--narrow">
+      <InlineSubscribe variant="inline" />
+    </div>
+
+    <div class="container">
+      <RelatedPosts posts={related} />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article {
+    padding-block: 3rem 2rem;
+  }
+
+  .article__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .article__title {
+    font-size: var(--step-4);
+    margin: 0 0 0.75rem;
+    text-wrap: balance;
+  }
+
+  .article__subtitle {
+    color: var(--text-muted);
+    font-size: var(--step-1);
+    font-style: italic;
+    margin: 0;
+    font-family: var(--font-serif);
+    text-wrap: balance;
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  .article__hero {
+    margin-block: 2rem 3rem;
+    text-align: center;
+  }
+  .article__hero :global(img) {
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 64rem;
+    margin-inline: auto;
+  }
+  .article__hero figcaption {
+    margin-top: 0.5rem;
+    font-size: var(--step--2);
+    color: var(--text-muted);
+  }
+  .article__hero figcaption a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+  }
+
+  .epigraph {
+    margin-block: 0 3rem;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--step-1);
+    color: var(--text-muted);
+  }
+  .epigraph cite {
+    display: block;
+    font-size: var(--step--1);
+    font-style: normal;
+    margin-top: 0.5rem;
+  }
+
+  .sources {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--rule);
+  }
+  .sources h2 {
+    font-size: var(--step-1);
+    margin-bottom: 0.75rem;
+  }
+  .sources ul {
+    padding-left: 1.25rem;
+    color: var(--text-muted);
+  }
+  .sources a {
+    color: var(--text);
+  }
+
+  .article__footer {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .article__share {
+    margin-top: 0.5rem;
+  }
+</style>

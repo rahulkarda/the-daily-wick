@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { path } from '@/lib/path';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const tags = new Set<string>();
+  posts.forEach((p) => p.data.tags.forEach((t) => tags.add(t)));
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`} description={`Posts tagged ${tag}.`}>
+  <section class="topic container">
+    <header class="topic__header">
+      <p class="eyebrow">Topic</p>
+      <h1>#{tag}</h1>
+      <p class="topic__count">{posts.length} {posts.length === 1 ? 'post' : 'posts'} on this topic.</p>
+      <p><a href={path('/articles')}>← All articles</a></p>
+    </header>
+    <div class="card-grid">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .topic {
+    padding-block: 4rem 2rem;
+  }
+  .topic__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .topic__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+    font-family: var(--font-serif);
+  }
+  .topic__count {
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem 2rem;
+  }
+</style>

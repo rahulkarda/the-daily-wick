@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="related" aria-labelledby="related-heading">
+    <h2 id="related-heading" class="eyebrow related__heading">Down the rabbit hole</h2>
+    <div class="related__grid">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+)}
+
+<style>
+  .related {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--rule);
+  }
+  .related__heading {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  @media (max-width: 720px) {
+    .related__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

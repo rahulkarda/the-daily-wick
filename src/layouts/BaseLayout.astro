@@ -1,0 +1,54 @@
+---
+import '@fontsource/fraunces/400.css';
+import '@fontsource/fraunces/600.css';
+import '@fontsource/fraunces/400-italic.css';
+import '@fontsource-variable/inter';
+
+import '@/styles/global.css';
+import '@/styles/typography.css';
+import '@/styles/prose.css';
+
+import BaseHead from '@/components/BaseHead.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import SearchModal from '@/components/SearchModal.astro';
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  pubDate?: Date;
+  type?: 'website' | 'article';
+}
+
+const { title, description, image, pubDate, type } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme-init>
+  <head>
+    <BaseHead title={title} description={description} image={image} pubDate={pubDate} type={type} />
+    <ViewTransitions />
+    <script is:inline>
+      // Set theme BEFORE paint to avoid flash.
+      (function () {
+        try {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark') {
+            document.documentElement.setAttribute('data-theme', stored);
+          }
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <SearchModal />
+  </body>
+</html>

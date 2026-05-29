@@ -1,0 +1,64 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { SITE } from '@/consts';
+import { path } from '@/lib/path';
+---
+
+<PageLayout
+  title={`What is ${SITE.name}?`}
+  description={SITE.description}
+  eyebrow="What is this?"
+  heading={`${SITE.name}`}
+  lede="A small flame, every morning."
+>
+  <p>
+    <strong>{SITE.name}</strong> is a daily byte-size newsletter for curious minds — one
+    idea, one question, one action, every weekday morning. It is the product of a
+    small experiment: can a daily publication, read in three minutes or fewer, do
+    real work on the way you think about your day?
+  </p>
+
+  <p>
+    The format is the same every weekday, on purpose. An <em>idea</em> small enough
+    to chew on. <em>One question</em> to sit with. A <em>concrete action</em> you can
+    do today, before lunch. And a few <em>links</em> if you want to follow the rabbit
+    hole further.
+  </p>
+
+  <h2>What you can expect</h2>
+  <ul>
+    <li>One short post, every weekday, before 7am Pacific time.</li>
+    <li>Two to three minutes to read. Three to thirty minutes to think about.</li>
+    <li>Sourced. Cited. Edited. Never padded.</li>
+    <li>A new theme each month — Foundations, Attention, Resilience, Craft… each issue an angle on it.</li>
+    <li>Free, forever, no paywall.</li>
+  </ul>
+
+  <h2>How posts are made</h2>
+  <p>
+    Each daily issue is drafted with help from a large language model
+    (Gemini 2.5 Flash) against a long, opinionated prompt — and then read,
+    edited, and approved by a human curator before it ships. We disclose the
+    process on every post and on our <a href={path('/editorial-standards')}>editorial standards</a>
+    page. Sources are real. Quotes are checked. We'd rather skip a day than
+    publish something we can't stand behind.
+  </p>
+
+  <h2>Who it's for</h2>
+  <p>
+    For anyone who wakes up wanting to read something <em>small and considered</em>
+    instead of something <em>large and frantic</em>. For people building habits, paying
+    attention to what they pay attention to, and quietly trying to live better.
+  </p>
+
+  <h2>Who's behind it</h2>
+  <p>
+    {SITE.name} is curated by <strong>{SITE.curator}</strong>. The whole site is
+    open-source on GitHub — you can read the prompt, the schema, the build pipeline,
+    every line of it.
+  </p>
+
+  <p>
+    If this sounds like your kind of morning, <a href={path('/subscribe')}>light the wick</a>.
+  </p>
+</PageLayout>

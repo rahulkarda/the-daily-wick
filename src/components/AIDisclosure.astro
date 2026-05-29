@@ -1,0 +1,35 @@
+---
+import { path } from '@/lib/path';
+
+interface Props {
+  curator: string;
+}
+
+const { curator } = Astro.props;
+---
+
+<aside class="ai-disclosure">
+  <p>
+    Drafted with AI (Gemini 2.5 Flash) and curated by <strong>{curator}</strong>.
+    Read our <a href={path('/editorial-standards')}>editorial standards</a>.
+  </p>
+</aside>
+
+<style>
+  .ai-disclosure {
+    margin-top: 3rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+  .ai-disclosure p {
+    margin: 0;
+  }
+  .ai-disclosure strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+</style>

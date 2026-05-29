@@ -1,0 +1,62 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { SITE } from '@/consts';
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  return paginate(posts, { pageSize: 12 });
+};
+
+interface Props {
+  page: Page<CollectionEntry<'posts'>>;
+}
+
+const { page } = Astro.props as Props;
+---
+
+<BaseLayout title={`Articles${page.currentPage > 1 ? ` — page ${page.currentPage}` : ''}`} description={`Every post from ${SITE.name}.`}>
+  <section class="archive container">
+    <header class="archive__header">
+      <p class="eyebrow">All posts</p>
+      <h1>Articles</h1>
+      <p class="archive__count">{page.total} posts so far.</p>
+    </header>
+    <div class="card-grid">
+      {page.data.map((p) => <PostCard post={p} />)}
+    </div>
+    <Pagination
+      prevUrl={page.url.prev}
+      nextUrl={page.url.next}
+      current={page.currentPage}
+      last={page.lastPage}
+    />
+  </section>
+</BaseLayout>
+
+<style>
+  .archive {
+    padding-block: 4rem 2rem;
+  }
+  .archive__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .archive__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+  .archive__count {
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem 2rem;
+  }
+</style>

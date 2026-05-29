@@ -1,0 +1,45 @@
+---
+import { path } from '@/lib/path';
+
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+{tags?.length > 0 && (
+  <ul class="tag-list" aria-label="Tags">
+    {tags.map((t) => (
+      <li>
+        <a href={path(`/topics/${t}`)} class="tag">{t}</a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .tag-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .tag {
+    font-size: var(--step--2);
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: lowercase;
+    background: var(--accent-soft);
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+  .tag:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+</style>
