@@ -1,0 +1,21 @@
+{
+  "intro": "If you're new here, this is a short, hand-picked path through the back catalogue. Read these in order — each one builds on the last. Total time: about 15 minutes.",
+  "outro": "Done with these? The whole shelf lives in the [archive](archive). Or pull something at random: try the [random button](random).",
+  "steps": [
+    {
+      "slug": "the-cost-of-half-attention",
+      "why": "Start here. The single idea that animates the whole publication — what fragmented attention actually costs you.",
+      "estimateMinutes": 2
+    },
+    {
+      "slug": "useful-friction",
+      "why": "Once you take attention seriously, the next question is how to design your day around it. This is the answer.",
+      "estimateMinutes": 2
+    },
+    {
+      "slug": "on-the-discipline-of-stillness",
+      "why": "And the final step — what you discover when you stop filling the silence at all.",
+      "estimateMinutes": 2
+    }
+  ]
+}

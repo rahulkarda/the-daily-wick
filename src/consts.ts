@@ -17,6 +17,7 @@ export const SITE = {
 
 export const NAV = [
   { label: 'Home', href: '/' },
+  { label: 'Start here', href: '/start-here' },
   { label: 'Articles', href: '/articles' },
   { label: 'Themes', href: '/themes' },
   { label: 'Archive', href: '/archive' },
@@ -26,6 +27,7 @@ export const NAV = [
 
 export const FOOTER_NAV = [
   { label: 'FAQ', href: '/faq' },
+  { label: 'Stats', href: '/stats' },
   { label: 'Editorial Standards', href: '/editorial-standards' },
   { label: 'Random', href: '/random' },
   { label: 'RSS', href: '/rss.xml' },

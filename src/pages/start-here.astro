@@ -1,0 +1,237 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/path';
+import { formatDateLong } from '@/lib/format-date';
+import { readingTime } from '@/lib/reading-time';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+interface Step {
+  slug: string;
+  why: string;
+  estimateMinutes?: number;
+}
+interface StartHere {
+  intro: string;
+  outro?: string;
+  steps: Step[];
+}
+
+const configPath = resolve(
+  fileURLToPath(import.meta.url),
+  '../../../content/start-here.json',
+);
+const config = JSON.parse(await readFile(configPath, 'utf-8')) as StartHere;
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const bySlug = new Map(allPosts.map((p) => [p.slug, p]));
+
+// Resolve each step to its post; drop steps whose slug is missing so the page
+// keeps working when a post is renamed or deleted before the JSON is updated.
+type ResolvedStep = Step & { post: NonNullable<ReturnType<typeof bySlug.get>> };
+const resolved: ResolvedStep[] = config.steps
+  .map((step) => {
+    const post = bySlug.get(step.slug);
+    return post ? { ...step, post } : null;
+  })
+  .filter((s): s is ResolvedStep => s !== null);
+
+const totalMinutes = resolved.reduce(
+  (s, step) => s + (step.estimateMinutes ?? 2),
+  0,
+);
+
+// Tiny inline markdown — only handles [text](slug-or-url) links because that's
+// what the JSON intro/outro actually use. Strict: anything else is plain text.
+function renderInlineMarkdown(text: string, basePath: typeof path): string {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  return escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, target) => {
+    const href = /^https?:\/\//.test(target) ? target : basePath(`/${target}`);
+    return `<a href="${href}">${label}</a>`;
+  });
+}
+const introHtml = renderInlineMarkdown(config.intro, path);
+const outroHtml = config.outro ? renderInlineMarkdown(config.outro, path) : '';
+---
+
+<BaseLayout
+  title="Start here"
+  description="A short, hand-picked path through the back catalogue. About 15 minutes, in order."
+>
+  <section class="start container container--narrow">
+    <header class="start__header">
+      <p class="eyebrow">For new readers</p>
+      <h1>Start here</h1>
+      <p class="start__time">
+        {resolved.length} {resolved.length === 1 ? 'post' : 'posts'} · about {totalMinutes} minutes total
+      </p>
+      <p class="start__intro" set:html={introHtml}></p>
+    </header>
+
+    {resolved.length === 0 ? (
+      <p class="start__empty">No reading path is set up yet.</p>
+    ) : (
+      <ol class="path">
+        {resolved.map((step, idx) => (
+          <li class="step">
+            <div class="step__number" aria-hidden="true">{idx + 1}</div>
+            <div class="step__body">
+              <a class="step__title" href={path(`/articles/${step.post.slug}`)}>
+                {step.post.data.title}
+              </a>
+              <p class="step__meta">
+                <time datetime={step.post.data.pubDate.toISOString()}>{formatDateLong(step.post.data.pubDate)}</time>
+                <span aria-hidden="true">·</span>
+                <span>{readingTime(step.post.body)}</span>
+                {step.post.data.format === 'essay' && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span class="step__pill">Essay</span>
+                  </>
+                )}
+              </p>
+              <p class="step__why">{step.why}</p>
+              <p class="step__cta">
+                <a href={path(`/articles/${step.post.slug}`)}>Read this →</a>
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    )}
+
+    {outroHtml && (
+      <p class="start__outro" set:html={outroHtml}></p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .start { padding-block: 4rem 3rem; }
+  .start__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .start__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 0.75rem;
+  }
+  .start__time {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 1.5rem;
+  }
+  .start__intro {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .start__empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 4rem 0;
+  }
+
+  .path {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+    transition: border-color 200ms ease;
+  }
+  .step:hover {
+    border-color: var(--accent);
+  }
+  .step__number {
+    font-family: var(--font-serif);
+    font-size: var(--step-3);
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    width: 2.5rem;
+    text-align: center;
+  }
+  .step__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    color: var(--text);
+    text-decoration: none;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  .step__title:hover { color: var(--accent); }
+  .step__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    margin: 0 0 0.75rem;
+  }
+  .step__pill {
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+  }
+  .step__why {
+    color: var(--text);
+    margin: 0 0 1rem;
+    line-height: 1.6;
+  }
+  .step__cta {
+    margin: 0;
+    font-size: var(--step--1);
+  }
+  .step__cta a {
+    color: var(--accent);
+  }
+
+  .start__outro {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px dashed var(--rule);
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+
+  @media (max-width: 540px) {
+    .step {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .step__number {
+      width: auto;
+      text-align: left;
+    }
+  }
+</style>

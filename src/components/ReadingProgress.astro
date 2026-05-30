@@ -1,0 +1,78 @@
+---
+/**
+ * Reading-progress bar — a thin accent line that grows left→right as the
+ * reader scrolls through the article. Mounted on PostLayout only (not on
+ * index/archive/etc), so the bar's a signal you're inside a post.
+ *
+ * The bar tracks the position of the <article> bounds, not the page bounds,
+ * so the header + footer don't pollute the percentage. This means the bar
+ * hits 100% exactly when the last paragraph leaves the viewport, which is
+ * the gesture readers expect.
+ */
+---
+
+<div
+  class="reading-progress"
+  role="progressbar"
+  aria-label="Reading progress"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-valuenow="0"
+  aria-hidden="true"
+>
+  <div class="reading-progress__fill" data-progress-fill></div>
+</div>
+
+<style>
+  .reading-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    z-index: 60;
+    background: transparent;
+    pointer-events: none;
+  }
+  .reading-progress__fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    transition: width 80ms linear;
+    will-change: width;
+  }
+  @media print {
+    .reading-progress { display: none; }
+  }
+</style>
+
+<script>
+  (function () {
+    const fill = document.querySelector<HTMLElement>('[data-progress-fill]');
+    const article = document.querySelector<HTMLElement>('article');
+    const bar = document.querySelector<HTMLElement>('.reading-progress');
+    if (!fill || !article || !bar) return;
+
+    const compute = () => {
+      const rect = article.getBoundingClientRect();
+      const viewport = window.innerHeight;
+      // Fraction read = (distance scrolled past article top) / (article height − viewport)
+      const total = Math.max(1, article.offsetHeight - viewport);
+      const scrolled = Math.min(total, Math.max(0, -rect.top));
+      const pct = Math.round((scrolled / total) * 100);
+      fill.style.width = `${pct}%`;
+      bar.setAttribute('aria-valuenow', String(pct));
+    };
+
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        compute();
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    compute();
+  })();
+</script>

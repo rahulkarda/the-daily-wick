@@ -1,0 +1,177 @@
+/* The Daily Wick — print stylesheet
+ * Goal: a clean, archive-worthy single-column reading layout when the user
+ * prints or saves a post as PDF. We hide the navigation, search, reactions,
+ * subscribe/share UI, and AI-disclosure box; we keep the article text,
+ * epigraph, hero credit, sources, and "If this hooked you" so the printed
+ * page is a self-contained reference.
+ *
+ * Only print rules live here — everything else stays in global.css.
+ */
+
+@media print {
+  /* Reset page chrome */
+  :root,
+  [data-theme='dark'] {
+    --bg: #ffffff;
+    --bg-elev: #ffffff;
+    --text: #000000;
+    --text-muted: #444444;
+    --rule: #cccccc;
+    --accent: #000000;
+    --accent-hover: #000000;
+    --accent-soft: transparent;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    line-height: 1.55;
+  }
+
+  /* Hide everything that doesn't belong on a printed page */
+  .site-header,
+  .site-footer,
+  .reading-progress,
+  .reactions,
+  .article__share,
+  .article__random,
+  .ai-disclosure,
+  .further-reading,
+  .related-posts,
+  .post-card__tags,
+  #search-modal,
+  .skip-link,
+  [data-filter-bar],
+  .tab-buttons,
+  /* Subscribe + InlineSubscribe widgets */
+  .inline-subscribe,
+  .subscribe-pill,
+  /* Pagefind */
+  .pagefind-ui,
+  /* Astro view-transitions wrapper */
+  astro-view-transitions,
+  /* Theme toggle */
+  theme-toggle {
+    display: none !important;
+  }
+
+  /* Article: full-width, no card padding, classical typography */
+  .article {
+    padding: 0 !important;
+  }
+  .article__header,
+  .article__hero,
+  .epigraph,
+  .prose,
+  .article__footer,
+  .container,
+  .container--narrow {
+    max-width: none !important;
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+  }
+
+  .article__title {
+    font-size: 24pt !important;
+    margin-bottom: 0.5rem !important;
+    text-align: left !important;
+  }
+  .article__subtitle {
+    font-size: 13pt !important;
+    text-align: left !important;
+    color: #444 !important;
+    margin: 0 0 1rem !important;
+  }
+  .post-meta {
+    border-top: 1px solid #ccc !important;
+    border-bottom: 1px solid #ccc !important;
+    padding: 0.4rem 0 !important;
+    margin-bottom: 1.5rem !important;
+    text-align: left !important;
+  }
+  .post-meta__chips {
+    justify-content: flex-start !important;
+  }
+  .theme-tag,
+  .format-pill,
+  .format-pill--micro {
+    background: transparent !important;
+    color: #000 !important;
+    border: 1px solid #888 !important;
+  }
+
+  .article__hero {
+    margin-block: 1rem 1.5rem !important;
+  }
+  .article__hero :global(img),
+  .article__hero img {
+    max-height: 3.5in !important;
+    width: auto !important;
+    border-radius: 0 !important;
+  }
+  .article__hero figcaption {
+    color: #666 !important;
+  }
+
+  .epigraph {
+    border-left: 3px solid #000 !important;
+    padding-left: 1rem !important;
+    margin-block: 1rem 1.5rem !important;
+    text-align: left !important;
+  }
+
+  .prose h2 {
+    font-size: 14pt !important;
+    margin-top: 1.5em !important;
+    /* Avoid orphaning a heading at the bottom of a page */
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .prose p,
+  .prose li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Sources block: keep, but visually quieter */
+  .sources {
+    margin-top: 1.5rem !important;
+    padding-top: 0.75rem !important;
+    border-top: 1px solid #ccc !important;
+  }
+  .sources h2 {
+    font-size: 11pt !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Make every link self-documenting in print */
+  a[href]:not([href^='#']):not([href^='javascript:'])::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+    color: #666;
+    word-break: break-all;
+  }
+  /* Don't expand image-credit links — too noisy */
+  .article__hero figcaption a[href]::after {
+    content: '';
+  }
+
+  /* Page setup */
+  @page {
+    margin: 0.75in 0.65in;
+  }
+  /* Footer breadcrumb so the printed page identifies itself */
+  body::after {
+    content: 'The Daily Wick · A small flame, every morning · rahulkarda.github.io/the-daily-wick';
+    display: block;
+    border-top: 1px solid #ccc;
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+    font-size: 9pt;
+    color: #666;
+    text-align: center;
+  }
+}

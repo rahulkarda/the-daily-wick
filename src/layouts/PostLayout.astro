@@ -10,6 +10,7 @@ import AIDisclosure from '@/components/AIDisclosure.astro';
 import TagList from '@/components/TagList.astro';
 import FurtherReading from '@/components/FurtherReading.astro';
 import Reactions from '@/components/Reactions.astro';
+import ReadingProgress from '@/components/ReadingProgress.astro';
 import { path } from '@/lib/path';
 
 interface Props {
@@ -48,6 +49,7 @@ const photoSourceLabel =
   type="article"
   pubDate={pubDate}
 >
+  <ReadingProgress />
   <article class="article" data-format={format ?? 'micro'}>
     <header class="article__header container container--narrow">
       <PostMeta

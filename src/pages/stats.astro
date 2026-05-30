@@ -1,0 +1,328 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { computeStats } from '@/lib/stats';
+import { formatDateLong } from '@/lib/format-date';
+import { path } from '@/lib/path';
+import { themeSlug } from '@/lib/theme';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const stats = computeStats(posts);
+
+// Cap top-tags at 12 for the chart and 6 for the leaderboard.
+const tagsForChart = stats.topTags.slice(0, 12);
+const maxTagCount = tagsForChart[0]?.count ?? 1;
+---
+
+<BaseLayout title="Stats" description="The Daily Wick by the numbers — totals, themes, streaks, and the long arc of the practice.">
+  <section class="stats container container--narrow">
+    <header class="stats__header">
+      <p class="eyebrow">By the numbers</p>
+      <h1>The shelf so far</h1>
+      <p class="stats__lede">
+        A small flame, every weekday morning. Here's what that adds up to.
+      </p>
+    </header>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <p class="stat__number">{stats.totalPosts}</p>
+        <p class="stat__label">{stats.totalPosts === 1 ? 'post' : 'posts'} written</p>
+      </div>
+      <div class="stat">
+        <p class="stat__number">{stats.totalWords.toLocaleString()}</p>
+        <p class="stat__label">words on the page</p>
+      </div>
+      <div class="stat">
+        <p class="stat__number">{stats.totalMinutes}</p>
+        <p class="stat__label">{stats.totalMinutes === 1 ? 'minute' : 'minutes'} to read it all</p>
+      </div>
+      <div class="stat">
+        <p class="stat__number">{stats.microCount}<span>/{stats.essayCount}</span></p>
+        <p class="stat__label">micros / essays</p>
+      </div>
+      <div class="stat">
+        <p class="stat__number">{stats.longestStreak?.length ?? 0}</p>
+        <p class="stat__label">longest publish streak (days)</p>
+      </div>
+      <div class="stat">
+        <p class="stat__number">{stats.totalSources + stats.totalFurtherReading}</p>
+        <p class="stat__label">books, papers, links sent your way</p>
+      </div>
+    </div>
+
+    {tagsForChart.length > 0 && (
+      <section class="stats__section">
+        <h2>Where the attention went</h2>
+        <p class="stats__sub">The 12 most-frequent tags, by post count.</p>
+        <ul class="bar-chart">
+          {tagsForChart.map((t) => (
+            <li class="bar-chart__row">
+              <a class="bar-chart__label" href={path(`/topics/${t.tag}`)}>#{t.tag}</a>
+              <div class="bar-chart__track">
+                <div class="bar-chart__fill" style={`width: ${(t.count / maxTagCount) * 100}%`}></div>
+              </div>
+              <span class="bar-chart__count">{t.count}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {stats.themeDistribution.length > 0 && (
+      <section class="stats__section">
+        <h2>Themes pulled on</h2>
+        <p class="stats__sub">Each calendar month had one thread; here's how the post counts landed.</p>
+        <ul class="theme-list">
+          {stats.themeDistribution.map((t) => (
+            <li>
+              <a href={path(`/themes/${themeSlug(t.theme)}`)}>{t.theme}</a>
+              <span class="theme-list__count">{t.count} {t.count === 1 ? 'post' : 'posts'}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {(stats.longestPost || stats.shortestPost) && (
+      <section class="stats__section">
+        <h2>The bookends</h2>
+        <div class="bookends">
+          {stats.longestPost && (
+            <div class="bookend">
+              <p class="bookend__label">Longest</p>
+              <a class="bookend__title" href={path(`/articles/${stats.longestPost.slug}`)}>
+                {stats.longestPost.title}
+              </a>
+              <p class="bookend__words">{stats.longestPost.words.toLocaleString()} words</p>
+            </div>
+          )}
+          {stats.shortestPost && stats.shortestPost.slug !== stats.longestPost?.slug && (
+            <div class="bookend">
+              <p class="bookend__label">Shortest</p>
+              <a class="bookend__title" href={path(`/articles/${stats.shortestPost.slug}`)}>
+                {stats.shortestPost.title}
+              </a>
+              <p class="bookend__words">{stats.shortestPost.words.toLocaleString()} words</p>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {stats.totalPosts > 0 && (
+      <section class="stats__section stats__since">
+        <p>
+          First post landed {formatDateLong(stats.firstPubDate)} —
+          most recent on {formatDateLong(stats.lastPubDate)}. That's <strong>{stats.daysSinceFirst}</strong> days,
+          {' '}<strong>{stats.averageWordsPerPost}</strong> words per post on average.
+        </p>
+      </section>
+    )}
+
+    {stats.totalPosts === 0 && (
+      <p class="stats__empty">
+        No posts yet — the shelf will fill up soon.
+      </p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .stats {
+    padding-block: 4rem 3rem;
+  }
+  .stats__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .stats__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+  .stats__lede {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    margin: 0;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 4rem;
+  }
+  .stat {
+    padding: 1.5rem 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+    text-align: center;
+  }
+  .stat__number {
+    font-family: var(--font-serif);
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1;
+    margin: 0 0 0.5rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .stat__number span {
+    font-size: 0.65em;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .stat__label {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    margin: 0;
+  }
+
+  .stats__section {
+    margin-block: 3rem;
+  }
+  .stats__section h2 {
+    font-size: var(--step-2);
+    margin: 0 0 0.25rem;
+  }
+  .stats__sub {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    margin: 0 0 1.25rem;
+    font-size: var(--step--1);
+  }
+
+  .bar-chart {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .bar-chart__row {
+    display: grid;
+    grid-template-columns: 9rem 1fr 3rem;
+    gap: 1rem;
+    align-items: center;
+  }
+  .bar-chart__label {
+    color: var(--text);
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .bar-chart__label:hover { color: var(--accent); }
+  .bar-chart__track {
+    background: var(--accent-soft);
+    border-radius: 999px;
+    height: 14px;
+    overflow: hidden;
+  }
+  .bar-chart__fill {
+    background: var(--accent);
+    height: 100%;
+    border-radius: 999px;
+    transition: width 200ms ease;
+  }
+  .bar-chart__count {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--step--1);
+  }
+
+  .theme-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .theme-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+  }
+  .theme-list a {
+    color: var(--text);
+    text-decoration: none;
+    font-family: var(--font-serif);
+    font-weight: 500;
+  }
+  .theme-list a:hover { color: var(--accent); }
+  .theme-list__count {
+    color: var(--text-muted);
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    align-self: center;
+  }
+
+  .bookends {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .bookend {
+    padding: 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+  }
+  .bookend__label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--step--2);
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+  .bookend__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    color: var(--text);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  .bookend__title:hover { color: var(--accent); }
+  .bookend__words {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    margin: 0;
+  }
+
+  .stats__since {
+    color: var(--text-muted);
+    border-top: 1px dashed var(--rule);
+    padding-top: 2rem;
+    text-align: center;
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+  .stats__since strong {
+    color: var(--text);
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .stats__empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 4rem 0;
+  }
+
+  @media (max-width: 540px) {
+    .bar-chart__row {
+      grid-template-columns: 7rem 1fr 2.5rem;
+      gap: 0.5rem;
+    }
+  }
+</style>
