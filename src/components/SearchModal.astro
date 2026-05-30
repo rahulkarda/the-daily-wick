@@ -2,23 +2,40 @@
 /**
  * SearchModal — wraps Pagefind's default UI in our themed modal.
  * Triggered by the Header's "open-search" button or Cmd/Ctrl+K.
+ *
+ * Fixes applied:
+ * 1. Use <script src> for pagefind-ui.js (loads it as a classic script, not
+ *    an ES module import) so PagefindUI lands on window — compatible with all
+ *    browsers and avoids dynamic import() with a runtime string.
+ * 2. Re-attach event listeners after every Astro View Transition so the
+ *    modal still opens on subsequent page navigations.
+ * 3. Retry initialisation for up to 3s so fast navigations don't race the
+ *    script tag.
  */
 import { path } from '@/lib/path';
 const pagefindCssHref = path('/pagefind/pagefind-ui.css');
-const pagefindJsHref = path('/pagefind/pagefind-ui.js');
+const pagefindJsHref  = path('/pagefind/pagefind-ui.js');
 ---
 
 <dialog id="search-dialog" class="search-dialog" aria-label="Search">
   <div class="search-dialog__inner">
-    <button id="close-search" type="button" class="search-dialog__close" aria-label="Close">×</button>
+    <button id="close-search" type="button" class="search-dialog__close" aria-label="Close search (Escape)">×</button>
     <div id="search"></div>
   </div>
 </dialog>
 
 <link rel="stylesheet" href={pagefindCssHref} />
+
+<!-- Load pagefind-ui as a classic (non-module) script so PagefindUI is
+     available on window. Dynamic import() with a runtime string is unreliable
+     across browsers and breaks after View Transitions reinitialise the DOM. -->
 <script is:inline define:vars={{ pagefindJsHref }}>
-  // Expose the resolved URL so the module script below can read it.
-  window.__pagefindJsHref = pagefindJsHref;
+  if (!document.querySelector('script[data-pagefind-ui]')) {
+    var s = document.createElement('script');
+    s.src = pagefindJsHref;
+    s.dataset.pagefindUi = '1';
+    document.head.appendChild(s);
+  }
 </script>
 
 <style>
@@ -39,6 +56,8 @@ const pagefindJsHref = path('/pagefind/pagefind-ui.js');
   .search-dialog__inner {
     padding: 1.5rem 1.5rem 1rem;
     position: relative;
+    overflow-y: auto;
+    max-height: calc(70vh - 2rem);
   }
   .search-dialog__close {
     position: absolute;
@@ -62,57 +81,90 @@ const pagefindJsHref = path('/pagefind/pagefind-ui.js');
     --pagefind-ui-border-radius: var(--radius);
     --pagefind-ui-font: var(--font-sans);
   }
+
+  /* Make search results scroll inside the dialog */
+  :global(.pagefind-ui__results-area) {
+    max-height: calc(70vh - 8rem);
+    overflow-y: auto;
+  }
 </style>
 
 <script>
-  const dialog = document.getElementById('search-dialog') as HTMLDialogElement | null;
-  const openBtn = document.getElementById('open-search');
-  const closeBtn = document.getElementById('close-search');
-  let initialized = false;
+  // initSearch() sets up the PagefindUI widget and wires all button/keyboard
+  // listeners. Called once on first load and again after every Astro View
+  // Transition that replaces the DOM.
+  function initSearch() {
+    const dialog   = document.getElementById('search-dialog') as HTMLDialogElement | null;
+    const openBtn  = document.getElementById('open-search');
+    const closeBtn = document.getElementById('close-search');
 
-  async function ensureInitialized() {
-    if (initialized) return;
-    initialized = true;
-    // Load Pagefind UI's prebuilt module from /public at runtime.
-    // Vite can't resolve this at build time (it doesn't exist yet — Pagefind
-    // generates it during `postbuild`), so we use a string variable to bypass
-    // Vite's static analysis.
-    // The base-prefixed URL was injected into window by the inline script above.
-    const url = (window as any).__pagefindJsHref ?? '/pagefind/pagefind-ui.js';
-    // @ts-ignore
-    const mod = await import(/* @vite-ignore */ url);
-    new mod.PagefindUI({
-      element: '#search',
-      showImages: false,
-      showSubResults: true,
-      resetStyles: false,
+    if (!dialog || !openBtn) return;
+
+    let pagefindReady = false;
+
+    function initPagefind() {
+      if (pagefindReady) return;
+      const PF = (window as any).PagefindUI;
+      if (PF) {
+        pagefindReady = true;
+        const container = document.getElementById('search');
+        if (container) container.innerHTML = '';
+        new PF({ element: '#search', showImages: false, showSubResults: true, resetStyles: false });
+      } else {
+        // Classic script not yet executed — schedule a retry (up to 3s).
+        let retries = 0;
+        const poll = setInterval(() => {
+          retries++;
+          const PF2 = (window as any).PagefindUI;
+          if (PF2) {
+            clearInterval(poll);
+            pagefindReady = true;
+            const container = document.getElementById('search');
+            if (container) container.innerHTML = '';
+            new PF2({ element: '#search', showImages: false, showSubResults: true, resetStyles: false });
+          } else if (retries >= 30) {
+            clearInterval(poll);
+            console.error('[search] PagefindUI never loaded — /pagefind/pagefind-ui.js may be missing');
+          }
+        }, 100);
+      }
+    }
+
+    function openSearch() {
+      initPagefind();
+      if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute('open', '');
+      }
+      setTimeout(() => {
+        dialog.querySelector<HTMLInputElement>('.pagefind-ui__search-input')?.focus();
+      }, 50);
+    }
+
+    function closeSearch() {
+      if (typeof dialog.close === 'function' && dialog.open) {
+        dialog.close();
+      } else {
+        dialog.removeAttribute('open');
+      }
+    }
+
+    openBtn.addEventListener('click', openSearch);
+    closeBtn?.addEventListener('click', closeSearch);
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) closeSearch(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dialog.open) { e.preventDefault(); closeSearch(); return; }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        dialog.open ? closeSearch() : openSearch();
+      }
     });
   }
 
-  function open() {
-    if (!dialog) return;
-    ensureInitialized().catch((err) => console.error('Search init failed', err));
-    if (typeof dialog.showModal === 'function') dialog.showModal();
-    setTimeout(() => {
-      const input = dialog.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
-      input?.focus();
-    }, 50);
-  }
+  // First load.
+  initSearch();
 
-  function close() {
-    if (dialog?.open) dialog.close();
-  }
-
-  openBtn?.addEventListener('click', open);
-  closeBtn?.addEventListener('click', close);
-  dialog?.addEventListener('click', (e) => {
-    if (e.target === dialog) close();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-      e.preventDefault();
-      if (dialog?.open) close(); else open();
-    }
-  });
+  // Re-run after every View Transition (fresh DOM = lost event listeners).
+  document.addEventListener('astro:page-load', initSearch);
 </script>
