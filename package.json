@@ -9,9 +9,10 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "build": "node scripts/generate-og-cards.mjs && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
+    "og": "node scripts/generate-og-cards.mjs",
     "generate": "node scripts/generate-daily-post.mjs",
     "generate:dry-run": "node scripts/dev/dry-run.mjs",
     "send": "node scripts/send-daily-newsletter.mjs",

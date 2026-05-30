@@ -1,0 +1,223 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { path } from '@/lib/path';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+
+const withEpigraphs = posts.filter((p) => p.data.epigraph);
+
+// Deterministic SSR pick (index 0). Client will randomize on load.
+const initial = withEpigraphs[0];
+
+const islandData = withEpigraphs.map((p) => ({
+  text: p.data.epigraph!.text,
+  attribution: p.data.epigraph!.attribution,
+  slug: p.slug,
+  title: p.data.title,
+}));
+
+const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+---
+
+{withEpigraphs.length > 0 && initial && (
+  <section class="qr container" aria-label="From the archive" data-base={baseUrl}>
+    <div class="qr__card">
+      <p class="eyebrow">From the archive</p>
+      <button
+        type="button"
+        class="qr__shuffle"
+        id="quote-rotator-shuffle"
+        aria-label="Show another quote"
+        title="Show another quote"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 12a9 9 0 1 1-3-6.7L21 8" />
+          <path d="M21 3v5h-5" />
+        </svg>
+      </button>
+      <div class="qr__live" aria-live="polite">
+        <blockquote class="qr__quote" id="quote-rotator-text">
+          {initial.data.epigraph!.text}
+        </blockquote>
+        <p class="qr__meta">
+          <span class="qr__attribution" id="quote-rotator-attribution">
+            — {initial.data.epigraph!.attribution}
+          </span>
+          <a
+            class="qr__link"
+            id="quote-rotator-link"
+            href={path(`/articles/${initial.slug}`)}
+          >
+            from {initial.data.title} →
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <script
+      type="application/json"
+      id="quote-rotator-data"
+      set:html={JSON.stringify(islandData)}
+    />
+
+    <script is:inline>
+      (function () {
+        var node = document.getElementById('quote-rotator-data');
+        if (!node) return;
+        var data;
+        try {
+          data = JSON.parse(node.textContent || '[]');
+        } catch (e) {
+          return;
+        }
+        if (!Array.isArray(data) || data.length === 0) return;
+
+        var BASE = '';
+        var section = document.querySelector('.qr');
+        if (section) {
+          BASE = section.getAttribute('data-base') || '';
+        }
+
+        var liveEl = document.querySelector('.qr__live');
+        var textEl = document.getElementById('quote-rotator-text');
+        var attrEl = document.getElementById('quote-rotator-attribution');
+        var linkEl = document.getElementById('quote-rotator-link');
+        var btn = document.getElementById('quote-rotator-shuffle');
+        if (!liveEl || !textEl || !attrEl || !linkEl) return;
+
+        function render(i) {
+          var q = data[i];
+          textEl.textContent = q.text;
+          attrEl.textContent = '— ' + q.attribution;
+          linkEl.setAttribute('href', BASE + '/articles/' + q.slug);
+          linkEl.textContent = 'from ' + q.title + ' →';
+        }
+
+        function pickRandom(exclude) {
+          if (data.length === 1) return 0;
+          var idx;
+          do {
+            idx = Math.floor(Math.random() * data.length);
+          } while (idx === exclude);
+          return idx;
+        }
+
+        // Hide briefly then animate in to avoid flash.
+        liveEl.style.opacity = '0';
+        liveEl.style.transition = 'opacity 250ms ease';
+
+        var current = pickRandom(-1);
+        render(current);
+
+        // Animate in on next frame.
+        requestAnimationFrame(function () {
+          liveEl.style.opacity = '1';
+        });
+
+        if (btn) {
+          btn.addEventListener('click', function () {
+            var next = pickRandom(current);
+            current = next;
+            liveEl.style.opacity = '0';
+            window.setTimeout(function () {
+              render(current);
+              liveEl.style.opacity = '1';
+            }, 180);
+          });
+        }
+      })();
+    </script>
+  </section>
+)}
+
+<style>
+  .qr {
+    padding-block: 2rem 0;
+  }
+  .qr__card {
+    position: relative;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+    padding: 1.75rem 1.5rem 1.5rem;
+  }
+  .qr__card .eyebrow {
+    margin: 0 0 1rem;
+  }
+  .qr__shuffle {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease, transform 200ms ease;
+  }
+  .qr__shuffle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: rotate(45deg);
+  }
+  .qr__shuffle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .qr__live {
+    max-width: 32rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .qr__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--step-2);
+    line-height: 1.4;
+    color: var(--text);
+    margin: 0 0 1rem;
+    text-wrap: balance;
+  }
+  .qr__meta {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+  .qr__attribution {
+    font-family: var(--font-serif);
+  }
+  .qr__link {
+    font-size: var(--step--2);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+  .qr__link:hover {
+    color: var(--accent);
+  }
+</style>

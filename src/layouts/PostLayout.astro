@@ -7,12 +7,14 @@ import RelatedPosts from '@/components/RelatedPosts.astro';
 import InlineSubscribe from '@/components/InlineSubscribe.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
 import AIDisclosure from '@/components/AIDisclosure.astro';
+import PostDna from '@/components/PostDna.astro';
 import TagList from '@/components/TagList.astro';
 import FurtherReading from '@/components/FurtherReading.astro';
 import Reactions from '@/components/Reactions.astro';
 import ReadingProgress from '@/components/ReadingProgress.astro';
 import SeriesNav from '@/components/SeriesNav.astro';
 import { path } from '@/lib/path';
+import { readingTime } from '@/lib/reading-time';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -40,11 +42,14 @@ const {
   furtherReading,
   curator,
   provenance,
+  dna,
 } = post.data;
 
 const slug = post.slug;
 const url = path(`/articles/${slug}`);
 const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').trim();
+const readingMinutes = readingTime(post.body);
+const ogImage = `/og/${slug}.png`;
 
 const photoSourceLabel =
   heroCredit.source === 'pexels'
@@ -67,6 +72,7 @@ const derivedProvenance = (() => {
 <BaseLayout
   title={title}
   description={description}
+  image={ogImage}
   type="article"
   pubDate={pubDate}
 >
@@ -155,6 +161,7 @@ const derivedProvenance = (() => {
         <a href={path('/random')}>Read another at random →</a>
       </p>
       <AIDisclosure curator={curator} />
+      <PostDna dna={dna} readingMinutes={readingMinutes} />
     </footer>
 
     <div class="container container--narrow">

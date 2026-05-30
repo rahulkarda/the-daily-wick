@@ -31,6 +31,7 @@ export function assembleMdx({
   provenance,
   body,
   curator,
+  dna,
 }) {
   const lines = [
     '---',
@@ -83,6 +84,19 @@ export function assembleMdx({
 
   lines.push(`aiDrafted: true`);
   lines.push(`curator: ${yamlString(curator)}`);
+
+  // Emit the optional DNA telemetry block. Only fields present make it in
+  // (the schema and component both treat individual rows as optional).
+  if (dna && Object.values(dna).some((v) => v !== undefined && v !== null && v !== '')) {
+    lines.push('dna:');
+    if (dna.model) lines.push(`  model: ${yamlString(dna.model)}`);
+    if (Number.isInteger(dna.generationMs)) lines.push(`  generationMs: ${dna.generationMs}`);
+    if (Number.isInteger(dna.outputTokens)) lines.push(`  outputTokens: ${dna.outputTokens}`);
+    if (dna.imageSource) lines.push(`  imageSource: ${yamlString(dna.imageSource)}`);
+    if (dna.imageQueryHit) lines.push(`  imageQueryHit: ${yamlString(dna.imageQueryHit)}`);
+    if (Number.isInteger(dna.imageQueryAttempts)) lines.push(`  imageQueryAttempts: ${dna.imageQueryAttempts}`);
+  }
+
   lines.push('---', '', body.trim(), '');
 
   return lines.join('\n');

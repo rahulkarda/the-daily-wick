@@ -134,6 +134,13 @@
     widows: 3;
   }
 
+  /* Drop cap: print stylesheet already neutralizes --accent, but force #000
+   * explicitly here for safety across user agents. */
+  article[data-format='essay'] .prose h2:first-of-type + p::first-letter,
+  article[data-format='essay'] .prose > p:first-child::first-letter {
+    color: #000 !important;
+  }
+
   /* Sources block: keep, but visually quieter */
   .sources {
     margin-top: 1.5rem !important;

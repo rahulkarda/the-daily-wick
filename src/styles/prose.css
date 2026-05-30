@@ -108,6 +108,32 @@
   margin-top: 0.75em;
 }
 
+/* Tufte-style drop cap for essay-format posts.
+ * Targets the first paragraph of body text (the <p> directly following the
+ * first <h2>, since essays open with "## The Question"), and a fallback for
+ * essays whose body unusually starts with a paragraph before any h2.
+ * Scoped to [data-format='essay'] so micro posts are untouched.
+ */
+article[data-format='essay'] .prose h2:first-of-type + p::first-letter,
+article[data-format='essay'] .prose > p:first-child::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  float: left;
+  font-size: 5em;
+  line-height: 0.85;
+  padding-right: 0.08em;
+  padding-top: 0.05em;
+  color: var(--accent);
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  article[data-format='essay'] .prose h2:first-of-type + p::first-letter,
+  article[data-format='essay'] .prose > p:first-child::first-letter {
+    font-size: 3.8em;
+  }
+}
+
 /* monthly theme hint at the top of the article */
 .theme-tag {
   display: inline-block;

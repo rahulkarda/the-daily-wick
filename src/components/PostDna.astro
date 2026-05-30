@@ -1,0 +1,200 @@
+---
+/**
+ * PostDna — meta-transparency block.
+ *
+ * Renders a collapsed <details> element with a small definition list of
+ * how the post was made: model, generation time, output tokens, image
+ * source/query, and reading time. Sits below AIDisclosure in PostLayout.
+ *
+ * If `dna` is undefined or every field is empty, renders nothing — old
+ * (hand-authored) posts without this block must still build cleanly.
+ */
+
+interface Dna {
+  model?: string;
+  generationMs?: number;
+  outputTokens?: number;
+  imageSource?: 'unsplash' | 'pexels' | 'pollinations' | 'fallback';
+  imageQueryHit?: string;
+  imageQueryAttempts?: number;
+}
+
+interface Props {
+  dna?: Dna | null;
+  readingMinutes: string;
+}
+
+const { dna, readingMinutes } = Astro.props;
+
+// Format generation time as seconds with one decimal.
+const formatMs = (ms?: number) =>
+  typeof ms === 'number' ? `${(ms / 1000).toFixed(1)}s` : null;
+
+// Pretty-print the image source for the human-readable line.
+const imageSourceLabel = (s?: Dna['imageSource']): string | null => {
+  switch (s) {
+    case 'unsplash':
+      return 'Unsplash';
+    case 'pexels':
+      return 'Pexels';
+    case 'pollinations':
+      return 'Pollinations.ai';
+    case 'fallback':
+      return 'Static fallback (Unsplash had no usable result)';
+    default:
+      return null;
+  }
+};
+
+// Ordinal for the "1st query" / "2nd query" suffix.
+const ordinal = (n: number): string => {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${n}st`;
+  if (mod10 === 2 && mod100 !== 12) return `${n}nd`;
+  if (mod10 === 3 && mod100 !== 13) return `${n}rd`;
+  return `${n}th`;
+};
+
+// --- Build the rendered rows. Each row is null if its data is missing. ---
+
+// "Drafted by" — model, generation seconds, output tokens.
+const draftedParts: string[] = [];
+if (dna?.model) draftedParts.push(dna.model);
+const seconds = formatMs(dna?.generationMs);
+if (seconds) draftedParts.push(seconds);
+if (typeof dna?.outputTokens === 'number') {
+  draftedParts.push(`${dna.outputTokens} output tokens`);
+}
+const draftedLine = draftedParts.length > 0 ? draftedParts.join(', ') : null;
+
+// "Image" — provider + query that hit (or fallback message).
+let imageLine: string | null = null;
+if (dna?.imageSource === 'fallback') {
+  imageLine = imageSourceLabel('fallback');
+} else if (dna?.imageSource) {
+  const provider = imageSourceLabel(dna.imageSource);
+  const query = dna.imageQueryHit ? `"${dna.imageQueryHit}"` : null;
+  const attempts =
+    typeof dna.imageQueryAttempts === 'number'
+      ? `(${ordinal(dna.imageQueryAttempts)} query)`
+      : null;
+  imageLine = [provider, query, attempts].filter(Boolean).join(' ');
+}
+
+const readingLine = readingMinutes ?? null;
+
+const hasAnyData = Boolean(draftedLine || imageLine || readingLine);
+---
+
+{hasAnyData && (
+  <details class="post-dna">
+    <summary>
+      <span class="post-dna__title">Post DNA</span>
+      <span class="post-dna__sep" aria-hidden="true">·</span>
+      <span class="post-dna__hint">how this was made</span>
+    </summary>
+    <dl class="post-dna__list">
+      {draftedLine && (
+        <div class="post-dna__row">
+          <dt>Drafted by</dt>
+          <dd>{draftedLine}</dd>
+        </div>
+      )}
+      {imageLine && (
+        <div class="post-dna__row">
+          <dt>Image</dt>
+          <dd>{imageLine}</dd>
+        </div>
+      )}
+      {readingLine && (
+        <div class="post-dna__row">
+          <dt>Reading</dt>
+          <dd>{readingLine}</dd>
+        </div>
+      )}
+    </dl>
+  </details>
+)}
+
+<style>
+  .post-dna {
+    margin-top: 1rem;
+    padding: 0.875rem 1.25rem;
+    background: var(--bg);
+    border-top: 1px dashed var(--rule);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .post-dna summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+  .post-dna summary::-webkit-details-marker {
+    display: none;
+  }
+  .post-dna summary::before {
+    content: '▾';
+    color: var(--text-muted);
+    transition: transform 150ms ease;
+    display: inline-block;
+  }
+  .post-dna:not([open]) > summary::before {
+    transform: rotate(-90deg);
+  }
+
+  .post-dna__title {
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+  .post-dna__sep {
+    color: var(--rule);
+  }
+  .post-dna__hint {
+    font-style: italic;
+  }
+
+  .post-dna__list {
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 0 0;
+    border-top: 1px solid var(--accent-soft);
+    display: grid;
+    gap: 0.35rem;
+  }
+  .post-dna__row {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+    font-size: var(--step--2);
+  }
+  .post-dna__row dt {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--step--2);
+  }
+  .post-dna__row dd {
+    margin: 0;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  @media (max-width: 32rem) {
+    .post-dna__row {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
+    }
+  }
+</style>

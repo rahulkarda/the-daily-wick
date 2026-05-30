@@ -78,6 +78,21 @@ const posts = defineCollection({
       aiDrafted: z.boolean().default(true),
       curator: z.string().default('Rahul Karda'),
       draft: z.boolean().default(false),
+      // Optional "Post DNA" — telemetric provenance for AI-drafted posts.
+      // Captured by the generator at build time; absent on hand-authored
+      // legacy posts. The PostDna component renders nothing when absent.
+      dna: z
+        .object({
+          model: z.string().optional(),
+          generationMs: z.number().int().optional(),
+          outputTokens: z.number().int().optional(),
+          imageSource: z
+            .enum(['unsplash', 'pexels', 'pollinations', 'fallback'])
+            .optional(),
+          imageQueryHit: z.string().optional(),
+          imageQueryAttempts: z.number().int().optional(),
+        })
+        .optional(),
     }),
 });
 

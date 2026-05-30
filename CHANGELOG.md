@@ -1,5 +1,30 @@
 # Changelog
 
+## v0.4.0 — 2026-05-30
+
+Tier 3 polish — alive surfaces, transparency, and shareable cards.
+
+- **"On this day"** — homepage strip surfaces posts published 1y / 6mo / 1mo
+  ago today (±3 days). Hidden until the catalogue catches up. Each anchor
+  picks the closest post and dedupes across anchors.
+- **Random quote rotator** — homepage block pulls a random epigraph from
+  the back catalogue with a "from {post title} →" link. Click "↻ Another"
+  to refresh. Aria-live polite. Hidden when no posts have epigraphs.
+- **Drop caps on essays** — Tufte-style serif drop cap on the first
+  paragraph of every essay-format post. Scoped via `[data-format='essay']`
+  so micros are untouched. Mobile-aware sizing; print-aware override.
+- **Post DNA block** — collapsible "how this was made" footer on every
+  post: model, generation time (seconds), output token count, image
+  source + which of the three queries hit, reading time. Schema field is
+  optional; old posts without `dna` are unaffected.
+- **OG cards** — every post gets a 1200×630 PNG generated at build time
+  via sharp. Title in serif, epigraph (italic, accent-bordered), format
+  pill, and the URL strip. Build script `scripts/generate-og-cards.mjs`
+  runs before `astro build` (mtime-incremental). `public/og/` is
+  gitignored — regenerated on every CI run.
+- Gemini wrapper now returns `{ draft, usage }` so the generator can record
+  output token counts in DNA without adding a second call.
+
 ## v0.3.0 — 2026-05-30
 
 Tier 1 + Tier 2 polish from the post-launch review.

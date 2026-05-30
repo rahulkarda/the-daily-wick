@@ -246,11 +246,19 @@ async function callGemini(prompt, apiKey, format) {
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Gemini returned no text');
 
+  // Surface token usage so the caller can stamp it into the post's DNA block.
+  // The Gemini REST API returns usageMetadata at the top level of the response.
+  const usage = {
+    outputTokens: data?.usageMetadata?.candidatesTokenCount,
+    promptTokens: data?.usageMetadata?.promptTokenCount,
+  };
+
+  let draft;
   try {
-    return JSON.parse(text);
+    draft = JSON.parse(text);
   } catch (err) {
     try {
-      return JSON.parse(repairJson(text));
+      draft = JSON.parse(repairJson(text));
     } catch (err2) {
       if (process.env.DEBUG_GEMINI) {
         console.error('[gemini] raw response (first 1200 chars):');
@@ -259,6 +267,7 @@ async function callGemini(prompt, apiKey, format) {
       throw new Error(`Gemini JSON parse failed: ${err.message}`);
     }
   }
+  return { draft, usage };
 }
 
 /**
@@ -318,9 +327,9 @@ export async function generateDraft({ prompt, apiKey, format = 'micro' }) {
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const draft = await callGemini(activePrompt, apiKey, format);
+      const { draft, usage } = await callGemini(activePrompt, apiKey, format);
       const v = validateDraft(draft, format);
-      if (v.ok) return draft;
+      if (v.ok) return { draft, usage };
       lastError = v.error;
       activePrompt = `${prompt}\n\n---\nYour previous output failed validation: ${v.error}\nReturn ONLY the corrected JSON. Do not explain. Fix only the violation; keep everything else the same in spirit.`;
     } catch (err) {

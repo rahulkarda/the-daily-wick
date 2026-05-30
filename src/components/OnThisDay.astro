@@ -1,0 +1,103 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { findOnThisDay } from '@/lib/on-this-day';
+import { formatDateLong } from '@/lib/format-date';
+import { path } from '@/lib/path';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+const anchors = findOnThisDay(posts);
+---
+
+{anchors.length > 0 && (
+  <section class="otd container" aria-label="On this day">
+    <p class="eyebrow">On this day</p>
+    <ul class="otd__list">
+      {anchors.map((a) => (
+        <li class="otd__item">
+          <span class="otd__ago">{a.ago}</span>
+          <a class="otd__link" href={path(`/articles/${a.post.slug}`)}>
+            <span class="otd__label">{a.label}</span>
+            <span class="otd__title">{a.post.data.title}</span>
+            <time class="otd__date" datetime={a.post.data.pubDate.toISOString()}>
+              {formatDateLong(a.post.data.pubDate)}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .otd {
+    padding-block: 2rem 0;
+  }
+  .otd__list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+  .otd__item {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+  .otd__item:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .otd__ago {
+    flex-shrink: 0;
+    align-self: center;
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--accent);
+    width: 2.5rem;
+    text-align: center;
+    letter-spacing: -0.02em;
+  }
+  .otd__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    color: inherit;
+    text-decoration: none;
+    min-width: 0;
+  }
+  .otd__link:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+  .otd__label {
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+  .otd__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-0);
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .otd__item:hover .otd__title {
+    color: var(--accent);
+  }
+  .otd__date {
+    color: var(--text-muted);
+    font-size: var(--step--2);
+  }
+</style>

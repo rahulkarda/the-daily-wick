@@ -12,6 +12,9 @@ dist/
 # pagefind
 public/pagefind/
 
+# generated OG card images (regenerated on every build)
+public/og/
+
 # environment
 .env
 .env.local

@@ -137,12 +137,14 @@ async function main() {
   const prompt = await buildPrompt({ today, theme, recent, exemplars, format });
 
   console.log('[generate] calling Gemini…');
-  const draft = await generateDraft({
+  const t0 = Date.now();
+  const { draft, usage } = await generateDraft({
     prompt,
     apiKey: process.env.GEMINI_API_KEY,
     format,
   });
-  console.log(`[generate] draft accepted: "${draft.title}"`);
+  const generationMs = Date.now() - t0;
+  console.log(`[generate] draft accepted: "${draft.title}" (${generationMs}ms, ${usage?.outputTokens ?? '?'} output tokens)`);
 
   const slug = slugify(draft.slug || draft.title);
   if (!slug) throw new Error('slug empty after slugify');
@@ -165,6 +167,27 @@ async function main() {
   }
 
   const tags = (draft.tags || []).map((t) => String(t).toLowerCase());
+
+  // Derive how many image queries were tried before one hit. unsplash.mjs
+  // doesn't return this directly — it returns the query that hit, so we
+  // map back to the original list. On hard fallback, every query was tried.
+  let imageQueryAttempts;
+  if (hero.source === 'fallback') {
+    imageQueryAttempts = (draft.imageQueries || []).length;
+  } else {
+    const idx = (draft.imageQueries || []).findIndex((q) => q === hero.query);
+    imageQueryAttempts = idx >= 0 ? idx + 1 : undefined;
+  }
+
+  const dna = {
+    model: 'gemini-2.5-flash',
+    generationMs,
+    outputTokens: usage?.outputTokens,
+    imageSource: hero.source,
+    imageQueryHit: hero.source === 'fallback' ? undefined : hero.query,
+    imageQueryAttempts,
+  };
+
   const mdx = assembleMdx({
     title: draft.title,
     subtitle: draft.subtitle,
@@ -181,6 +204,7 @@ async function main() {
     provenance: draft.provenance || undefined,
     body: draft.bodyMdx,
     curator: CURATOR,
+    dna,
   });
 
   mkdirSync(POSTS_DIR, { recursive: true });
