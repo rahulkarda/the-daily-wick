@@ -15,6 +15,7 @@
     "og": "node scripts/generate-og-cards.mjs",
     "generate": "node scripts/generate-daily-post.mjs",
     "generate:dry-run": "node scripts/dev/dry-run.mjs",
+    "queue": "node scripts/queue-topic.mjs",
     "send": "node scripts/send-daily-newsletter.mjs",
     "send:dry-run": "node scripts/send-daily-newsletter.mjs --dry-run",
     "test": "node --test tests/*.test.mjs",

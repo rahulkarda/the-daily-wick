@@ -26,6 +26,7 @@ import { generateDraft } from './lib/gemini.mjs';
 import { fetchHeroImage } from './lib/unsplash.mjs';
 import { assembleMdx } from './lib/mdx-writer.mjs';
 import { readRecent, appendRecent, summarize } from './lib/recent-topics.mjs';
+import { peekNext, popNext } from './lib/topic-queue.mjs';
 import { slugify } from './lib/slugify.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -92,16 +93,42 @@ async function loadExemplars() {
   return out;
 }
 
-async function buildPrompt({ today, theme, recent, exemplars, format }) {
+async function buildPrompt({ today, theme, recent, exemplars, format, queuedTopic }) {
   const template = await readFile(PROMPT_PATH, 'utf-8');
+
+  // When a topic is queued, inject a directive block so Gemini writes about
+  // that specific idea rather than inventing one. The rest of the prompt
+  // (voice rules, format spec, banned phrases) remains unchanged.
+  const topicDirective = queuedTopic
+    ? [
+        '',
+        '## Queued topic — write about this today',
+        '',
+        `**Title direction:** ${queuedTopic.title}`,
+        queuedTopic.angle ? `**Angle:** ${queuedTopic.angle}` : '',
+        queuedTopic.tags?.length
+          ? `**Tag hints:** ${queuedTopic.tags.join(', ')}`
+          : '',
+        '',
+        'Use the title direction as your starting point — you may refine the wording but stay on this idea. The angle is a suggested framing; follow it or find a sharper one.',
+        '',
+      ]
+        .filter((l) => l !== null)
+        .join('\n')
+    : '';
+
   return template
     .replaceAll('{{DATE}}', isoDate(today))
     .replaceAll('{{MONTHLY_THEME}}', theme.theme)
     .replaceAll('{{MONTHLY_THEME_DESCRIPTION}}', theme.description)
     .replaceAll('{{RECENT_TOPICS}}', summarize(recent))
-    .replaceAll('{{EXEMPLARS}}', exemplars.map((ex, i) => `### Exemplar ${i + 1}\n\n${ex}`).join('\n\n---\n\n'))
+    .replaceAll(
+      '{{EXEMPLARS}}',
+      exemplars.map((ex, i) => `### Exemplar ${i + 1}\n\n${ex}`).join('\n\n---\n\n'),
+    )
     .replaceAll('{{CURATOR}}', CURATOR)
-    .replaceAll('{{FORMAT}}', format);
+    .replaceAll('{{FORMAT}}', format)
+    + topicDirective;
 }
 
 function postExistsForToday(today) {
@@ -115,8 +142,17 @@ async function main() {
   console.log(`[generate] starting (dry-run=${DRY_RUN})`);
 
   const today = todayInPT();
-  const format = formatFor(today);
-  console.log(`[generate] date: ${isoDate(today)} · format: ${format}`);
+  const calendarFormat = formatFor(today);
+
+  // Check the topic queue BEFORE calling Gemini. A queued entry can optionally
+  // override the calendar-driven format (micro/essay rotation).
+  const queuedTopic = await peekNext();
+  const format = queuedTopic?.format ?? calendarFormat;
+
+  if (queuedTopic) {
+    console.log(`[generate] queue hit: "${queuedTopic.title}" (format=${format})`);
+  }
+  console.log(`[generate] date: ${isoDate(today)} · format: ${format}${queuedTopic ? ' (queued)' : ' (auto)'}`);
 
   if (postExistsForToday(today)) {
     console.log('[generate] today already has a post — exiting clean (0).');
@@ -134,7 +170,7 @@ async function main() {
 
   const recent = await readRecent();
   const exemplars = await loadExemplars();
-  const prompt = await buildPrompt({ today, theme, recent, exemplars, format });
+  const prompt = await buildPrompt({ today, theme, recent, exemplars, format, queuedTopic });
 
   console.log('[generate] calling Gemini…');
   const t0 = Date.now();
@@ -213,6 +249,11 @@ async function main() {
   console.log(`[generate] wrote ${outPath}`);
 
   if (!DRY_RUN) {
+    // Consume the queue entry now that the MDX is safely on disk.
+    if (queuedTopic) {
+      await popNext();
+      console.log(`[generate] queue entry consumed: "${queuedTopic.title}"`);
+    }
     await appendRecent({
       date: isoDate(today),
       slug,
