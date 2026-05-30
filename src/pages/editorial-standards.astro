@@ -20,15 +20,15 @@ import { SITE } from '@/consts';
   <ol>
     <li>
       <strong>Draft.</strong> Every weekday morning, an automated job calls Gemini
-      2.5 Flash with a long, opinionated prompt. The prompt fixes the format
-      (epigraph, the idea, one question, today's action, sources), enforces a voice,
-      lists banned phrases, and supplies the current month's theme plus the last
-      thirty topics so we don't repeat ourselves.
+      2.5 Flash with a long, opinionated prompt. The prompt fixes the day's format
+      (a 2-minute <em>micro</em> on Mon/Wed/Fri; a 6-8-minute <em>essay</em> on Tue/Thu),
+      enforces a voice, lists banned phrases, and supplies the current month's theme
+      plus the last thirty topics so we don't repeat ourselves.
     </li>
     <li>
       <strong>Validate.</strong> The draft is checked against our schema (title,
-      tags, length, structure) and against a banned-phrases list. Drafts that fail
-      validation are rewritten; drafts that fail twice are skipped.
+      tags, length, structure, real-looking source URLs) and against a banned-phrases
+      list. Drafts that fail validation are rewritten; drafts that fail twice are skipped.
     </li>
     <li>
       <strong>Curate.</strong> A human curator reads the result, fact-checks the
@@ -53,9 +53,9 @@ import { SITE } from '@/consts';
       paper, dataset, or report whenever the source is reachable.
     </li>
     <li>
-      <strong>Books and papers are linked.</strong> The "Go Deeper" block at the
-      bottom of every post points to the actual source — book, paper, podcast, or
-      essay — never to a paywalled summary.
+      <strong>Further reading is curated.</strong> The "If this hooked you" block
+      at the bottom of every post points to actual books, papers, talks, or essays
+      — chosen as the next-best step, not as a citation. We avoid paywalled-only links.
     </li>
     <li>
       <strong>If we can't source it, we don't say it.</strong> An idea without a
@@ -66,8 +66,9 @@ import { SITE } from '@/consts';
   <h2>Images</h2>
   <p>
     Every hero image comes from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
-    under their free license. The photographer's name and a link to their profile
-    appear directly under every image. We do not generate AI imagery in v1.
+    or <a href="https://pexels.com" target="_blank" rel="noopener">Pexels</a> under their
+    free licenses. The photographer's name and a link to their profile appear directly
+    under every image. We do not generate AI imagery in v1.
   </p>
 
   <h2>Corrections</h2>

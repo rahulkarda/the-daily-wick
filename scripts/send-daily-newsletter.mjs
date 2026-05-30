@@ -29,7 +29,7 @@ const FAILED_PATH = resolve(ROOT, 'content/state/failed-sends.json');
 
 const SITE_URL = process.env.SITE_URL || 'https://rahulkarda.github.io/the-daily-wick';
 const BUTTONDOWN_HANDLE = 'the-daily-wick';
-const CURATOR = process.env.CURATOR_NAME || 'the Editor';
+const CURATOR = process.env.CURATOR_NAME || 'Rahul Karda';
 
 function todayPT() {
   const fmt = new Intl.DateTimeFormat('en-CA', {
@@ -126,6 +126,7 @@ async function main() {
     pubDate: typeof fm.pubDate === 'string' ? fm.pubDate : new Date(fm.pubDate).toISOString().slice(0, 10),
     siteUrl: SITE_URL,
     buttondownHandle: BUTTONDOWN_HANDLE,
+    furtherReading: fm.furtherReading,
   });
 
   if (DRY_RUN) {

@@ -26,11 +26,15 @@ const fixture = {
   ].join('\n'),
   epigraph: { text: 'All of humanity\'s problems stem from inability to sit quietly alone.', attribution: 'Pascal' },
   monthlyTheme: 'Stillness',
-  curator: 'the Editor',
+  curator: 'Rahul Karda',
   postSlug: 'on-the-discipline-of-stillness',
   pubDate: '2026-05-28',
-  siteUrl: 'https://the-daily-wick.pages.dev',
+  siteUrl: 'https://rahulkarda.github.io/the-daily-wick',
   buttondownHandle: 'the-daily-wick',
+  furtherReading: [
+    { label: 'Pascal — Pensées', url: 'https://www.gutenberg.org/ebooks/18269', kind: 'book', note: 'Read §139.' },
+    { label: 'Pico Iyer TED talk', url: 'https://www.ted.com/talks/pico_iyer_the_art_of_stillness', kind: 'video' },
+  ],
 };
 
 test('renderEmail returns subject + html + preheader', () => {
@@ -55,17 +59,46 @@ test('renderEmail HTML contains all four section markers', () => {
 
 test('renderEmail HTML includes web-version + standards links', () => {
   const { html } = renderEmail(fixture);
-  assert.match(html, /the-daily-wick\.pages\.dev\/articles\/on-the-discipline-of-stillness/);
+  assert.match(html, /rahulkarda\.github\.io\/the-daily-wick\/articles\/on-the-discipline-of-stillness/);
   assert.match(html, /editorial-standards/);
 });
 
 test('renderEmail HTML includes curator name + AI disclosure', () => {
   const { html } = renderEmail(fixture);
   assert.match(html, /Drafted with AI/);
-  assert.match(html, /the Editor/);
+  assert.match(html, /Rahul Karda/);
 });
 
 test('renderEmail HTML respects 600px container', () => {
   const { html } = renderEmail(fixture);
   assert.match(html, /max-width:600px/);
+});
+
+test('renderEmail HTML includes furtherReading items', () => {
+  const { html } = renderEmail(fixture);
+  assert.match(html, /If this hooked you/);
+  assert.match(html, /Pascal — Pensées/);
+  assert.match(html, /Pico Iyer TED talk/);
+  assert.match(html, /Read §139/);
+});
+
+test('renderEmail without furtherReading omits the block', () => {
+  const noFr = { ...fixture, furtherReading: undefined };
+  const { html } = renderEmail(noFr);
+  assert.ok(!/If this hooked you/.test(html), 'should not show heading without items');
+});
+
+test('renderEmail escapes double quotes in attribute values', () => {
+  // Defensive: even though gemini.mjs should reject these, the email
+  // renderer must escape them so a hand-edited MDX with a stray quote
+  // can't smuggle attributes into hrefs.
+  const sneaky = {
+    ...fixture,
+    furtherReading: [
+      { label: 'oops', url: 'https://example.com" onload="alert(1)', kind: 'site' },
+    ],
+  };
+  const { html } = renderEmail(sneaky);
+  assert.ok(!/onload="alert\(1\)/.test(html), 'must not allow attribute breakout');
+  assert.match(html, /&quot;/);
 });

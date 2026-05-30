@@ -21,7 +21,9 @@ function esc(s) {
   return String(s ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function inlineStyle(obj) {
@@ -98,6 +100,77 @@ function styleElements(html) {
     .replace(/<strong>/g, '<strong style="font-weight:600">');
 }
 
+/**
+ * Render the "If this hooked you" section as inline-styled email HTML.
+ * Returns empty string if no items — keep the spacing clean.
+ */
+function renderFurtherReading(items) {
+  if (!items || items.length === 0) return '';
+
+  const itemsHtml = items
+    .map((it) => {
+      const note = it.note
+        ? `<div style="${inlineStyle({
+            fontFamily: SANS,
+            fontSize: '13px',
+            color: COLORS.textMuted,
+            lineHeight: '1.45',
+            marginTop: '2px',
+          })}">${esc(it.note)}</div>`
+        : '';
+      const kind = it.kind
+        ? `<span style="${inlineStyle({
+            fontFamily: SANS,
+            fontSize: '11px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: COLORS.textMuted,
+            marginLeft: '8px',
+          })}">· ${esc(it.kind)}</span>`
+        : '';
+      return `<li style="${inlineStyle({
+        marginBottom: '12px',
+        listStyle: 'none',
+      })}">
+        <a href="${esc(it.url)}" style="${inlineStyle({
+          color: COLORS.text,
+          fontFamily: SANS,
+          fontSize: '15px',
+          fontWeight: '500',
+          textDecoration: 'none',
+        })}">${esc(it.label)}</a>${kind}
+        ${note}
+      </li>`;
+    })
+    .join('');
+
+  return `<div style="${inlineStyle({
+    marginTop: '24px',
+    padding: '16px 18px 14px 18px',
+    border: `1px solid ${COLORS.rule}`,
+    borderRadius: '8px',
+    backgroundColor: COLORS.bg,
+  })}">
+    <div style="${inlineStyle({
+      fontFamily: SERIF,
+      fontSize: '17px',
+      fontWeight: '600',
+      color: COLORS.text,
+      marginBottom: '2px',
+    })}">If this hooked you</div>
+    <div style="${inlineStyle({
+      fontFamily: SERIF,
+      fontStyle: 'italic',
+      fontSize: '14px',
+      color: COLORS.textMuted,
+      marginBottom: '10px',
+    })}">Where we'd send you next.</div>
+    <ul style="${inlineStyle({ padding: '0', margin: '0', listStyle: 'none' })}">
+      ${itemsHtml}
+    </ul>
+  </div>`;
+}
+
 export function renderEmail({
   title,
   subtitle,
@@ -108,6 +181,7 @@ export function renderEmail({
   postSlug,
   pubDate,
   siteUrl,
+  furtherReading,
   // buttondownHandle reserved for future use (e.g. archive link)
 }) {
   const bodyHtml = styleElements(marked.parse(bodyMdx ?? ''));
@@ -115,6 +189,8 @@ export function renderEmail({
 
   const subject = title;
   const preheader = subtitle || epigraph?.text || 'A small flame for your morning.';
+
+  const furtherReadingBlock = renderFurtherReading(furtherReading);
 
   const html = `<!doctype html>
 <html lang="en">
@@ -204,6 +280,7 @@ export function renderEmail({
       }
       <tr><td style="padding:24px 32px 16px 32px;color:${COLORS.text};">
         ${bodyHtml}
+        ${furtherReadingBlock}
       </td></tr>
       <tr><td style="padding:8px 32px 24px 32px;border-top:1px solid ${COLORS.rule};margin-top:24px;">
         <p style="${inlineStyle({

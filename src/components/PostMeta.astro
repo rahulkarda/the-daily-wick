@@ -7,14 +7,19 @@ interface Props {
   body: string;
   curator: string;
   monthlyTheme?: string;
+  format?: 'micro' | 'essay';
 }
 
-const { pubDate, body, curator, monthlyTheme } = Astro.props;
+const { pubDate, body, curator, monthlyTheme, format } = Astro.props;
 const minutes = readingTime(body);
 ---
 
 <div class="post-meta">
-  {monthlyTheme && <span class="theme-tag">{monthlyTheme}</span>}
+  <div class="post-meta__chips">
+    {monthlyTheme && <span class="theme-tag">{monthlyTheme}</span>}
+    {format === 'essay' && <span class="format-pill">Essay</span>}
+    {format === 'micro' && <span class="format-pill format-pill--micro">Micro</span>}
+  </div>
   <p class="post-meta__line">
     <time datetime={pubDate.toISOString()}>{formatDateLong(pubDate)}</time>
     <span aria-hidden="true">·</span>
@@ -33,6 +38,12 @@ const minutes = readingTime(body);
     align-items: center;
     gap: 0.75rem;
   }
+  .post-meta__chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .post-meta__line {
     font-size: var(--step--1);
     color: var(--text-muted);
@@ -45,5 +56,21 @@ const minutes = readingTime(body);
   .post-meta__line em {
     font-style: italic;
     color: var(--text);
+  }
+  .format-pill {
+    display: inline-block;
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--bg);
+    background: var(--text);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .format-pill--micro {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--rule);
   }
 </style>

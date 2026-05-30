@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/path';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const slugs = posts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((p) => p.slug);
+
+// First slug is the only one rendered server-side; the script below picks
+// uniformly at random from the full list at runtime. We expose the list
+// as a JSON island so the script doesn't need a separate fetch.
+const fallbackSlug = slugs[0] ?? '';
+---
+
+<BaseLayout title="Read another" description="Pulling something at random from the shelf.">
+  <section class="random container container--narrow" aria-live="polite">
+    <p class="eyebrow">A small flame, at random</p>
+    <h1>Read another</h1>
+    <p class="random__lede" id="random-status">Pulling something at random from the shelf…</p>
+    <p class="random__manual" id="random-manual" hidden>
+      Or pick one yourself: <a id="random-link" href={path(`/articles/${fallbackSlug}`)}>open this one</a>.
+    </p>
+
+    <noscript>
+      <p>
+        JavaScript is off — open <a href={path(`/articles/${fallbackSlug}`)}>the latest post</a> instead.
+      </p>
+    </noscript>
+
+    <script id="random-data" type="application/json" set:html={JSON.stringify(slugs)} />
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ basePrefix: import.meta.env.BASE_URL }}>
+  // Read the slug list, pick one uniformly at random, redirect.
+  // We retain a 200 ms minimum delay so the user sees the page state and
+  // back-button feels right — instant redirect can confuse readers.
+  (function () {
+    const dataEl = document.getElementById('random-data');
+    const manual = document.getElementById('random-manual');
+    const manualLink = document.getElementById('random-link');
+    if (!dataEl) return;
+
+    let slugs = [];
+    try { slugs = JSON.parse(dataEl.textContent || '[]'); } catch {}
+    if (!Array.isArray(slugs) || slugs.length === 0) {
+      if (manual) manual.hidden = false;
+      return;
+    }
+
+    const idx = Math.floor(Math.random() * slugs.length);
+    const slug = slugs[idx];
+    // Match astro.config.mjs trailingSlash: 'never'.
+    const base = (basePrefix || '/').replace(/\/$/, '');
+    const target = `${base}/articles/${slug}`;
+
+    if (manualLink) manualLink.setAttribute('href', target);
+    if (manual) manual.hidden = false;
+
+    setTimeout(() => {
+      // Use replace() so /random doesn't pile up in history on rapid taps.
+      window.location.replace(target);
+    }, 200);
+  })();
+</script>
+
+<style>
+  .random {
+    padding-block: 5rem 4rem;
+    text-align: center;
+  }
+  .random h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+  .random__lede {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+  .random__manual {
+    margin-top: 1.5rem;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+</style>

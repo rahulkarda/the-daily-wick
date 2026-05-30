@@ -5,6 +5,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
 import Pagination from '@/components/Pagination.astro';
 import { SITE } from '@/consts';
+import { themeSlug } from '@/lib/theme';
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -17,6 +18,12 @@ interface Props {
 }
 
 const { page } = Astro.props as Props;
+
+// Build the chip set from the current page's posts. Format chips are
+// always shown (micro/essay) so the toggle is consistent across pages.
+const themesOnPage = [
+  ...new Set(page.data.map((p) => p.data.monthlyTheme)),
+].sort();
 ---
 
 <BaseLayout title={`Articles${page.currentPage > 1 ? ` — page ${page.currentPage}` : ''}`} description={`Every post from ${SITE.name}.`}>
@@ -24,11 +31,42 @@ const { page } = Astro.props as Props;
     <header class="archive__header">
       <p class="eyebrow">All posts</p>
       <h1>Articles</h1>
-      <p class="archive__count">{page.total} posts so far.</p>
+      <p class="archive__count">{page.total} {page.total === 1 ? 'post' : 'posts'} so far.</p>
     </header>
-    <div class="card-grid">
-      {page.data.map((p) => <PostCard post={p} />)}
+
+    <div class="filters" data-filter-bar>
+      <div class="filters__group" role="group" aria-label="Format">
+        <span class="filters__label">Format</span>
+        <button class="chip is-active" type="button" aria-pressed="true" data-filter-key="format" data-filter-value="all">All</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter-key="format" data-filter-value="micro">Micro</button>
+        <button class="chip" type="button" aria-pressed="false" data-filter-key="format" data-filter-value="essay">Essay</button>
+      </div>
+      {themesOnPage.length > 1 && (
+        <div class="filters__group" role="group" aria-label="Theme">
+          <span class="filters__label">Theme</span>
+          <button class="chip is-active" type="button" aria-pressed="true" data-filter-key="theme" data-filter-value="all">All</button>
+          {themesOnPage.map((t) => (
+            <button class="chip" type="button" aria-pressed="false" data-filter-key="theme" data-filter-value={themeSlug(t)}>{t}</button>
+          ))}
+        </div>
+      )}
     </div>
+
+    <div class="card-grid">
+      {page.data.map((p) => (
+        <div
+          class="card-wrap"
+          data-format={p.data.format ?? 'micro'}
+          data-theme={themeSlug(p.data.monthlyTheme)}
+        >
+          <PostCard post={p} />
+        </div>
+      ))}
+    </div>
+    <p class="filter-empty" data-filter-empty hidden>
+      Nothing matches that combination on this page. Try another, or browse <a href="../">earlier pages</a>.
+    </p>
+
     <Pagination
       prevUrl={page.url.prev}
       nextUrl={page.url.next}
@@ -44,7 +82,7 @@ const { page } = Astro.props as Props;
   }
   .archive__header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
   }
   .archive__header h1 {
     font-size: var(--step-3);
@@ -54,9 +92,128 @@ const { page } = Astro.props as Props;
     color: var(--text-muted);
     margin: 0;
   }
+  .filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0 auto 2.5rem;
+    max-width: 48rem;
+  }
+  .filters__group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .filters__label {
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-right: 0.5rem;
+  }
+  .chip {
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    color: var(--text-muted);
+    background: transparent;
+    font-size: var(--step--1);
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  }
+  .chip:hover {
+    color: var(--text);
+    border-color: var(--text-muted);
+  }
+  .chip.is-active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2.5rem 2rem;
   }
+  .card-wrap.is-hidden {
+    display: none;
+  }
+  .filter-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem 0;
+  }
 </style>
+
+<script>
+  // Simple two-axis filter (format + theme). Active chips per axis are tracked
+  // in URL hash so refreshing keeps the view; chips fall back to "all" if hash
+  // is invalid.
+  (function () {
+    const bar = document.querySelector<HTMLElement>('[data-filter-bar]');
+    if (!bar) return;
+    const chips = bar.querySelectorAll<HTMLButtonElement>('.chip');
+    const cards = document.querySelectorAll<HTMLElement>('.card-wrap');
+    const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+
+    const state: Record<string, string> = { format: 'all', theme: 'all' };
+
+    function readHash() {
+      const h = location.hash.replace(/^#/, '');
+      if (!h) return;
+      for (const part of h.split('&')) {
+        const [k, v] = part.split('=');
+        if ((k === 'format' || k === 'theme') && v) state[k] = v;
+      }
+    }
+
+    function writeHash() {
+      const parts: string[] = [];
+      if (state.format !== 'all') parts.push(`format=${state.format}`);
+      if (state.theme !== 'all') parts.push(`theme=${state.theme}`);
+      const h = parts.length ? '#' + parts.join('&') : '';
+      // Avoid history-spamming on every click
+      history.replaceState(null, '', location.pathname + location.search + h);
+    }
+
+    function syncChips() {
+      chips.forEach((chip) => {
+        const k = chip.dataset.filterKey!;
+        const v = chip.dataset.filterValue!;
+        const active = state[k] === v;
+        chip.classList.toggle('is-active', active);
+        chip.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    function applyFilter() {
+      let visible = 0;
+      cards.forEach((card) => {
+        const f = card.dataset.format || 'micro';
+        const t = card.dataset.theme || '';
+        const showFormat = state.format === 'all' || state.format === f;
+        const showTheme = state.theme === 'all' || state.theme === t;
+        const show = showFormat && showTheme;
+        card.classList.toggle('is-hidden', !show);
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible !== 0;
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const k = chip.dataset.filterKey!;
+        const v = chip.dataset.filterValue!;
+        state[k] = v;
+        writeHash();
+        syncChips();
+        applyFilter();
+      });
+    });
+
+    readHash();
+    syncChips();
+    applyFilter();
+  })();
+</script>

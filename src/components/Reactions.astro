@@ -1,0 +1,155 @@
+---
+/**
+ * Reactions — a 5-emoji reaction strip per post.
+ *
+ * Persistence:
+ *   - Per-post reaction (last picked emoji) saved to localStorage under
+ *     `wick.reaction.<slug>`. Survives reloads on the same browser.
+ *   - We deliberately do NOT show a global count. A static site can't
+ *     track that honestly without a backend, and a fake counter is worse
+ *     than no counter. If the project later adds Cloudflare KV / Workers,
+ *     swap the localStorage hooks for fetch() to a /api/reactions endpoint
+ *     — the markup contract here doesn't change.
+ *
+ *   - Each reaction button accepts a single click per session before it
+ *     toggles to the "you reacted" state. Re-clicking changes the choice.
+ */
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+const REACTIONS = [
+  { emoji: '❤️', label: 'Love', key: 'love' },
+  { emoji: '🤔', label: 'Made me think', key: 'thinking' },
+  { emoji: '💡', label: 'New idea', key: 'idea' },
+  { emoji: '🔁', label: 'Will re-read', key: 'reread' },
+  { emoji: '✨', label: 'Inspired', key: 'inspired' },
+];
+---
+
+<div class="reactions" data-reactions data-slug={slug}>
+  <p class="reactions__prompt">How did this land?</p>
+  <ul class="reactions__list">
+    {REACTIONS.map((r) => (
+      <li>
+        <button type="button" class="reaction" data-key={r.key} aria-label={r.label} aria-pressed="false" title={r.label}>
+          <span class="reaction__emoji" aria-hidden="true">{r.emoji}</span>
+          <span class="reaction__label">{r.label}</span>
+        </button>
+      </li>
+    ))}
+  </ul>
+  <p class="reactions__note" data-reactions-note hidden>Saved on this device.</p>
+</div>
+
+<style>
+  .reactions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--rule);
+    text-align: center;
+  }
+  .reactions__prompt {
+    color: var(--text-muted);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--step--1);
+    margin: 0 0 0.75rem;
+  }
+  .reactions__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  }
+  .reaction:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .reaction.is-picked {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .reaction__emoji {
+    font-size: 1.1em;
+  }
+  .reactions__note {
+    color: var(--text-muted);
+    font-size: var(--step--2);
+    margin: 0.75rem 0 0;
+  }
+
+  @media (max-width: 480px) {
+    .reaction__label {
+      display: none;
+    }
+    .reaction {
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      padding: 0;
+      font-size: 1.25em;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-reactions]').forEach((root) => {
+    const slug = root.dataset.slug;
+    if (!slug) return;
+    const storeKey = `wick.reaction.${slug}`;
+    const note = root.querySelector<HTMLElement>('[data-reactions-note]');
+    const buttons = root.querySelectorAll<HTMLButtonElement>('.reaction');
+
+    const pick = (key: string | null) => {
+      buttons.forEach((b) => {
+        const isPicked = !!key && b.dataset.key === key;
+        b.classList.toggle('is-picked', isPicked);
+        b.setAttribute('aria-pressed', String(isPicked));
+      });
+      if (note) note.hidden = !key;
+    };
+
+    try {
+      pick(localStorage.getItem(storeKey));
+    } catch {
+      // localStorage may be disabled (Safari private mode, etc) — silent skip.
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key!;
+        let current: string | null = null;
+        try {
+          current = localStorage.getItem(storeKey);
+        } catch {}
+        const next = current === key ? null : key; // tap-again to clear
+        try {
+          if (next) localStorage.setItem(storeKey, next);
+          else localStorage.removeItem(storeKey);
+        } catch {}
+        pick(next);
+      });
+    });
+  });
+</script>

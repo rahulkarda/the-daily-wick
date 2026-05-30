@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/path';
+import { themeSlug, groupByTheme } from '@/lib/theme';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+all.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const themesGrouped = groupByTheme(all);
+type Post = (typeof all)[number];
+
+// Pull theme blurbs from content/themes/themes.json so the description on the
+// landing page stays in sync with the prompt.
+const themesPath = resolve(fileURLToPath(import.meta.url), '../../../content/themes/themes.json');
+let themeData: { theme: string; description: string }[] = [];
+try {
+  const raw = JSON.parse(await readFile(themesPath, 'utf-8')) as {
+    themes: { month: string; theme: string; description: string }[];
+  };
+  // Dedupe by theme name; first occurrence wins for description.
+  const seen = new Set<string>();
+  themeData = raw.themes.filter((t) => {
+    if (seen.has(t.theme)) return false;
+    seen.add(t.theme);
+    return true;
+  });
+} catch {
+  themeData = [];
+}
+
+// Order themes: those with posts first (by post count desc), then unposted
+// themes from themes.json so the page also surfaces what's coming.
+const ordered: { theme: string; description?: string; posts: Post[] }[] = [];
+const themesByName = new Map(themeData.map((t) => [t.theme, t.description]));
+const usedNames = new Set<string>();
+const sortedActive = [...themesGrouped.entries()].sort(
+  (a, b) => b[1].length - a[1].length,
+);
+for (const [name, posts] of sortedActive) {
+  ordered.push({ theme: name, description: themesByName.get(name), posts });
+  usedNames.add(name);
+}
+for (const t of themeData) {
+  if (!usedNames.has(t.theme)) {
+    ordered.push({ theme: t.theme, description: t.description, posts: [] });
+  }
+}
+---
+
+<BaseLayout title="Themes" description="Posts grouped by the monthly theme that shaped them.">
+  <section class="themes container">
+    <header class="themes__header">
+      <p class="eyebrow">By theme</p>
+      <h1>Themes</h1>
+      <p>Each month has a single thread we pull on. Pick one to follow.</p>
+    </header>
+
+    <div class="theme-grid">
+      {ordered.map(({ theme, description, posts }) => (
+        <a class="theme-card" href={path(`/themes/${themeSlug(theme)}`)}>
+          <h2 class="theme-card__name">{theme}</h2>
+          {description && <p class="theme-card__blurb">{description}</p>}
+          <p class="theme-card__count">
+            {posts.length === 0
+              ? 'Coming up'
+              : `${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .themes {
+    padding-block: 4rem 2rem;
+  }
+  .themes__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .themes__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .theme-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    color: inherit;
+    text-decoration: none;
+    background: var(--bg-elev);
+    transition: transform 200ms ease, border-color 200ms ease;
+  }
+  .theme-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    color: inherit;
+    text-decoration: none;
+  }
+  .theme-card__name {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .theme-card__blurb {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: var(--step--1);
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+  .theme-card__count {
+    margin: 0.5rem 0 0;
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+</style>

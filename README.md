@@ -2,7 +2,7 @@
 
 > A small flame, every morning.
 
-A fully-automated daily blog + newsletter for curious minds. One short, careful post — 250-500 words, two to three minutes to read — every weekday morning. Drafted by a language model, edited by a human, delivered to your inbox by 06:30 Pacific time.
+A fully-automated daily blog + newsletter for curious minds. Two formats, both careful: a 2-minute **micro** Mon/Wed/Fri, a 6-8-minute **essay** Tue/Thu. Drafted by a language model, curated by a human, delivered to your inbox by 06:30 Pacific time.
 
 Live: **https://rahulkarda.github.io/the-daily-wick/**
 Repo: **https://github.com/rahulkarda/the-daily-wick**
@@ -14,12 +14,14 @@ Newsletter archive: **https://buttondown.com/the-daily-wick**
 
 A daily editorial newsletter and blog, in the spirit of [Daily Stoic](https://dailystoic.com), [James Clear's 3-2-1](https://jamesclear.com/3-2-1), [Mark Manson](https://markmanson.net), [Reading Faithfully](https://daily.readingfaithfully.org), [Arnold's Pump Club](https://www.arnoldschwarzenegger.com/newsletter), and [nousimon.com](https://nousimon.com) — but free, open-source, and shipped from a single GitHub Action.
 
-Every issue follows the same shape:
+Two formats:
 
-1. **The Idea** — one concept, defined plainly, with an example
-2. **One Question** — a single sentence to sit with
-3. **Today's Action** — 1-3 concrete things you can do today
-4. **Go Deeper** — sourced links if the rabbit hole calls
+- **Micro** (Mon / Wed / Fri) — 200-350 words. Idea → question → action → reflection. Read it on the bus.
+- **Essay** (Tue / Thu) — 900-1500 words. Question → argument → counterpoint → what to do with it. Read it with coffee.
+
+Format rotates automatically; override per-run with `FORMAT=micro|essay`.
+
+Every issue, both formats, ends with **"If this hooked you"** — a curated set of next reads (books, essays, talks) so the rabbit hole has signposts.
 
 ---
 
@@ -79,13 +81,16 @@ npm run preview    # serves dist/ on http://localhost:4321
 
 ## Required secrets
 
-You need three API keys. All have free tiers.
+You need three API keys (one optional). All have free tiers.
 
 | Variable                | Where to get it                                                        | Free tier                          |
 |-------------------------|------------------------------------------------------------------------|------------------------------------|
 | `GEMINI_API_KEY`        | https://aistudio.google.com/apikey                                     | Generous; ~250-1500 RPD            |
-| `UNSPLASH_ACCESS_KEY`   | https://unsplash.com/oauth/applications (create a "Demo" app)           | 50 req/hr (we use 2/day)           |
+| `UNSPLASH_ACCESS_KEY`   | https://unsplash.com/oauth/applications (create a "Demo" app)           | 50 req/hr (we use ≤6/day)          |
+| `PEXELS_API_KEY`        | https://www.pexels.com/api/ (optional fallback)                        | 200 req/hr free                    |
 | `BUTTONDOWN_API_KEY`    | https://buttondown.com/settings/programming                            | 100 subscribers free               |
+
+Pexels is the fallback image provider — used only when Unsplash returns nothing usable for any of Gemini's three suggested queries. The pipeline runs fine without it; you'll just see fewer photos when Unsplash misses.
 
 Set them in two places:
 
@@ -99,6 +104,7 @@ cp .env.example .env
 ```bash
 gh secret set GEMINI_API_KEY
 gh secret set UNSPLASH_ACCESS_KEY
+gh secret set PEXELS_API_KEY      # optional
 gh secret set BUTTONDOWN_API_KEY
 ```
 

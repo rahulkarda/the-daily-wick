@@ -21,11 +21,13 @@ export function assembleMdx({
   pubDate,
   tags,
   monthlyTheme,
+  format, // 'micro' | 'essay'
   heroImagePath, // relative ./_images/slug.jpg
   heroAlt,
   heroCredit,
   epigraph,
   sources,
+  furtherReading,
   body,
   curator,
 }) {
@@ -36,12 +38,14 @@ export function assembleMdx({
     `pubDate: ${pubDate.toISOString().slice(0, 10)}`,
     `tags: ${yamlList(tags)}`,
     `monthlyTheme: ${yamlString(monthlyTheme)}`,
+    `format: ${yamlString(format || 'micro')}`,
     `heroImage: ${heroImagePath}`,
     `heroAlt: ${yamlString(heroAlt)}`,
     'heroCredit:',
     `  photographer: ${yamlString(heroCredit.photographer)}`,
     `  photographerUrl: ${yamlString(heroCredit.photographerUrl)}`,
     `  unsplashUrl: ${yamlString(heroCredit.unsplashUrl)}`,
+    `  source: ${yamlString(heroCredit.source || 'unsplash')}`,
   ];
 
   if (epigraph) {
@@ -57,6 +61,18 @@ export function assembleMdx({
     for (const s of sources) {
       lines.push(`  - label: ${yamlString(s.label)}`);
       lines.push(`    url: ${yamlString(s.url)}`);
+    }
+  }
+
+  if (furtherReading && furtherReading.length > 0) {
+    lines.push('furtherReading:');
+    for (const fr of furtherReading) {
+      lines.push(`  - label: ${yamlString(fr.label)}`);
+      lines.push(`    url: ${yamlString(fr.url)}`);
+      lines.push(`    kind: ${yamlString(fr.kind || 'essay')}`);
+      if (fr.note) {
+        lines.push(`    note: ${yamlString(fr.note)}`);
+      }
     }
   }
 

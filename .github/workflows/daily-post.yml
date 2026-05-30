@@ -27,9 +27,10 @@ jobs:
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
       BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
       SITE_URL: https://rahulkarda.github.io/the-daily-wick
-      CURATOR_NAME: ${{ vars.CURATOR_NAME || 'the Editor' }}
+      CURATOR_NAME: ${{ vars.CURATOR_NAME || 'Rahul Karda' }}
     steps:
       - uses: actions/checkout@v4
         with:

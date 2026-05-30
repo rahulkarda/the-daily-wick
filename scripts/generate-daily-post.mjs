@@ -2,16 +2,19 @@
  * Daily generation pipeline.
  *
  * Steps:
- *  1. Resolve today's date + monthly theme
+ *  1. Resolve today's date + monthly theme + today's format
  *  2. Bail if today's post already exists (idempotency)
- *  3. Build the prompt (template + theme + recent topics + exemplars)
- *  4. Call Gemini → validate → retry on schema violation
- *  5. Fetch Unsplash hero image
+ *  3. Build the prompt (template + theme + recent topics + exemplars + format)
+ *  4. Call Gemini → validate (format-aware) → retry on schema violation
+ *  5. Fetch Unsplash hero image (multi-query, Pexels fallback)
  *  6. Write MDX
  *  7. Update recent-topics state
  *  8. (CI only) Commit + push
  *
  * Run with `--dry-run` to write to tmp/ and skip state + commit.
+ *
+ * Format rotation: micros run Mon/Wed/Fri, essays run Tue/Thu by default.
+ * Override with FORMAT=micro|essay env var.
  */
 
 import { existsSync, mkdirSync, readdirSync } from 'node:fs';
@@ -41,10 +44,9 @@ const THEMES_PATH = resolve(ROOT, 'content/themes/themes.json');
 const PROMPT_PATH = resolve(ROOT, 'content/prompts/daily-post.md');
 const EXAMPLES_DIR = resolve(ROOT, 'content/prompts/examples');
 
-const CURATOR = process.env.CURATOR_NAME || 'the Editor';
+const CURATOR = process.env.CURATOR_NAME || 'Rahul Karda';
 
 function todayInPT() {
-  // Get today's date in America/Los_Angeles timezone as a YYYY-MM-DD-aware Date
   const fmt = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Los_Angeles',
     year: 'numeric',
@@ -52,15 +54,27 @@ function todayInPT() {
     day: '2-digit',
   });
   const [{ value: y }, , { value: m }, , { value: d }] = fmt.formatToParts(new Date());
-  return new Date(`${y}-${m}-${d}T12:00:00Z`); // noon UTC anchor for stability
+  return new Date(`${y}-${m}-${d}T12:00:00Z`);
 }
 
-function isoDate(d) {
-  return d.toISOString().slice(0, 10);
-}
+function isoDate(d) { return d.toISOString().slice(0, 10); }
+function monthKey(d) { return d.toISOString().slice(0, 7); }
 
-function monthKey(d) {
-  return d.toISOString().slice(0, 7);
+/**
+ * Pick the format for a given date.
+ *   Mon/Wed/Fri → micro
+ *   Tue/Thu     → essay
+ *   Sat/Sun     → micro (we don't publish on weekends, but if a backfill runs, micro is safe)
+ *
+ * Override with the FORMAT env var.
+ */
+function formatFor(date) {
+  const override = (process.env.FORMAT || '').toLowerCase();
+  if (override === 'micro' || override === 'essay') return override;
+
+  const day = date.getUTCDay(); // 0=Sun..6=Sat (we anchored at noon UTC)
+  // Tue=2, Thu=4 → essay; everything else → micro
+  return day === 2 || day === 4 ? 'essay' : 'micro';
 }
 
 async function loadThemes() {
@@ -78,7 +92,7 @@ async function loadExemplars() {
   return out;
 }
 
-async function buildPrompt({ today, theme, recent, exemplars }) {
+async function buildPrompt({ today, theme, recent, exemplars, format }) {
   const template = await readFile(PROMPT_PATH, 'utf-8');
   return template
     .replaceAll('{{DATE}}', isoDate(today))
@@ -86,7 +100,8 @@ async function buildPrompt({ today, theme, recent, exemplars }) {
     .replaceAll('{{MONTHLY_THEME_DESCRIPTION}}', theme.description)
     .replaceAll('{{RECENT_TOPICS}}', summarize(recent))
     .replaceAll('{{EXEMPLARS}}', exemplars.map((ex, i) => `### Exemplar ${i + 1}\n\n${ex}`).join('\n\n---\n\n'))
-    .replaceAll('{{CURATOR}}', CURATOR);
+    .replaceAll('{{CURATOR}}', CURATOR)
+    .replaceAll('{{FORMAT}}', format);
 }
 
 function postExistsForToday(today) {
@@ -100,14 +115,14 @@ async function main() {
   console.log(`[generate] starting (dry-run=${DRY_RUN})`);
 
   const today = todayInPT();
-  console.log(`[generate] date: ${isoDate(today)}`);
+  const format = formatFor(today);
+  console.log(`[generate] date: ${isoDate(today)} · format: ${format}`);
 
   if (postExistsForToday(today)) {
     console.log('[generate] today already has a post — exiting clean (0).');
     process.exit(0);
   }
 
-  // Resolve monthly theme
   const themes = await loadThemes();
   const mk = monthKey(today);
   const theme = themes.find((t) => t.month === mk);
@@ -117,33 +132,31 @@ async function main() {
   }
   console.log(`[generate] monthly theme: ${theme.theme} — ${theme.description}`);
 
-  // Build prompt
   const recent = await readRecent();
   const exemplars = await loadExemplars();
-  const prompt = await buildPrompt({ today, theme, recent, exemplars });
+  const prompt = await buildPrompt({ today, theme, recent, exemplars, format });
 
-  // Call Gemini
   console.log('[generate] calling Gemini…');
   const draft = await generateDraft({
     prompt,
     apiKey: process.env.GEMINI_API_KEY,
+    format,
   });
   console.log(`[generate] draft accepted: "${draft.title}"`);
 
-  // Slug + image
   const slug = slugify(draft.slug || draft.title);
   if (!slug) throw new Error('slug empty after slugify');
 
   mkdirSync(IMAGES_DIR, { recursive: true });
   const hero = await fetchHeroImage({
-    query: draft.imageQuery,
-    apiKey: process.env.UNSPLASH_ACCESS_KEY,
+    queries: draft.imageQueries,
+    unsplashKey: process.env.UNSPLASH_ACCESS_KEY,
+    pexelsKey: process.env.PEXELS_API_KEY,
     slug,
     outDir: IMAGES_DIR,
   });
-  console.log(`[generate] hero: ${hero.relPath} (fallback=${hero.fallbackUsed})`);
+  console.log(`[generate] hero: ${hero.relPath} (source=${hero.source}, query="${hero.query}", fallback=${hero.fallbackUsed})`);
 
-  // Assemble MDX
   const tags = (draft.tags || []).map((t) => String(t).toLowerCase());
   const mdx = assembleMdx({
     title: draft.title,
@@ -151,11 +164,13 @@ async function main() {
     pubDate: today,
     tags,
     monthlyTheme: theme.theme,
+    format,
     heroImagePath: hero.fallbackUsed ? hero.relPath : `./_images/${slug}.jpg`,
     heroAlt: hero.alt,
     heroCredit: hero.credit,
     epigraph: draft.epigraph,
     sources: draft.sources || [],
+    furtherReading: draft.furtherReading || [],
     body: draft.bodyMdx,
     curator: CURATOR,
   });

@@ -7,7 +7,7 @@
 const ENDPOINT =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-const TIMEOUT_MS = 30_000;
+const TIMEOUT_MS = 45_000;
 const MAX_RETRIES = 2;
 
 const BANNED_PHRASES = [
@@ -23,13 +23,41 @@ const BANNED_PHRASES = [
 
 const EMOJI_RE = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u;
 
+const FORMAT_SECTIONS = {
+  micro: ['## The Idea', '## One Question', "## Today's Action", '## Go Deeper'],
+  essay: [
+    '## The Question',
+    '## The Argument',
+    '## The Counterpoint',
+    '## What To Do With It',
+  ],
+};
+
+// Word ranges enforced by the validator. Kept in lockstep with the spec
+// in content/prompts/daily-post.md and src/consts.ts FORMATS.
+//   micro: 200-400 words (target 200-350, hard ceiling 400)
+//   essay: 800-1700 words (target 900-1500, hard ceiling 1700)
+// The min for essay is intentionally loose at 800 because the model
+// reliably lands around 800-900 even when targeting 900 — the practical
+// floor is "long enough to feel like an essay" and we'd rather ship at
+// 850 than crash the pipeline. The max is a hard ceiling, not a target.
+const FORMAT_WORDS = {
+  micro: { min: 200, max: 400 },
+  essay: { min: 800, max: 1700 },
+};
+
+function wordCount(text) {
+  return (text || '').trim().split(/\s+/).filter(Boolean).length;
+}
+
 /**
- * Validate a generated draft. Returns { ok: true } or { ok: false, error: string }.
+ * Validate a generated draft against a target format.
+ * Returns { ok: true } or { ok: false, error: string }.
  */
-export function validateDraft(draft) {
+export function validateDraft(draft, format = 'micro') {
   if (!draft || typeof draft !== 'object') return { ok: false, error: 'not an object' };
 
-  const required = ['title', 'subtitle', 'slug', 'tags', 'epigraph', 'bodyMdx', 'imageQuery'];
+  const required = ['title', 'subtitle', 'slug', 'tags', 'epigraph', 'bodyMdx', 'imageQueries'];
   for (const k of required) {
     if (!(k in draft)) return { ok: false, error: `missing field: ${k}` };
   }
@@ -49,18 +77,57 @@ export function validateDraft(draft) {
   if (!draft.epigraph || typeof draft.epigraph.text !== 'string' || typeof draft.epigraph.attribution !== 'string') {
     return { ok: false, error: 'epigraph must have text + attribution' };
   }
-  if (typeof draft.bodyMdx !== 'string' || draft.bodyMdx.length < 600) {
-    return { ok: false, error: 'bodyMdx too short (need ≥600 chars / ~250 words)' };
+  if (typeof draft.bodyMdx !== 'string') {
+    return { ok: false, error: 'bodyMdx must be a string' };
   }
-  // Required section headers
-  const required_sections = ['## The Idea', '## One Question', '## Today\'s Action', '## Go Deeper'];
-  for (const sec of required_sections) {
+
+  // Format-specific section + word-count check.
+  const sections = FORMAT_SECTIONS[format] ?? FORMAT_SECTIONS.micro;
+  for (const sec of sections) {
     if (!draft.bodyMdx.includes(sec)) {
-      return { ok: false, error: `bodyMdx missing required section header: ${sec}` };
+      return { ok: false, error: `bodyMdx missing required ${format} section header: ${sec}` };
+    }
+  }
+  const wc = wordCount(draft.bodyMdx);
+  const range = FORMAT_WORDS[format];
+  if (wc < range.min) {
+    return { ok: false, error: `bodyMdx too short for ${format}: ${wc} words (need ≥${range.min})` };
+  }
+  if (wc > range.max) {
+    return { ok: false, error: `bodyMdx too long for ${format}: ${wc} words (max ${range.max})` };
+  }
+
+  // imageQueries shape: 3 distinct concrete strings.
+  const queries = draft.imageQueries;
+  if (!Array.isArray(queries) || queries.length !== 3) {
+    return { ok: false, error: 'imageQueries must be exactly 3 strings' };
+  }
+  const seen = new Set();
+  for (const q of queries) {
+    if (typeof q !== 'string' || q.trim().length < 3 || q.trim().length > 60) {
+      return { ok: false, error: 'each imageQuery must be 3-60 chars' };
+    }
+    const norm = q.trim().toLowerCase();
+    if (seen.has(norm)) return { ok: false, error: 'imageQueries must be distinct' };
+    seen.add(norm);
+  }
+
+  // furtherReading is optional; if present, basic shape check.
+  if (draft.furtherReading != null) {
+    if (!Array.isArray(draft.furtherReading)) {
+      return { ok: false, error: 'furtherReading must be an array' };
+    }
+    for (const fr of draft.furtherReading) {
+      if (!fr || typeof fr.label !== 'string' || typeof fr.url !== 'string') {
+        return { ok: false, error: 'furtherReading items need {label,url}' };
+      }
+      if (!/^https?:\/\/[^\s"'<>`]+$/i.test(fr.url)) {
+        return { ok: false, error: 'furtherReading url must be a clean http(s) URL' };
+      }
     }
   }
 
-  // Banned phrases check (in body + title)
+  // Banned phrases check (in body + title + subtitle)
   const corpus = `${draft.title}\n${draft.subtitle}\n${draft.bodyMdx}`;
   for (const re of BANNED_PHRASES) {
     if (re.test(corpus)) {
@@ -76,7 +143,7 @@ export function validateDraft(draft) {
 
 const RESPONSE_SCHEMA = {
   type: 'OBJECT',
-  required: ['title', 'subtitle', 'slug', 'tags', 'epigraph', 'bodyMdx', 'imageQuery', 'themeAlignmentNote'],
+  required: ['title', 'subtitle', 'slug', 'tags', 'epigraph', 'bodyMdx', 'imageQueries', 'themeAlignmentNote'],
   properties: {
     title: { type: 'STRING' },
     subtitle: { type: 'STRING' },
@@ -96,7 +163,12 @@ const RESPONSE_SCHEMA = {
       },
     },
     bodyMdx: { type: 'STRING' },
-    imageQuery: { type: 'STRING' },
+    imageQueries: {
+      type: 'ARRAY',
+      items: { type: 'STRING' },
+      minItems: 3,
+      maxItems: 3,
+    },
     themeAlignmentNote: { type: 'STRING' },
     sources: {
       type: 'ARRAY',
@@ -106,6 +178,19 @@ const RESPONSE_SCHEMA = {
         properties: {
           label: { type: 'STRING' },
           url: { type: 'STRING' },
+        },
+      },
+    },
+    furtherReading: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        required: ['label', 'url', 'kind'],
+        properties: {
+          label: { type: 'STRING' },
+          url: { type: 'STRING' },
+          kind: { type: 'STRING' },
+          note: { type: 'STRING' },
         },
       },
     },
@@ -124,7 +209,11 @@ async function withTimeout(promise, ms) {
   }
 }
 
-async function callGemini(prompt, apiKey) {
+async function callGemini(prompt, apiKey, format) {
+  // Essay format needs more headroom — 1500 words plus JSON escaping
+  // is close to the 8k token cap.
+  const maxTokens = format === 'essay' ? 16384 : 8192;
+
   const res = await withTimeout(
     fetch(`${ENDPOINT}?key=${apiKey}`, {
       method: 'POST',
@@ -134,7 +223,7 @@ async function callGemini(prompt, apiKey) {
         generationConfig: {
           temperature: 0.85,
           topP: 0.95,
-          maxOutputTokens: 8192,
+          maxOutputTokens: maxTokens,
           responseMimeType: 'application/json',
           responseSchema: RESPONSE_SCHEMA,
           thinkingConfig: { thinkingBudget: 0 },
@@ -156,16 +245,12 @@ async function callGemini(prompt, apiKey) {
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Gemini returned no text');
 
-  // First try a clean parse
   try {
     return JSON.parse(text);
   } catch (err) {
-    // Common Gemini issue: occasional raw newlines or unescaped control chars
-    // inside string values. Try a repair pass before giving up.
     try {
       return JSON.parse(repairJson(text));
     } catch (err2) {
-      // Log a window around the failure point so debugging is easy
       if (process.env.DEBUG_GEMINI) {
         console.error('[gemini] raw response (first 1200 chars):');
         console.error(text.slice(0, 1200));
@@ -180,12 +265,8 @@ async function callGemini(prompt, apiKey) {
  *  - strip ```json fences if present
  *  - escape raw newlines/tabs that appear *inside* string values
  *  - drop trailing commas
- *
- * State machine — walk through the text, track whether we're inside a string,
- * and replace literal control chars with their JSON-escaped equivalents.
  */
 function repairJson(text) {
-  // Strip code fences
   let s = text.trim();
   if (s.startsWith('```')) {
     s = s.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '');
@@ -212,7 +293,6 @@ function repairJson(text) {
       continue;
     }
     if (inString) {
-      // Replace raw control chars inside strings with their escaped forms
       if (ch === '\n') { out += '\\n'; continue; }
       if (ch === '\r') { out += '\\r'; continue; }
       if (ch === '\t') { out += '\\t'; continue; }
@@ -225,12 +305,11 @@ function repairJson(text) {
     out += ch;
   }
 
-  // Drop trailing commas before } or ]
   out = out.replace(/,\s*([}\]])/g, '$1');
   return out;
 }
 
-export async function generateDraft({ prompt, apiKey }) {
+export async function generateDraft({ prompt, apiKey, format = 'micro' }) {
   if (!apiKey) throw new Error('GEMINI_API_KEY missing');
 
   let lastError = null;
@@ -238,15 +317,13 @@ export async function generateDraft({ prompt, apiKey }) {
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const draft = await callGemini(activePrompt, apiKey);
-      const v = validateDraft(draft);
+      const draft = await callGemini(activePrompt, apiKey, format);
+      const v = validateDraft(draft, format);
       if (v.ok) return draft;
       lastError = v.error;
-      // Re-prompt with the validation error for the next attempt
       activePrompt = `${prompt}\n\n---\nYour previous output failed validation: ${v.error}\nReturn ONLY the corrected JSON. Do not explain. Fix only the violation; keep everything else the same in spirit.`;
     } catch (err) {
       lastError = err.message;
-      // exponential backoff for transient failures
       if (attempt < MAX_RETRIES) {
         const wait = 500 * Math.pow(2, attempt);
         await new Promise((r) => setTimeout(r, wait));

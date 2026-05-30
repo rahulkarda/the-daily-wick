@@ -8,6 +8,8 @@ import InlineSubscribe from '@/components/InlineSubscribe.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
 import AIDisclosure from '@/components/AIDisclosure.astro';
 import TagList from '@/components/TagList.astro';
+import FurtherReading from '@/components/FurtherReading.astro';
+import Reactions from '@/components/Reactions.astro';
 import { path } from '@/lib/path';
 
 interface Props {
@@ -22,17 +24,22 @@ const {
   pubDate,
   tags,
   monthlyTheme,
+  format,
   heroImage,
   heroAlt,
   heroCredit,
   epigraph,
   sources,
+  furtherReading,
   curator,
 } = post.data;
 
 const slug = post.slug;
 const url = path(`/articles/${slug}`);
 const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').trim();
+
+const photoSourceLabel =
+  heroCredit.source === 'pexels' ? 'Pexels' : 'Unsplash';
 ---
 
 <BaseLayout
@@ -41,13 +48,14 @@ const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').tri
   type="article"
   pubDate={pubDate}
 >
-  <article class="article">
+  <article class="article" data-format={format ?? 'micro'}>
     <header class="article__header container container--narrow">
       <PostMeta
         pubDate={pubDate}
         body={post.body}
         curator={curator}
         monthlyTheme={monthlyTheme}
+        format={format}
       />
       <h1 class="article__title">{title}</h1>
       {subtitle && <p class="article__subtitle">{subtitle}</p>}
@@ -66,7 +74,7 @@ const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').tri
         Photo by
         <a href={heroCredit.photographerUrl} target="_blank" rel="noopener">{heroCredit.photographer}</a>
         on
-        <a href={heroCredit.unsplashUrl} target="_blank" rel="noopener">Unsplash</a>
+        <a href={heroCredit.unsplashUrl} target="_blank" rel="noopener">{photoSourceLabel}</a>
       </figcaption>
     </figure>
 
@@ -82,7 +90,7 @@ const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').tri
 
       {sources && sources.length > 0 && (
         <section class="sources">
-          <h2>Go deeper</h2>
+          <h2>Sources</h2>
           <ul>
             {sources.map((s) => (
               <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>
@@ -90,13 +98,21 @@ const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').tri
           </ul>
         </section>
       )}
+
+      {furtherReading && furtherReading.length > 0 && (
+        <FurtherReading items={furtherReading} />
+      )}
     </div>
 
     <footer class="article__footer container container--narrow">
       <TagList tags={tags} />
+      <Reactions slug={slug} />
       <div class="article__share">
         <ShareButtons title={title} url={url} />
       </div>
+      <p class="article__random">
+        <a href={path('/random')}>Read another at random →</a>
+      </p>
       <AIDisclosure curator={curator} />
     </footer>
 
@@ -124,6 +140,12 @@ const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').tri
     font-size: var(--step-4);
     margin: 0 0 0.75rem;
     text-wrap: balance;
+  }
+
+  /* Slightly smaller hero title for essays — they have more body text and
+   * the title shouldn't dominate the page. */
+  .article[data-format='essay'] .article__title {
+    font-size: var(--step-3);
   }
 
   .article__subtitle {
@@ -199,5 +221,18 @@ const description = subtitle ?? post.body.slice(0, 160).replace(/\s+/g, ' ').tri
   }
   .article__share {
     margin-top: 0.5rem;
+  }
+  .article__random {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+  .article__random a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+  }
+  .article__random a:hover {
+    color: var(--accent);
   }
 </style>

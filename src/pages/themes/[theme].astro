@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { path } from '@/lib/path';
+import { themeSlug, groupByTheme } from '@/lib/theme';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const grouped = groupByTheme(posts);
+  return [...grouped.entries()].map(([theme, list]) => ({
+    params: { theme: themeSlug(theme) },
+    props: {
+      theme,
+      posts: list.sort(
+        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+      ),
+    },
+  }));
+}
+
+const { theme, posts } = Astro.props;
+---
+
+<BaseLayout title={`Theme: ${theme}`} description={`Every post written under the ${theme} theme.`}>
+  <section class="theme-page container">
+    <header class="theme-page__header">
+      <p class="eyebrow">Theme</p>
+      <h1>{theme}</h1>
+      <p class="theme-page__count">{posts.length} {posts.length === 1 ? 'post' : 'posts'} under this theme.</p>
+      <p><a href={path('/themes')}>← All themes</a></p>
+    </header>
+    <div class="card-grid">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .theme-page {
+    padding-block: 4rem 2rem;
+  }
+  .theme-page__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .theme-page__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+    font-family: var(--font-serif);
+  }
+  .theme-page__count {
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem 2rem;
+  }
+</style>
