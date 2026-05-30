@@ -28,6 +28,7 @@ export function assembleMdx({
   epigraph,
   sources,
   furtherReading,
+  provenance,
   body,
   curator,
 }) {
@@ -74,6 +75,10 @@ export function assembleMdx({
         lines.push(`    note: ${yamlString(fr.note)}`);
       }
     }
+  }
+
+  if (provenance) {
+    lines.push(`provenance: ${yamlString(provenance)}`);
   }
 
   lines.push(`aiDrafted: true`);

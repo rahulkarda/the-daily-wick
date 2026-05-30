@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/path';
+import { loadSeriesDefs, groupBySeries } from '@/lib/series';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+const defs = await loadSeriesDefs();
+const groups = groupBySeries(all, defs);
+---
+
+<BaseLayout title="Series" description="Multi-part arcs that sit together — read in order.">
+  <section class="series container">
+    <header class="series__header">
+      <p class="eyebrow">Multi-part arcs</p>
+      <h1>Series</h1>
+      <p class="series__lede">
+        Some ideas are too big for a single morning. These are the threads we pulled
+        across multiple posts — meant to be read in order.
+      </p>
+    </header>
+
+    {groups.length === 0 ? (
+      <p class="series__empty">
+        No series yet. They'll show up here once a multi-part arc is published.
+      </p>
+    ) : (
+      <ul class="series-list">
+        {groups.map((g) => (
+          <li class="series-card">
+            <h2 class="series-card__title">
+              <a class="series-card__link" href={path(`/series/${g.def.slug}`)}>{g.def.title}</a>
+            </h2>
+            {g.def.description && <p class="series-card__blurb">{g.def.description}</p>}
+            <p class="series-card__count">
+              {g.posts.length} {g.posts.length === 1 ? 'part' : 'parts'} · starts with
+              <em> {g.posts[0].data.title}</em>
+            </p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .series {
+    padding-block: 4rem 2rem;
+  }
+  .series__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .series__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+  }
+  .series__lede {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    text-wrap: balance;
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+  .series__empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 4rem 0;
+  }
+  .series-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .series-card {
+    padding: 1.5rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+  .series-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .series-card__link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .series-card__link:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .series-card__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .series-card__blurb {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    margin: 0 0 0.75rem;
+  }
+  .series-card__count {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    margin: 0;
+  }
+  .series-card__count em {
+    color: var(--text);
+    font-style: normal;
+  }
+</style>

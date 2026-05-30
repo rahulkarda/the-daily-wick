@@ -1,0 +1,97 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { path } from '@/lib/path';
+import { loadSeriesDefs, groupBySeries } from '@/lib/series';
+
+export async function getStaticPaths() {
+  const all = await getCollection('posts', ({ data }) => !data.draft);
+  const defs = await loadSeriesDefs();
+  const grouped = groupBySeries(all, defs);
+  return grouped.map((g) => ({
+    params: { series: g.def.slug },
+    props: { def: g.def, posts: g.posts },
+  }));
+}
+
+interface Props {
+  def: { slug: string; title: string; description?: string };
+  posts: CollectionEntry<'posts'>[];
+}
+const { def, posts } = Astro.props as Props;
+---
+
+<BaseLayout
+  title={`Series: ${def.title}`}
+  description={def.description ?? `${def.title} — a multi-part arc.`}
+>
+  <section class="series-page container">
+    <header class="series-page__header">
+      <p class="eyebrow">Series · {posts.length} {posts.length === 1 ? 'part' : 'parts'}</p>
+      <h1>{def.title}</h1>
+      {def.description && <p class="series-page__blurb">{def.description}</p>}
+      <p><a href={path('/series')}>← All series</a></p>
+    </header>
+
+    <ol class="series-list-detail">
+      {posts.map((p, idx) => (
+        <li>
+          <span class="series-list-detail__num" aria-hidden="true">{p.data.series?.part ?? idx + 1}</span>
+          <PostCard post={p} />
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>
+
+<style>
+  .series-page {
+    padding-block: 4rem 2rem;
+  }
+  .series-page__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .series-page__header h1 {
+    font-size: var(--step-3);
+    margin: 0.5rem 0 1rem;
+    font-family: var(--font-serif);
+  }
+  .series-page__blurb {
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: var(--font-serif);
+    margin: 0 auto 1rem;
+    max-width: 36rem;
+  }
+  .series-list-detail {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2.5rem 2rem;
+  }
+  .series-list-detail li {
+    position: relative;
+  }
+  .series-list-detail__num {
+    position: absolute;
+    top: -0.5rem;
+    left: -0.5rem;
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: var(--step--1);
+    border: 1px solid var(--rule);
+    background: var(--bg-elev);
+    color: var(--accent);
+    border-radius: 999px;
+    z-index: 2;
+  }
+</style>

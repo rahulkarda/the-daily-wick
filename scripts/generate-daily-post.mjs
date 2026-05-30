@@ -157,6 +157,13 @@ async function main() {
   });
   console.log(`[generate] hero: ${hero.relPath} (source=${hero.source}, query="${hero.query}", fallback=${hero.fallbackUsed})`);
 
+  // Emit a workflow-level annotation when we degraded past Unsplash so the
+  // curator can see the pattern in the run summary, not just buried in logs.
+  if (process.env.GITHUB_ACTIONS && (hero.source === 'pexels' || hero.source === 'pollinations' || hero.fallbackUsed)) {
+    const level = hero.fallbackUsed ? 'warning' : 'notice';
+    console.log(`::${level}::Image fell back to ${hero.source} for "${slug}" (Unsplash returned no usable result)`);
+  }
+
   const tags = (draft.tags || []).map((t) => String(t).toLowerCase());
   const mdx = assembleMdx({
     title: draft.title,
@@ -171,6 +178,7 @@ async function main() {
     epigraph: draft.epigraph,
     sources: draft.sources || [],
     furtherReading: draft.furtherReading || [],
+    provenance: draft.provenance || undefined,
     body: draft.bodyMdx,
     curator: CURATOR,
   });

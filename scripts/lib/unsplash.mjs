@@ -1,24 +1,32 @@
 /**
  * Hero image picker — multi-query, multi-provider, with relevance scoring.
  *
- * Strategy:
- *   1. Try each Unsplash query in order. For each, fetch up to 10 candidates
- *      and pick the highest-scoring landscape photo with width ≥ 1600.
+ * Strategy (in order):
+ *   1. Try each Unsplash query. Pick the highest-scoring landscape photo
+ *      with width >= 1600.
  *   2. If Unsplash returns nothing usable for any query, fall back to Pexels.
- *   3. If Pexels also fails, use the static OG fallback.
+ *   3. If Pexels also fails (or no key), generate a hero with Pollinations.ai
+ *      (free, no key required). The prompt is the first imageQuery padded
+ *      with style hints to keep things consistent across the site.
+ *   4. If Pollinations fails too, use the static OG fallback.
  *
  * Scoring (simple, transparent — easy to tune):
- *   +3 likes/(likes+1) — popularity proxy ("featured" content tends to be sharper
+ *   +3 likes/(likes+1) — popularity proxy
  *   +2 if alt_description / description includes a query keyword
  *   +1 per million pixels above 2 MP, capped at +3
  *   −2 if portrait or square (we want landscape heroes)
- *   −5 if explicit-content flag tripped (Unsplash content_filter handles most)
  */
 
 import { writeFile } from 'node:fs/promises';
 
 const UNSPLASH_SEARCH = 'https://api.unsplash.com/search/photos';
 const PEXELS_SEARCH = 'https://api.pexels.com/v1/search';
+const POLLINATIONS_BASE = 'https://image.pollinations.ai/prompt';
+
+// Style preamble for AI generation: editorial, muted, on-brand.
+// Kept short so the user query stays the dominant signal.
+const POLLINATIONS_STYLE =
+  'editorial photograph, warm natural light, muted earth tones, shallow depth of field, no text, no logos, cinematic';
 
 const UTM = '?utm_source=the_daily_wick&utm_medium=referral';
 
@@ -77,6 +85,18 @@ export async function fetchHeroImage({
       } catch (err) {
         console.warn(`[pexels] "${q}" failed: ${err.message}`);
       }
+    }
+  }
+
+  // Pollinations fallback — AI-generated hero. No key required, but rate-
+  // limited (single GET, retry once). Skip if PIPELINE has the env var
+  // POLLINATIONS_DISABLED=1 (escape hatch in case the service is broken).
+  if (process.env.POLLINATIONS_DISABLED !== '1') {
+    try {
+      const out = await downloadPollinations(qs[0], slug, outDir);
+      if (out) return out;
+    } catch (err) {
+      console.warn(`[pollinations] failed: ${err.message}`);
     }
   }
 
@@ -193,6 +213,87 @@ async function downloadPexels(photo, query, slug, outDir) {
     fallbackUsed: false,
     query,
     source: 'pexels',
+  };
+}
+
+// ----- Pollinations.ai (AI generation, no key) ------------------------------
+
+/**
+ * Build a deterministic seed from the slug so re-runs produce the same image
+ * (avoids "the post drifts every CI run"). 32-bit unsigned int.
+ */
+function seedFromSlug(slug) {
+  let h = 2166136261;
+  for (let i = 0; i < slug.length; i++) {
+    h ^= slug.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+async function downloadPollinations(query, slug, outDir) {
+  const prompt = `${query}, ${POLLINATIONS_STYLE}`;
+  const seed = seedFromSlug(slug);
+  // 1600x900 is on-brand and matches the stock-photo aspect we use elsewhere.
+  const url =
+    `${POLLINATIONS_BASE}/${encodeURIComponent(prompt)}` +
+    `?width=1600&height=900&nologo=true&seed=${seed}&model=flux`;
+
+  // Tight timeout — 30s. The whole workflow only has 10 minutes, and a
+  // 60s wait on a flaky service eats too much of that budget.
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 30_000);
+  let imgRes;
+  try {
+    imgRes = await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(t);
+  }
+  if (!imgRes.ok) throw new Error(`pollinations ${imgRes.status}`);
+
+  // Validate Content-Type before reading body — a fast fail if the service
+  // returned an HTML error page despite a 200 status.
+  const ct = imgRes.headers.get('content-type') || '';
+  if (!/^image\//i.test(ct)) {
+    throw new Error(`pollinations returned non-image content-type: ${ct}`);
+  }
+
+  const buf = Buffer.from(await imgRes.arrayBuffer());
+  // Sanity check the magic bytes. JPEG starts with 0xFF 0xD8 0xFF. PNG with
+  // 0x89 0x50 0x4E 0x47. Pollinations serves JPEG by default but accept PNG
+  // defensively — the file extension is .jpg either way; sharp/Astro will
+  // re-encode at build time.
+  const isJpeg = buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
+  const isPng =
+    buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
+  if (!isJpeg && !isPng) {
+    throw new Error(`pollinations payload not JPEG/PNG (first bytes: ${buf.slice(0, 4).toString('hex')})`);
+  }
+  // 8 KB minimum — generous enough for a legitimate small flux image,
+  // tight enough to catch tiny error sentinels.
+  if (buf.length < 8_000) {
+    throw new Error(`pollinations payload too small (${buf.length} bytes)`);
+  }
+
+  const filePath = `${outDir}/${slug}.jpg`;
+  await writeFile(filePath, buf);
+
+  return {
+    filePath,
+    relPath: `./_images/${slug}.jpg`,
+    alt: query,
+    credit: {
+      photographer: 'AI illustration (Pollinations.ai)',
+      photographerUrl: 'https://pollinations.ai',
+      // Link to the Pollinations homepage rather than the prompt URL — the
+      // prompt URL leaks our image-query verbatim and isn't a "credit" page.
+      // The full prompt is preserved in CHANGELOG/git history if needed.
+      unsplashUrl: 'https://pollinations.ai',
+      source: 'pollinations',
+    },
+    fallbackUsed: false,
+    query,
+    source: 'pollinations',
   };
 }
 

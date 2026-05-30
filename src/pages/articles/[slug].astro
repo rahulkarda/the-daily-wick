@@ -2,20 +2,26 @@
 import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 import { relatedPosts } from '@/lib/related-posts';
+import { loadSeriesDefs, findSeriesContext } from '@/lib/series';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const defs = await loadSeriesDefs();
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post, all: posts },
+    props: {
+      post,
+      all: posts,
+      seriesContext: findSeriesContext(post, posts, defs),
+    },
   }));
 }
 
-const { post, all } = Astro.props;
+const { post, all, seriesContext } = Astro.props;
 const { Content } = await post.render();
 const related = relatedPosts(post, all, 3);
 ---
 
-<PostLayout post={post} related={related}>
+<PostLayout post={post} related={related} seriesContext={seriesContext}>
   <Content />
 </PostLayout>

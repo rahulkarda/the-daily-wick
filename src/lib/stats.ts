@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { computeStreak as computeStreakJs } from './streak.mjs';
 
 type Post = CollectionEntry<'posts'>;
 
@@ -23,65 +24,6 @@ export interface SiteStats {
 
 function wordCount(body: string): number {
   return body.trim().split(/\s+/).filter(Boolean).length;
-}
-
-/**
- * Compute the longest run of consecutive *publishing days* — Mon-Fri.
- * Saturdays/Sundays don't break the streak; gaps of more than one weekend do.
- *
- * Returns null if fewer than 1 post.
- */
-function computeStreak(posts: Post[]): SiteStats['longestStreak'] {
-  if (posts.length === 0) return null;
-
-  const sorted = [...posts].sort(
-    (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
-  );
-
-  let bestLen = 1;
-  let bestStart = sorted[0].data.pubDate;
-  let bestEnd = sorted[0].data.pubDate;
-
-  let curLen = 1;
-  let curStart = sorted[0].data.pubDate;
-
-  for (let i = 1; i < sorted.length; i++) {
-    const prev = sorted[i - 1].data.pubDate;
-    const cur = sorted[i].data.pubDate;
-    if (isNextPublishDay(prev, cur)) {
-      curLen++;
-    } else {
-      curLen = 1;
-      curStart = cur;
-    }
-    if (curLen > bestLen) {
-      bestLen = curLen;
-      bestStart = curStart;
-      bestEnd = cur;
-    }
-  }
-
-  return { length: bestLen, start: bestStart, end: bestEnd };
-}
-
-/**
- * True if `b` falls on the next *expected* publish day after `a`:
- * Mon→Tue, Tue→Wed, Wed→Thu, Thu→Fri, Fri→Mon, Sat/Sun ignored.
- */
-function isNextPublishDay(a: Date, b: Date): boolean {
-  const dayA = a.getUTCDay();
-  // Days between in calendar terms
-  const msPerDay = 86_400_000;
-  const diff = Math.round(
-    (Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate()) -
-      Date.UTC(a.getUTCFullYear(), a.getUTCMonth(), a.getUTCDate())) /
-      msPerDay,
-  );
-  if (diff <= 0) return false;
-  if (dayA === 5 /* Fri */) return diff === 3; // next Mon
-  if (dayA === 6 /* Sat */) return diff === 2; // next Mon
-  if (dayA === 0 /* Sun */) return diff === 1;
-  return diff === 1;
 }
 
 export function computeStats(posts: Post[]): SiteStats {
@@ -146,7 +88,7 @@ export function computeStats(posts: Post[]): SiteStats {
     daysSinceFirst,
     topTags,
     themeDistribution,
-    longestStreak: computeStreak(posts),
+    longestStreak: computeStreakJs(posts) as SiteStats['longestStreak'],
     averageWordsPerPost: posts.length === 0 ? 0 : Math.round(totalWords / posts.length),
     totalSources,
     totalFurtherReading,

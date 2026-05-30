@@ -27,6 +27,7 @@ export const NAV = [
 
 export const FOOTER_NAV = [
   { label: 'FAQ', href: '/faq' },
+  { label: 'Series', href: '/series' },
   { label: 'Stats', href: '/stats' },
   { label: 'Editorial Standards', href: '/editorial-standards' },
   { label: 'Random', href: '/random' },

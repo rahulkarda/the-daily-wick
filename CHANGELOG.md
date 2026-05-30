@@ -1,5 +1,39 @@
 # Changelog
 
+## v0.3.0 — 2026-05-30
+
+Tier 1 + Tier 2 polish from the post-launch review.
+
+### Tier 1 — discovery + ops
+- **`/stats`** page — totals, top-12 tag bar chart, theme distribution,
+  longest publish streak (Mon-Fri-aware), longest/shortest bookend posts.
+  Pure server-render; no JS.
+- **`/start-here`** — curated reading path driven by `content/start-here.json`.
+  Hand-pickable steps with a "why" per post and an estimated total time.
+- **Reading-progress bar** — thin accent line that grows as you scroll
+  through an article. Tracks the `<article>` bounds so it hits 100% exactly
+  when the last paragraph leaves the viewport.
+- **Print stylesheet** — clean B&W print/PDF layout. Hides nav/footer/
+  reactions/share/AI-disclosure/related/subscribe/search. Expands link
+  URLs after each link so printed copies are self-contained.
+- **Failure alerting** — when the daily cron fails, the workflow opens (or
+  comments on) a `daily-post-failure`-labelled GitHub issue. Re-uses an open
+  issue across consecutive failures so the inbox doesn't get spammed.
+
+### Tier 2 — depth
+- **Series / multi-part arcs** — opt-in `series: { slug, part }` field on
+  posts. `/series` index + `/series/[slug]` detail pages. SeriesNav inside
+  every series-tagged post: full TOC + Prev/Next pager. Series declared in
+  `content/series/series.json`.
+- **Pollinations.ai third image tier** — when both Unsplash and Pexels miss,
+  the picker generates an editorial-style hero with Pollinations.ai (free,
+  no key). Deterministic seed-from-slug so re-runs produce the same image.
+  Disable with \`POLLINATIONS_DISABLED=1\`.
+- **"Where this came from" provenance** — optional `provenance` frontmatter
+  field renders a one-line breadcrumb under the byline ("Builds on Sophie
+  Leroy's attention-residue paper"). Auto-derived from `sources[0]` if not
+  set. Gemini fills it on most drafts.
+
 ## v0.2.0 — 2026-05-30
 
 Two-feed expansion: more variety, better discovery.

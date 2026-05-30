@@ -70,6 +70,7 @@ jobs:
           git push origin main
 
       - name: Send newsletter
+        id: send
         if: ${{ inputs.dry_run != 'true' }}
         run: node scripts/send-daily-newsletter.mjs
 
@@ -85,15 +86,21 @@ jobs:
           git push origin main
 
       - name: Open or update failure issue
-        # Runs only when an earlier step failed. Opens an issue tagged
-        # `daily-post-failure` if none is open, or comments on the existing
-        # one — so a string of bad days doesn't spam the inbox.
-        if: failure() && inputs.dry_run != 'true'
+        # Triggers either when an earlier step failed (build/generate/commit
+        # crashed) OR when the newsletter send step set send_failed=true via
+        # its $GITHUB_OUTPUT marker. The post itself is already committed in
+        # the latter case; this just surfaces the email failure.
+        if: |
+          inputs.dry_run != 'true' &&
+          (failure() || steps.send.outputs.send_failed == 'true')
         uses: actions/github-script@v7
+        env:
+          SEND_ERROR: ${{ steps.send.outputs.send_error }}
         with:
           script: |
             const today = new Date().toISOString().slice(0, 10);
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const sendError = process.env.SEND_ERROR || '';
             const label = 'daily-post-failure';
 
             // Make sure the label exists (idempotent — ignore "already exists")
@@ -116,20 +123,31 @@ jobs:
               per_page: 1,
             });
 
+            const isSendFailure = sendError !== '';
+            const title = isSendFailure
+              ? `Newsletter send failed (${today})`
+              : `Daily post failed (${today})`;
+            const intro = isSendFailure
+              ? `The post for **${today}** committed cleanly, but the Buttondown send step failed.`
+              : `Daily-post workflow failed on **${today}**.`;
+
             const body = [
-              `Daily-post workflow failed on **${today}**.`,
+              intro,
               ``,
               `- Run: ${runUrl}`,
               `- Trigger: \`${context.eventName}\``,
               `- Commit: ${context.sha.slice(0, 7)}`,
+              isSendFailure ? `- Error: ${sendError}` : null,
               ``,
-              `Open this issue, click the run link, and read the failed step's logs to triage. Common culprits: Gemini quota, Unsplash 401 (key rotated), Buttondown payload changes.`,
-            ].join('\n');
+              isSendFailure
+                ? `Triage: check Buttondown account status, key validity, and the failed-sends log at \`content/state/failed-sends.json\`. The post is live on the site; you can manually resend if needed.`
+                : `Open this issue, click the run link, and read the failed step's logs. Common culprits: Gemini quota, Unsplash 401 (key rotated), commit conflict.`,
+            ].filter((l) => l !== null).join('\n');
 
             if (open.length === 0) {
               await github.rest.issues.create({
                 ...context.repo,
-                title: `Daily post failed (${today})`,
+                title,
                 body,
                 labels: [label],
               });
@@ -137,6 +155,6 @@ jobs:
               await github.rest.issues.createComment({
                 ...context.repo,
                 issue_number: open[0].number,
-                body: `Another failure on **${today}** — run: ${runUrl}`,
+                body: `Another failure on **${today}** — ${isSendFailure ? 'newsletter send' : 'workflow'} — run: ${runUrl}${sendError ? `\n\nError: ${sendError}` : ''}`,
               });
             }

@@ -170,6 +170,7 @@ const RESPONSE_SCHEMA = {
       maxItems: 3,
     },
     themeAlignmentNote: { type: 'STRING' },
+    provenance: { type: 'STRING' },
     sources: {
       type: 'ARRAY',
       items: {

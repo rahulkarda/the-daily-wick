@@ -58,11 +58,15 @@ const maxTagCount = tagsForChart[0]?.count ?? 1;
         <ul class="bar-chart">
           {tagsForChart.map((t) => (
             <li class="bar-chart__row">
-              <a class="bar-chart__label" href={path(`/topics/${t.tag}`)}>#{t.tag}</a>
-              <div class="bar-chart__track">
+              <a
+                class="bar-chart__label"
+                href={path(`/topics/${t.tag}`)}
+                aria-label={`${t.count} ${t.count === 1 ? 'post' : 'posts'} tagged ${t.tag}`}
+              >#{t.tag}</a>
+              <div class="bar-chart__track" aria-hidden="true">
                 <div class="bar-chart__fill" style={`width: ${(t.count / maxTagCount) * 100}%`}></div>
               </div>
-              <span class="bar-chart__count">{t.count}</span>
+              <span class="bar-chart__count" aria-hidden="true">{t.count}</span>
             </li>
           ))}
         </ul>

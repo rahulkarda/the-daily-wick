@@ -18,9 +18,8 @@
   aria-valuemin="0"
   aria-valuemax="100"
   aria-valuenow="0"
-  aria-hidden="true"
 >
-  <div class="reading-progress__fill" data-progress-fill></div>
+  <div class="reading-progress__fill" data-progress-fill aria-hidden="true"></div>
 </div>
 
 <style>
@@ -54,10 +53,17 @@
     const compute = () => {
       const rect = article.getBoundingClientRect();
       const viewport = window.innerHeight;
+      // If the article fits within the viewport, "progress" is meaningless —
+      // the reader sees it all at once. Show 0 so the bar isn't misleading.
+      if (article.offsetHeight <= viewport) {
+        fill.style.width = '0%';
+        bar.setAttribute('aria-valuenow', '0');
+        return;
+      }
       // Fraction read = (distance scrolled past article top) / (article height − viewport)
-      const total = Math.max(1, article.offsetHeight - viewport);
+      const total = article.offsetHeight - viewport;
       const scrolled = Math.min(total, Math.max(0, -rect.top));
-      const pct = Math.round((scrolled / total) * 100);
+      const pct = Math.max(0, Math.min(100, Math.round((scrolled / total) * 100)));
       fill.style.width = `${pct}%`;
       bar.setAttribute('aria-valuenow', String(pct));
     };

@@ -171,6 +171,17 @@ async function main() {
     } catch (ferr) {
       console.error('[send] could not write failed-sends.json:', ferr.message);
     }
+    // Touch a marker the workflow can read to surface the failure as an
+    // issue without breaking the publication path. The post stays committed.
+    if (process.env.GITHUB_OUTPUT) {
+      try {
+        const fs = await import('node:fs/promises');
+        await fs.appendFile(
+          process.env.GITHUB_OUTPUT,
+          `send_failed=true\nsend_error=${err.message.replace(/[\n\r]/g, ' ').slice(0, 240)}\n`,
+        );
+      } catch {/* ignore */}
+    }
     // Exit 0 so the post still gets committed in CI
     process.exit(0);
   }

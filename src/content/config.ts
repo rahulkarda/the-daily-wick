@@ -20,9 +20,11 @@ const posts = defineCollection({
         photographerUrl: z.string().url(),
         // Source URL for the photo on whichever provider was used.
         // Named `unsplashUrl` for legacy compatibility; can also point at
-        // a Pexels page when Pexels was the source.
+        // a Pexels page or a Pollinations prompt-link.
         unsplashUrl: z.string().url(),
-        source: z.enum(['unsplash', 'pexels', 'fallback']).default('unsplash'),
+        source: z
+          .enum(['unsplash', 'pexels', 'pollinations', 'fallback'])
+          .default('unsplash'),
       }),
       epigraph: z
         .object({
@@ -56,6 +58,22 @@ const posts = defineCollection({
           }),
         )
         .max(8)
+        .optional(),
+      // Optional: a one-line "where this came from" note rendered under the
+      // byline. Plain text, max 200 chars. Examples:
+      //   "Inspired by Cal Newport's Deep Work."
+      //   "After a re-reading of Pascal §139."
+      // If absent, PostLayout will derive a short note from the first source.
+      provenance: z.string().max(200).optional(),
+      // Optional: marks this post as part of a multi-post series. The
+      // `slug` references an entry in content/series/series.json; `part`
+      // is the 1-indexed position in that series. Order in the series page
+      // is determined by `part` (then pubDate as tiebreak).
+      series: z
+        .object({
+          slug: z.string().min(2).max(60),
+          part: z.number().int().min(1).max(12),
+        })
         .optional(),
       aiDrafted: z.boolean().default(true),
       curator: z.string().default('Rahul Karda'),

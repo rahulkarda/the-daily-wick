@@ -109,6 +109,7 @@ If today's idea overlaps with any of the above, pick a different angle. Repetiti
   - Bad: `["discipline", "mindset stuff", "productivity"]` (abstractions)
   - Bad: `["lit candle", "burning candle", "candle flame"]` (synonyms)
 - **themeAlignmentNote** (1 sentence): How today's idea connects to the monthly theme. One sentence, internal — won't be rendered.
+- **provenance** (≤180 chars, optional): A single short sentence saying where this idea came from — a book, a paper, a conversation, an older post. Examples: "Inspired by Cal Newport's *Deep Work*.", "After re-reading Pascal §139.", "Builds on Sophie Leroy's attention-residue paper." If you don't have a clear single source, omit it — the layout will derive a fallback from the first `sources` entry.
 - **sources** (0–6 items): Real, public, non-paywalled URLs that the *body cites* — papers, studies, primary essays. If unsure of a URL, omit it — better empty than wrong. Each item: `{ "label": "Author — Title", "url": "https://..." }`.
 - **furtherReading** (0–6 items): Curated next-reads — *not* citations, but where the reader should go if today's idea hooked them. Books, essays, videos, podcasts. Real, reachable URLs only. Each item: `{ "label": "Author — Title", "url": "https://...", "kind": "book"|"essay"|"paper"|"podcast"|"video"|"site", "note": "≤140 chars on why" }`. Note is optional but strongly preferred — one line on what the reader will get from it.
 

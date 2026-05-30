@@ -45,13 +45,24 @@ const totalMinutes = resolved.reduce(
 
 // Tiny inline markdown — only handles [text](slug-or-url) links because that's
 // what the JSON intro/outro actually use. Strict: anything else is plain text.
+// We escape the entire string first, then run the link regex on the *escaped*
+// output. The label is already-escaped HTML; the URL is additionally validated:
+// only http(s) absolute URLs OR plain-slug paths are accepted, and the result
+// is double-quote-escaped before being interpolated into the href attribute.
 function renderInlineMarkdown(text: string, basePath: typeof path): string {
   const escaped = text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-  return escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, target) => {
-    const href = /^https?:\/\//.test(target) ? target : basePath(`/${target}`);
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  return escaped.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (match, label, target) => {
+    // Only allow http(s) absolutes or kebab/slash slugs — reject anything that
+    // could be a javascript: or data: URI smuggle.
+    const isAbsolute = /^https?:\/\/[^\s"'<>`]+$/i.test(target);
+    const isRelative = /^[a-z0-9][a-z0-9/_-]*$/i.test(target);
+    if (!isAbsolute && !isRelative) return match; // leave as-is
+    const href = isAbsolute ? target : basePath(`/${target}`);
     return `<a href="${href}">${label}</a>`;
   });
 }
