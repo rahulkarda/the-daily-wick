@@ -28,13 +28,29 @@ const config = JSON.parse(await readFile(configPath, 'utf-8')) as StartHere;
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const bySlug = new Map(allPosts.map((p) => [p.slug, p]));
 
+/**
+ * Look up a post by either its full slug ("2026-05-26-the-cost-of-half-attention")
+ * or its tail (the human-friendly part after the date prefix). The JSON config
+ * lets you write either; we try exact first, then YYYY-MM-DD-prefix scan.
+ */
+function findPost(needle: string) {
+  const exact = bySlug.get(needle);
+  if (exact) return exact;
+  const dateRe = /^\d{4}-\d{2}-\d{2}-/;
+  return allPosts.find((p) => p.slug.replace(dateRe, '') === needle);
+}
+
 // Resolve each step to its post; drop steps whose slug is missing so the page
 // keeps working when a post is renamed or deleted before the JSON is updated.
 type ResolvedStep = Step & { post: NonNullable<ReturnType<typeof bySlug.get>> };
 const resolved: ResolvedStep[] = config.steps
   .map((step) => {
-    const post = bySlug.get(step.slug);
-    return post ? { ...step, post } : null;
+    const post = findPost(step.slug);
+    if (!post) {
+      console.warn(`[start-here] no post found for slug "${step.slug}" — skipping`);
+      return null;
+    }
+    return { ...step, post };
   })
   .filter((s): s is ResolvedStep => s !== null);
 

@@ -102,8 +102,9 @@ const isActive = (href: string) => {
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 1.5rem;
+    gap: 1.25rem;
     justify-content: center;
+    flex-wrap: nowrap;
   }
 
   .primary-nav a {
@@ -112,6 +113,7 @@ const isActive = (href: string) => {
     font-size: var(--step--1);
     padding-block: 0.25rem;
     position: relative;
+    white-space: nowrap;
     transition: color 150ms ease;
   }
   .primary-nav a:hover {
