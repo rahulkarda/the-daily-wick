@@ -26,9 +26,8 @@ const pagefindJsHref  = path('/pagefind/pagefind-ui.js');
 
 <link rel="stylesheet" href={pagefindCssHref} />
 
-<!-- Load pagefind-ui as a classic (non-module) script so PagefindUI is
-     available on window. Dynamic import() with a runtime string is unreliable
-     across browsers and breaks after View Transitions reinitialise the DOM. -->
+{/* Load pagefind-ui as a classic script so PagefindUI lands on window.
+    Dynamic import() with a runtime string breaks after View Transitions. */}
 <script is:inline define:vars={{ pagefindJsHref }}>
   if (!document.querySelector('script[data-pagefind-ui]')) {
     var s = document.createElement('script');

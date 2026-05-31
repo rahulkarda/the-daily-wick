@@ -7,17 +7,25 @@
 /* ---------- design tokens ---------- */
 
 :root {
-  /* light (default) */
-  --bg: #f8f4ec;
-  --bg-elev: #fffefa;
-  --text: #1a1612;
-  --text-muted: #6b6258;
-  --rule: #e6dece;
-  --accent: #b5563a;
-  --accent-hover: #93412b;
-  --accent-soft: #b5563a1a;
-  --shadow-card: 0 1px 2px rgba(26, 22, 18, 0.04), 0 8px 24px rgba(26, 22, 18, 0.06);
-  --shadow-modal: 0 8px 32px rgba(26, 22, 18, 0.18);
+  /* ── Theme 5: Copper & Slate ──────────────────────────────────────────────
+   * Three colour zones create natural sectioning without extra markup:
+   *   1. Page BG     — warm ivory   #f9f7f5  (sunlit paper)
+   *   2. Elevated BG — cool slate   #f2f3f8  (cards/modals feel distinct)
+   *   3. Accent      — terracotta   #c24a18  (links, CTAs, highlights)
+   * Muted text + rules lean into the cool zone so they anchor cards,
+   * not the warm page. Dark mode flips the warm/cool assignment on bg
+   * vs bg-elev so the visual logic stays consistent.
+   * ──────────────────────────────────────────────────────────────────────── */
+  --bg:          #f9f7f5;   /* warm ivory — page */
+  --bg-elev:     #f1f2f8;   /* cool slate-lavender — cards, header, modals */
+  --text:        #1c1810;   /* near-black, warm */
+  --text-muted:  #6a6278;   /* muted violet-grey — anchors to bg-elev zone */
+  --rule:        #d4d2e4;   /* cool lavender border — unifies with cards */
+  --accent:      #c24a18;   /* terracotta — warm pop against cool cards */
+  --accent-hover:#9e3710;
+  --accent-soft: #c24a1815; /* barely-there terracotta wash for tags */
+  --shadow-card: 0 1px 3px rgba(28,24,16,0.06), 0 6px 20px rgba(28,24,16,0.09);
+  --shadow-modal: 0 8px 36px rgba(28,24,16,0.22);
 
   /* type scale (modular ratio ~1.25, fluid via clamp) */
   --step--2: clamp(0.78rem, 0.76rem + 0.08vw, 0.84rem);
@@ -43,31 +51,32 @@
 }
 
 [data-theme='dark'] {
-  --bg: #161312;
-  --bg-elev: #1f1b19;
-  --text: #ece4d6;
-  --text-muted: #a89c8b;
-  --rule: #2d2723;
-  --accent: #d87a5e;
-  --accent-hover: #e89070;
-  --accent-soft: #d87a5e1f;
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.55);
+  /* Dark: flip the warm/cool assignment — page goes cool-dark, cards go warm-dark */
+  --bg:          #0c0b0f;   /* cool deep purple-black — page */
+  --bg-elev:     #1c1610;   /* warm dark brown — cards feel different from page */
+  --text:        #f2ede5;   /* warm cream */
+  --text-muted:  #b09880;   /* warm sand muted — matches card zone */
+  --rule:        #2c2218;   /* warm dark rule — ties to card warmth */
+  --accent:      #f07040;   /* bright warm orange — pops on both zones */
+  --accent-hover:#ff8f60;
+  --accent-soft: #f0704020;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.5), 0 6px 20px rgba(0,0,0,0.6);
+  --shadow-modal: 0 8px 36px rgba(0,0,0,0.72);
 }
 
 /* respect system preference unless user has explicitly chosen */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']):not([data-theme='dark']) {
-    --bg: #161312;
-    --bg-elev: #1f1b19;
-    --text: #ece4d6;
-    --text-muted: #a89c8b;
-    --rule: #2d2723;
-    --accent: #d87a5e;
-    --accent-hover: #e89070;
-    --accent-soft: #d87a5e1f;
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4);
-    --shadow-modal: 0 8px 32px rgba(0, 0, 0, 0.55);
+    --bg:          #0c0b0f;
+    --bg-elev:     #1c1610;
+    --text:        #f2ede5;
+    --text-muted:  #b09880;
+    --rule:        #2c2218;
+    --accent:      #f07040;
+    --accent-hover:#ff8f60;
+    --accent-soft: #f0704020;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.5), 0 6px 20px rgba(0,0,0,0.6);
+    --shadow-modal: 0 8px 36px rgba(0,0,0,0.72);
   }
 }
 
