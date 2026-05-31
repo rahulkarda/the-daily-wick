@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { path } from '@/lib/path';
 import { formatDateLong } from '@/lib/format-date';
@@ -7,6 +6,7 @@ import { readingTime } from '@/lib/reading-time';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getPosts } from '@/lib/get-posts';
 
 interface Step {
   slug: string;
@@ -25,7 +25,7 @@ const configPath = resolve(
 );
 const config = JSON.parse(await readFile(configPath, 'utf-8')) as StartHere;
 
-const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const allPosts = await getPosts();
 const bySlug = new Map(allPosts.map((p) => [p.slug, p]));
 
 /**

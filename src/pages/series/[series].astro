@@ -1,12 +1,13 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
 import { path } from '@/lib/path';
 import { loadSeriesDefs, groupBySeries } from '@/lib/series';
+import { getPosts } from '@/lib/get-posts';
 
 export async function getStaticPaths() {
-  const all = await getCollection('posts', ({ data }) => !data.draft);
+  const all = await getPosts();
   const defs = await loadSeriesDefs();
   const grouped = groupBySeries(all, defs);
   return grouped.map((g) => ({

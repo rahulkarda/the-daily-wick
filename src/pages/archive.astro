@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { formatDateShort, getYear, getMonthKey } from '@/lib/format-date';
 import { path } from '@/lib/path';
 import { themeSlug, groupByTheme, groupByTag } from '@/lib/theme';
+import { getPosts } from '@/lib/get-posts';
 
-const all = await getCollection('posts', ({ data }) => !data.draft);
+const all = await getPosts();
 all.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const MONTH_NAMES = [

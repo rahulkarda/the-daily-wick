@@ -1,13 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { path } from '@/lib/path';
 import { themeSlug, groupByTheme } from '@/lib/theme';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getPosts } from '@/lib/get-posts';
 
-const all = await getCollection('posts', ({ data }) => !data.draft);
+const all = await getPosts();
 all.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const themesGrouped = groupByTheme(all);

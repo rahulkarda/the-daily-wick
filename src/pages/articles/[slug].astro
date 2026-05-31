@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 import { relatedPosts } from '@/lib/related-posts';
 import { loadSeriesDefs, findSeriesContext } from '@/lib/series';
+import { getPosts } from '@/lib/get-posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const posts = await getPosts();
   const defs = await loadSeriesDefs();
   return posts.map((post) => ({
     params: { slug: post.slug },

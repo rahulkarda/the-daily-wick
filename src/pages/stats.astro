@@ -1,12 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { computeStats } from '@/lib/stats';
 import { formatDateLong } from '@/lib/format-date';
 import { path } from '@/lib/path';
 import { themeSlug } from '@/lib/theme';
+import { getPosts } from '@/lib/get-posts';
 
-const posts = await getCollection('posts', ({ data }) => !data.draft);
+const posts = await getPosts();
 const stats = computeStats(posts);
 
 // Cap top-tags at 12 for the chart and 6 for the leaderboard.

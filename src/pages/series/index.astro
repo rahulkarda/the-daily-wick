@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { path } from '@/lib/path';
 import { loadSeriesDefs, groupBySeries } from '@/lib/series';
+import { getPosts } from '@/lib/get-posts';
 
-const all = await getCollection('posts', ({ data }) => !data.draft);
+const all = await getPosts();
 const defs = await loadSeriesDefs();
 const groups = groupBySeries(all, defs);
 ---

@@ -1,12 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
 import { path } from '@/lib/path';
 import { themeSlug, groupByTheme } from '@/lib/theme';
+import { getPosts } from '@/lib/get-posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  const posts = await getPosts();
   const grouped = groupByTheme(posts);
   return [...grouped.entries()].map(([theme, list]) => ({
     params: { theme: themeSlug(theme) },

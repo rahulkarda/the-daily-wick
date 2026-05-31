@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
 import InlineSubscribe from '@/components/InlineSubscribe.astro';
@@ -7,8 +6,9 @@ import OnThisDay from '@/components/OnThisDay.astro';
 import QuoteRotator from '@/components/QuoteRotator.astro';
 import { SITE } from '@/consts';
 import { path } from '@/lib/path';
+import { getPosts } from '@/lib/get-posts';
 
-const all = await getCollection('posts', ({ data }) => !data.draft);
+const all = await getPosts();
 const sorted = all.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
