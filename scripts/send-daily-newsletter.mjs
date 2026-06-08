@@ -89,6 +89,7 @@ async function postToButtondown({ subject, html, preheader }) {
     headers: {
       Authorization: `Token ${apiKey}`,
       'Content-Type': 'application/json',
+      'X-Buttondown-Live-Dangerously': 'true',
     },
     body: JSON.stringify(payload),
   });
