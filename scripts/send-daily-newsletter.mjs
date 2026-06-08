@@ -28,7 +28,7 @@ const NEWSLETTER_DIR = resolve(ROOT, 'src/content/newsletter-issues');
 const FAILED_PATH = resolve(ROOT, 'content/state/failed-sends.json');
 
 const SITE_URL = process.env.SITE_URL || 'https://rahulkarda.github.io/the-daily-wick';
-const BUTTONDOWN_HANDLE = 'the-daily-wick';
+const BUTTONDOWN_HANDLE = 'rahulkarda';
 const CURATOR = process.env.CURATOR_NAME || 'Rahul Karda';
 
 function todayPT() {

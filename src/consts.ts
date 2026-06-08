@@ -8,7 +8,7 @@ export const SITE = {
   description:
     'A daily byte-size newsletter for curious minds. One idea, one question, one action — every weekday morning.',
   url: 'https://rahulkarda.github.io/the-daily-wick',
-  buttondownHandle: 'the-daily-wick',
+  buttondownHandle: 'rahulkarda',
   curator: 'Rahul Karda',
   language: 'en',
   locale: 'en-US',
