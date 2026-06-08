@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Rebuild at 14:00 UTC (07:00 PT) Mon–Fri so pre-seeded posts
+    # become visible on their pubDate even if the bot had nothing to commit.
+    - cron: '0 14 * * 1-5'
 
 permissions:
   contents: read

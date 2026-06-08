@@ -66,7 +66,7 @@ jobs:
             echo "No changes to commit (post may already exist for today)."
             exit 0
           fi
-          git commit -m "post: $(date -u +%Y-%m-%d) [skip ci]"
+          git commit -m "post: $(date -u +%Y-%m-%d)"
           git push origin main
 
       - name: Send newsletter
