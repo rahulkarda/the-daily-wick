@@ -196,8 +196,17 @@ export function renderEmail({
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(subject)}</title>
+<style>
+@media only screen and (max-width:700px){
+  .outer-td{padding:16px 8px!important;}
+  .card{width:100%!important;max-width:100%!important;border-radius:0!important;}
+  .cell{padding-left:16px!important;padding-right:16px!important;}
+  .cell-epigraph{padding-left:20px!important;padding-right:20px!important;}
+  h1{font-size:24px!important;}
+}
+</style>
 </head>
 <body style="${inlineStyle({
     margin: '0',
@@ -208,9 +217,9 @@ export function renderEmail({
 <!-- preheader -->
 <div style="display:none;font-size:1px;color:${COLORS.bg};line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${esc(preheader)}</div>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:${COLORS.bg};">
-  <tr><td align="center" style="padding:32px 16px;">
-    <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background-color:${COLORS.bgElev};border:1px solid ${COLORS.rule};border-radius:10px;">
-      <tr><td style="padding:32px 32px 16px 32px;text-align:center;">
+  <tr><td align="center" class="outer-td" style="padding:32px 16px;">
+    <table role="presentation" width="680" cellspacing="0" cellpadding="0" border="0" class="card" style="max-width:680px;background-color:${COLORS.bgElev};border:1px solid ${COLORS.rule};border-radius:10px;">
+      <tr><td class="cell" style="padding:32px 24px 16px 24px;text-align:center;">
         <p style="${inlineStyle({
           margin: '0',
           fontFamily: SERIF,
@@ -235,7 +244,7 @@ export function renderEmail({
             : ''
         }
       </td></tr>
-      <tr><td style="padding:24px 32px 8px 32px;text-align:center;">
+      <tr><td class="cell" style="padding:24px 24px 8px 24px;text-align:center;">
         <h1 style="${inlineStyle({
           fontFamily: SERIF,
           fontSize: '30px',
@@ -260,7 +269,7 @@ export function renderEmail({
       </td></tr>
       ${
         epigraph
-          ? `<tr><td style="padding:24px 48px 8px 48px;text-align:center;">
+          ? `<tr><td class="cell-epigraph" style="padding:24px 36px 8px 36px;text-align:center;">
               <p style="${inlineStyle({
                 fontFamily: SERIF,
                 fontStyle: 'italic',
@@ -278,11 +287,11 @@ export function renderEmail({
             </td></tr>`
           : ''
       }
-      <tr><td style="padding:24px 32px 16px 32px;color:${COLORS.text};">
+      <tr><td class="cell" style="padding:24px 24px 16px 24px;color:${COLORS.text};">
         ${bodyHtml}
         ${furtherReadingBlock}
       </td></tr>
-      <tr><td style="padding:8px 32px 24px 32px;border-top:1px solid ${COLORS.rule};margin-top:24px;">
+      <tr><td class="cell" style="padding:8px 24px 24px 24px;border-top:1px solid ${COLORS.rule};margin-top:24px;">
         <p style="${inlineStyle({
           fontFamily: SANS,
           fontSize: '13px',
