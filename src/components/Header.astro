@@ -18,7 +18,7 @@ const isActive = (href: string) => {
       <span class="brand__tagline">{SITE.tagline}</span>
     </a>
 
-    <nav class="primary-nav" aria-label="Primary">
+    <nav class="primary-nav" id="primary-nav" aria-label="Primary">
       <ul>
         {NAV.map(({ label, href }) => (
           <li>
@@ -49,6 +49,21 @@ const isActive = (href: string) => {
       </button>
       <ThemeToggle />
       <a href={path('/subscribe')} class="subscribe-pill">Subscribe</a>
+
+      <button
+        id="menu-toggle"
+        type="button"
+        class="menu-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+      >
+        <span class="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
     </div>
   </div>
 </header>
@@ -172,26 +187,145 @@ const isActive = (href: string) => {
     transform: translateY(-1px);
   }
 
+  /* Burger button — hidden on desktop */
+  .menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    color: var(--text-muted);
+    transition: background-color 150ms ease, color 150ms ease;
+    flex-shrink: 0;
+  }
+  .menu-toggle:hover {
+    background-color: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 18px;
+    height: 18px;
+  }
+  .burger span {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transform-origin: center;
+    transition: transform 250ms ease, opacity 200ms ease, width 200ms ease;
+  }
+
+  /* Animated X when open */
+  .menu-toggle[aria-expanded="true"] .burger span:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded="true"] .burger span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .menu-toggle[aria-expanded="true"] .burger span:nth-child(3) {
+    transform: translateY(-5.5px) rotate(-45deg);
+  }
+
   @media (max-width: 720px) {
+    .menu-toggle {
+      display: inline-flex;
+    }
+
+    /* Hide subscribe pill on mobile — it's already in the nav drawer */
+    .subscribe-pill {
+      display: none;
+    }
+
     .site-header__inner {
       grid-template-columns: 1fr auto;
-      grid-template-rows: auto auto;
-      row-gap: 0.5rem;
+      padding-block: 0.875rem;
     }
-    .header-actions {
-      grid-row: 1;
-      grid-column: 2;
-    }
-    .primary-nav {
-      grid-row: 2;
-      grid-column: 1 / -1;
-      overflow-x: auto;
-    }
-    .primary-nav ul {
-      justify-content: flex-start;
-    }
+
     .brand__tagline {
       display: none;
     }
+
+    /* Desktop nav hidden on mobile; shown via JS toggle */
+    .primary-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: color-mix(in srgb, var(--bg) 97%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+      padding: 0.75rem 1rem 1.25rem;
+    }
+
+    .primary-nav.is-open {
+      display: block;
+    }
+
+    .primary-nav ul {
+      flex-direction: column;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .primary-nav li {
+      border-bottom: 1px solid var(--rule);
+    }
+    .primary-nav li:last-child {
+      border-bottom: none;
+    }
+
+    .primary-nav a {
+      display: block;
+      padding: 0.75rem 0.25rem;
+      font-size: var(--step-0);
+      white-space: normal;
+    }
+
+    .primary-nav a.is-active::after {
+      display: none;
+    }
+    .primary-nav a.is-active {
+      color: var(--accent);
+    }
   }
 </style>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    });
+
+    // Close on nav link click (single-page feel)
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target as Node) && !nav.contains(e.target as Node)) {
+        nav.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+      }
+    });
+  }
+</script>
