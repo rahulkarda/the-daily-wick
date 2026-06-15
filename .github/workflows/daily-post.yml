@@ -2,10 +2,8 @@ name: Daily post + newsletter
 
 on:
   schedule:
-    # 06:30 PT (Mon-Fri) = 13:30 UTC during PDT, 14:30 UTC during PST.
-    # We pick 13:30 UTC; it lands at 06:30 in summer and 05:30 in winter.
-    # Adjust to '30 14 * * 1-5' if you prefer a fixed 06:30 PST anchor.
-    - cron: '30 13 * * 1-5'
+    # 2:30pm IST = 09:00 UTC
+    - cron: '0 9 * * 1-5'
   workflow_dispatch:
     inputs:
       dry_run:
