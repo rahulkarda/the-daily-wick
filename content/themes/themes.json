@@ -2,7 +2,7 @@
   "themes": [
     { "month": "2026-05", "theme": "Attention", "description": "Where we look becomes who we are." },
     { "month": "2026-06", "theme": "Foundations", "description": "Habits, first principles, the things that hold the rest up." },
-    { "month": "2026-07", "theme": "Attention", "description": "Where we look becomes who we are." },
+    { "month": "2026-07", "theme": "Clarity", "description": "Cutting through noise; the discipline of knowing what matters." },
     { "month": "2026-08", "theme": "Resilience", "description": "Bending without breaking; recovery as a skill." },
     { "month": "2026-09", "theme": "Craft", "description": "The patient pursuit of better work." },
     { "month": "2026-10", "theme": "Friction", "description": "Useful resistance and the costs of ease." },
@@ -12,6 +12,25 @@
     { "month": "2027-02", "theme": "Discipline", "description": "Showing up when motivation has left the room." },
     { "month": "2027-03", "theme": "Curiosity", "description": "Questions worth carrying around." },
     { "month": "2027-04", "theme": "Connection", "description": "The other people in our story." },
-    { "month": "2027-05", "theme": "Stillness", "description": "Doing less, on purpose." }
+    { "month": "2027-05", "theme": "Stillness", "description": "Doing less, on purpose." },
+    { "month": "2027-06", "theme": "Leverage", "description": "Where small inputs produce outsized results." },
+    { "month": "2027-07", "theme": "Memory", "description": "What we keep, what we lose, and what shapes us." },
+    { "month": "2027-08", "theme": "Risk", "description": "The cost of playing it safe, and the cost of not." },
+    { "month": "2027-09", "theme": "Language", "description": "How the words we use shape the thoughts we have." },
+    { "month": "2027-10", "theme": "Systems", "description": "Everything is connected; nothing works in isolation." },
+    { "month": "2027-11", "theme": "Slowness", "description": "The counterintuitive power of doing things deliberately." },
+    { "month": "2027-12", "theme": "Identity", "description": "Who we are when no one is watching." },
+    { "month": "2028-01", "theme": "Courage", "description": "Acting clearly in the presence of fear." },
+    { "month": "2028-02", "theme": "Simplicity", "description": "Stripping away until what remains is essential." },
+    { "month": "2028-03", "theme": "Depth", "description": "Going further instead of wider." },
+    { "month": "2028-04", "theme": "Failure", "description": "What goes wrong, and why that's where learning lives." },
+    { "month": "2028-05", "theme": "Ownership", "description": "Taking responsibility as a creative act." },
+    { "month": "2028-06", "theme": "Play", "description": "Seriousness without heaviness; work that doesn't feel like work." },
+    { "month": "2028-07", "theme": "Patience", "description": "Long games, compounding returns, trust in process." },
+    { "month": "2028-08", "theme": "Truth", "description": "What honesty costs and why it's worth it." },
+    { "month": "2028-09", "theme": "Constraints", "description": "How limits unlock creativity." },
+    { "month": "2028-10", "theme": "Solitude", "description": "Being alone well; the mind at rest." },
+    { "month": "2028-11", "theme": "Change", "description": "Adapting without losing yourself." },
+    { "month": "2028-12", "theme": "Legacy", "description": "The things we make that outlast us." }
   ]
 }

@@ -1,284 +1,304 @@
 {
   "window": [
     {
-      "date": "2026-05-29",
-      "slug": "unchosen-attention",
-      "tags": [
-        "attention",
-        "focus",
-        "habits"
-      ],
-      "conceptSummary": "Most attention is not stolen but surrendered before the decision to give it has been made."
-    },
-    {
-      "date": "2026-05-30",
-      "slug": "the-single-tab",
-      "tags": [
-        "attention",
-        "focus",
-        "design"
-      ],
-      "conceptSummary": "Having 40 browser tabs open is a physical representation of deferred decisions."
-    },
-    {
-      "date": "2026-06-01",
-      "slug": "the-keystone-hour",
-      "tags": [
-        "habits",
-        "foundations",
-        "discipline"
-      ],
-      "conceptSummary": "The first hour you control shapes everything that follows."
-    },
-    {
-      "date": "2026-06-02",
-      "slug": "why-systems-outlast-motivation",
-      "tags": [
-        "habits",
-        "foundations",
-        "discipline"
-      ],
-      "conceptSummary": "Systems lower the cost of execution so motivation stops being the binding constraint."
-    },
-    {
-      "date": "2026-06-03",
-      "slug": "the-floor-not-the-ceiling",
-      "tags": [
-        "habits",
-        "foundations",
-        "discipline"
-      ],
-      "conceptSummary": "The floor is the minimum you do no matter what \u2014 two pages, ten minutes, one rep."
-    },
-    {
-      "date": "2026-06-04",
-      "slug": "the-identity-you-inherit",
-      "tags": [
-        "foundations",
-        "mindset",
-        "mental-models"
-      ],
-      "conceptSummary": "Before you can build who you want to be, you have to see the identity you were handed."
-    },
-    {
-      "date": "2026-06-05",
-      "slug": "small-reps-compound",
-      "tags": [
-        "habits",
-        "foundations",
-        "discipline"
-      ],
-      "conceptSummary": "The compound is not in the result but in the habit of executing."
-    },
-    {
-      "date": "2026-06-08",
-      "slug": "the-morning-ritual-myth",
-      "tags": [
-        "habits",
-        "foundations",
-        "mindset"
-      ],
-      "conceptSummary": "Copying someone else morning ritual without understanding why it works for them rarely sticks."
-    },
-    {
-      "date": "2026-06-09",
-      "slug": "what-first-principles-actually-mean",
-      "tags": [
-        "foundations",
-        "mental-models",
-        "decisions"
-      ],
-      "conceptSummary": "First principles is about finding which constraints are actually fixed vs just conventions."
-    },
-    {
-      "date": "2026-06-10",
-      "slug": "one-non-negotiable",
-      "tags": [
-        "habits",
-        "discipline",
-        "foundations"
-      ],
-      "conceptSummary": "Not ten things \u2014 one thing you do regardless of mood, travel, or excuse."
-    },
-    {
-      "date": "2026-06-11",
-      "slug": "the-slow-hunch",
-      "tags": [
-        "curiosity",
-        "learning",
-        "foundations"
-      ],
-      "conceptSummary": "The best ideas incubate across months and years before crystallizing."
-    },
-    {
-      "date": "2026-06-12",
-      "slug": "clearing-the-decks",
-      "tags": [
-        "habits",
-        "focus",
-        "foundations"
-      ],
-      "conceptSummary": "The end-of-day clear closes cognitive loops that would otherwise bleed into the next day."
-    },
-    {
-      "date": "2026-06-15",
-      "slug": "the-return-policy",
-      "tags": [
-        "decisions",
-        "mindset",
-        "foundations"
-      ],
-      "conceptSummary": "Before starting something difficult, decide under what conditions you will stop."
-    },
-    {
-      "date": "2026-06-16",
-      "slug": "on-commitment-and-optionality",
-      "tags": [
-        "decisions",
-        "foundations",
-        "mindset"
-      ],
-      "conceptSummary": "Keeping options open becomes a tax once you know what you want."
-    },
-    {
-      "date": "2026-06-17",
-      "slug": "the-2-minute-rule-revisited",
-      "tags": [
-        "habits",
-        "foundations",
-        "decisions"
-      ],
-      "conceptSummary": "The real lesson under the 2-minute rule is about deferral and decision threshold."
-    },
-    {
-      "date": "2026-06-18",
-      "slug": "why-constraints-clarify",
-      "tags": [
-        "foundations",
-        "design",
-        "craft"
-      ],
-      "conceptSummary": "Constraints force prioritization that unlimited resources never require."
-    },
-    {
-      "date": "2026-06-19",
-      "slug": "writing-things-down",
-      "tags": [
-        "learning",
-        "foundations",
-        "craft"
-      ],
-      "conceptSummary": "The page is not a record of thought \u2014 it is where thought happens."
-    },
-    {
-      "date": "2026-06-22",
-      "slug": "the-dead-hand-of-defaults",
-      "tags": [
-        "foundations",
-        "mindset",
-        "decisions"
-      ],
-      "conceptSummary": "Most of how you live was decided before you thought to ask."
-    },
-    {
-      "date": "2026-06-23",
-      "slug": "the-problem-with-best-practices",
-      "tags": [
-        "foundations",
-        "craft",
-        "mental-models"
-      ],
-      "conceptSummary": "Best practices are historical averages stripped of context."
-    },
-    {
-      "date": "2026-06-24",
-      "slug": "the-single-source-of-truth",
-      "tags": [
-        "habits",
-        "foundations",
-        "design"
-      ],
-      "conceptSummary": "Redundant systems create a cognitive tax every time you encounter them."
-    },
-    {
-      "date": "2026-06-25",
-      "slug": "the-sunk-cost-you-live-in",
-      "tags": [
-        "decisions",
-        "mindset",
-        "foundations"
-      ],
-      "conceptSummary": "Leaving does not mean the original choice was wrong \u2014 it means the context has changed."
-    },
-    {
-      "date": "2026-06-26",
-      "slug": "the-useful-constraint",
-      "tags": [
-        "foundations",
-        "discipline",
-        "craft"
-      ],
-      "conceptSummary": "A deliberate constraint forces you to commit to one direction instead of exploring all possible directions."
-    },
-    {
-      "date": "2026-06-29",
-      "slug": "the-quiet-discipline",
-      "tags": [
-        "discipline",
-        "craft",
-        "foundations"
-      ],
-      "conceptSummary": "The discipline that happens when no one is watching compounds differently."
-    },
-    {
-      "date": "2026-06-30",
-      "slug": "on-building-versus-tending",
-      "tags": [
-        "foundations",
-        "craft",
-        "discipline"
-      ],
-      "conceptSummary": "Most of what lasts is tended, not built."
-    },
-    {
-      "date": "2026-07-01",
-      "slug": "the-cost-of-context-switching",
-      "tags": [
-        "attention",
-        "focus",
-        "habits"
-      ],
-      "conceptSummary": "Attention residue means you are divided when you think you have switched."
-    },
-    {
-      "date": "2026-07-02",
-      "slug": "what-you-rehearse",
-      "tags": [
-        "attention",
-        "mindset",
-        "habits"
-      ],
-      "conceptSummary": "Every time you check your phone out of habit you rehearse distraction."
-    },
-    {
-      "date": "2026-07-03",
-      "slug": "the-second-glance",
-      "tags": [
-        "attention",
-        "curiosity",
-        "mindset"
-      ],
-      "conceptSummary": "The first glance classifies; the second glance sees."
-    },
-    {
       "date": "2026-07-06",
-      "slug": "the-calendar-lie",
+      "conceptSummary": "The calendar lie",
       "tags": [
         "attention",
         "time",
         "decisions"
       ],
-      "conceptSummary": "Your calendar represents intentions; your attention represents values."
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-07-03",
+      "conceptSummary": "The second glance",
+      "tags": [
+        "attention",
+        "curiosity",
+        "mindset"
+      ],
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-07-02",
+      "conceptSummary": "What you rehearse",
+      "tags": [
+        "attention",
+        "mindset",
+        "habits"
+      ],
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-07-01",
+      "conceptSummary": "The cost of context switching",
+      "tags": [
+        "attention",
+        "focus",
+        "habits"
+      ],
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-06-30",
+      "conceptSummary": "On building versus tending",
+      "tags": [
+        "foundations",
+        "craft",
+        "discipline"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-29",
+      "conceptSummary": "The quiet discipline",
+      "tags": [
+        "discipline",
+        "craft",
+        "foundations"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-26",
+      "conceptSummary": "The useful constraint",
+      "tags": [
+        "foundations",
+        "discipline",
+        "craft"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-25",
+      "conceptSummary": "The sunk cost you live in",
+      "tags": [
+        "decisions",
+        "mindset",
+        "foundations"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-24",
+      "conceptSummary": "The single source of truth",
+      "tags": [
+        "habits",
+        "foundations",
+        "design"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-23",
+      "conceptSummary": "The problem with best practices",
+      "tags": [
+        "foundations",
+        "craft",
+        "mental-models"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-22",
+      "conceptSummary": "The dead hand of defaults",
+      "tags": [
+        "foundations",
+        "mindset",
+        "decisions"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-19",
+      "conceptSummary": "Writing things down",
+      "tags": [
+        "learning",
+        "foundations",
+        "craft"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-18",
+      "conceptSummary": "Why constraints clarify",
+      "tags": [
+        "foundations",
+        "design",
+        "craft"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-17",
+      "conceptSummary": "The 2-minute rule, revisited",
+      "tags": [
+        "habits",
+        "foundations",
+        "decisions"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-16",
+      "conceptSummary": "On commitment and optionality",
+      "tags": [
+        "decisions",
+        "foundations",
+        "mindset"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-15",
+      "conceptSummary": "The return policy",
+      "tags": [
+        "decisions",
+        "mindset",
+        "foundations"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-12",
+      "conceptSummary": "Clearing the decks",
+      "tags": [
+        "habits",
+        "focus",
+        "foundations"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-11",
+      "conceptSummary": "The slow hunch",
+      "tags": [
+        "curiosity",
+        "learning",
+        "foundations"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-10",
+      "conceptSummary": "One non-negotiable",
+      "tags": [
+        "habits",
+        "discipline",
+        "foundations"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-09",
+      "conceptSummary": "What first principles actually mean",
+      "tags": [
+        "foundations",
+        "mental-models",
+        "decisions"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-08",
+      "conceptSummary": "The morning ritual myth",
+      "tags": [
+        "habits",
+        "foundations",
+        "mindset"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-05",
+      "conceptSummary": "Small reps compound",
+      "tags": [
+        "habits",
+        "foundations",
+        "discipline"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-04",
+      "conceptSummary": "The identity you inherit",
+      "tags": [
+        "foundations",
+        "mindset",
+        "mental-models"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-03",
+      "conceptSummary": "The floor, not the ceiling",
+      "tags": [
+        "habits",
+        "foundations",
+        "discipline"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-02",
+      "conceptSummary": "Why systems outlast motivation",
+      "tags": [
+        "habits",
+        "foundations",
+        "discipline"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-06-01",
+      "conceptSummary": "The keystone hour",
+      "tags": [
+        "habits",
+        "foundations",
+        "discipline"
+      ],
+      "theme": "Foundations"
+    },
+    {
+      "date": "2026-05-30",
+      "conceptSummary": "The single tab",
+      "tags": [
+        "attention",
+        "focus",
+        "design"
+      ],
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-05-29",
+      "conceptSummary": "Unchosen attention",
+      "tags": [
+        "attention",
+        "focus",
+        "habits"
+      ],
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-05-28",
+      "conceptSummary": "On the discipline of stillness",
+      "tags": [
+        "stillness",
+        "discipline",
+        "mindset"
+      ],
+      "theme": "Attention"
+    },
+    {
+      "date": "2026-05-27",
+      "conceptSummary": "Useful friction",
+      "tags": [
+        "habits",
+        "friction",
+        "design"
+      ],
+      "theme": "Attention"
     }
   ]
 }
