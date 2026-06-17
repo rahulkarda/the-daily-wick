@@ -2,8 +2,8 @@ name: Daily post + newsletter
 
 on:
   schedule:
-    # 3pm IST target (-1hr buffer) = 2pm IST = 08:30 UTC
-    - cron: '30 8 * * 1-5'
+    # 3pm IST target (-2hr buffer) = 1pm IST = 07:30 UTC
+    - cron: '30 7 * * 1-5'
   workflow_dispatch:
     inputs:
       dry_run:
