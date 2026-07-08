@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-07-08",
+      "slug": "tyranny-of-shoulds",
+      "tags": [
+        "clarity",
+        "mindset",
+        "philosophy",
+        "decisions"
+      ],
+      "conceptSummary": "This essay connects to clarity by defining it as the active removal of external and inherited 'shoulds' to reveal one's true priorities, thereby cutting through noise and knowing what truly matters."
+    },
+    {
       "date": "2026-07-07",
       "slug": "myth-objective-clarity",
       "tags": [
@@ -288,16 +299,6 @@
         "attention",
         "focus",
         "habits"
-      ],
-      "theme": "Attention"
-    },
-    {
-      "date": "2026-05-28",
-      "conceptSummary": "On the discipline of stillness",
-      "tags": [
-        "stillness",
-        "discipline",
-        "mindset"
       ],
       "theme": "Attention"
     }
