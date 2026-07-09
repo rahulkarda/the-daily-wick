@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-09",
+      "slug": "adjacent-possible-clarity",
+      "tags": [
+        "clarity",
+        "decisions",
+        "mental-models",
+        "focus",
+        "learning"
+      ],
+      "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
+    },
+    {
       "date": "2026-07-08",
       "slug": "tyranny-of-shoulds",
       "tags": [
@@ -289,16 +301,6 @@
         "attention",
         "focus",
         "design"
-      ],
-      "theme": "Attention"
-    },
-    {
-      "date": "2026-05-29",
-      "conceptSummary": "Unchosen attention",
-      "tags": [
-        "attention",
-        "focus",
-        "habits"
       ],
       "theme": "Attention"
     }
