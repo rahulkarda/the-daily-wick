@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-07-10",
+      "slug": "clarity-subtraction",
+      "tags": [
+        "clarity",
+        "mindset",
+        "focus",
+        "decisions"
+      ],
+      "conceptSummary": "This essay connects to clarity by defining it as an outcome of intentional subtraction, thereby cutting through noise and knowing what matters by eliminating the superfluous."
+    },
+    {
       "date": "2026-07-09",
       "slug": "adjacent-possible-clarity",
       "tags": [
@@ -293,16 +304,6 @@
         "discipline"
       ],
       "theme": "Foundations"
-    },
-    {
-      "date": "2026-05-30",
-      "conceptSummary": "The single tab",
-      "tags": [
-        "attention",
-        "focus",
-        "design"
-      ],
-      "theme": "Attention"
     }
   ]
 }
