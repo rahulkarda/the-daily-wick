@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-14",
+      "slug": "clarity-adjacent-possible",
+      "tags": [
+        "clarity",
+        "learning",
+        "decisions",
+        "mental-models",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
+    },
+    {
       "date": "2026-07-13",
       "slug": "clarity-of-the-no",
       "tags": [
@@ -289,16 +301,6 @@
     {
       "date": "2026-06-03",
       "conceptSummary": "The floor, not the ceiling",
-      "tags": [
-        "habits",
-        "foundations",
-        "discipline"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-02",
-      "conceptSummary": "Why systems outlast motivation",
       "tags": [
         "habits",
         "foundations",
