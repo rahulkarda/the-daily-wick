@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-07-16",
+      "slug": "tyranny-possible",
+      "tags": [
+        "clarity",
+        "decisions",
+        "mindset",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to clarity by exploring how an overabundance of choice can obscure what truly matters, and proposes intentional elimination as a discipline to cut through that noise."
+    },
+    {
       "date": "2026-07-15",
       "slug": "unsaid-clarity",
       "tags": [
@@ -296,16 +307,6 @@
         "habits",
         "foundations",
         "discipline"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-04",
-      "conceptSummary": "The identity you inherit",
-      "tags": [
-        "foundations",
-        "mindset",
-        "mental-models"
       ],
       "theme": "Foundations"
     }
