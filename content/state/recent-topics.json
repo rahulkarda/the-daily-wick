@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-07-20",
+      "slug": "clarity-unsaid",
+      "tags": [
+        "clarity",
+        "communication",
+        "focus",
+        "design"
+      ],
+      "conceptSummary": "This essay connects to clarity by reframing it as the outcome of intentional omission and disciplined conciseness, thereby cutting through noise by highlighting what truly matters through subtraction."
+    },
+    {
       "date": "2026-07-17",
       "slug": "clarity-of-no",
       "tags": [
@@ -298,16 +309,6 @@
         "foundations",
         "mental-models",
         "decisions"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-08",
-      "conceptSummary": "The morning ritual myth",
-      "tags": [
-        "habits",
-        "foundations",
-        "mindset"
       ],
       "theme": "Foundations"
     }
