@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-21",
+      "slug": "clarity-of-constraints",
+      "tags": [
+        "clarity",
+        "design",
+        "mental-models",
+        "decisions",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to clarity by proposing that deliberate constraints, rather than boundless choice, are a powerful discipline for cutting through noise and knowing what truly matters, by focusing energy and revealing deeper insights."
+    },
+    {
       "date": "2026-07-20",
       "slug": "clarity-unsaid",
       "tags": [
@@ -299,16 +311,6 @@
         "habits",
         "discipline",
         "foundations"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-09",
-      "conceptSummary": "What first principles actually mean",
-      "tags": [
-        "foundations",
-        "mental-models",
-        "decisions"
       ],
       "theme": "Foundations"
     }
