@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-22",
+      "slug": "clarity-of-no",
+      "tags": [
+        "clarity",
+        "decisions",
+        "focus",
+        "mindset",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to clarity by proposing that the discipline of knowing what to discard is a powerful, often overlooked, route to knowing what matters most, thereby cutting through noise by intentional subtraction."
+    },
+    {
       "date": "2026-07-21",
       "slug": "clarity-of-constraints",
       "tags": [
@@ -300,16 +312,6 @@
       "tags": [
         "curiosity",
         "learning",
-        "foundations"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-10",
-      "conceptSummary": "One non-negotiable",
-      "tags": [
-        "habits",
-        "discipline",
         "foundations"
       ],
       "theme": "Foundations"
