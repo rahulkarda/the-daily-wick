@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-23",
+      "slug": "adjacent-possible-clarity",
+      "tags": [
+        "clarity",
+        "learning",
+        "decisions",
+        "mental-models",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
+    },
+    {
       "date": "2026-07-22",
       "slug": "clarity-of-no",
       "tags": [
@@ -302,16 +314,6 @@
       "tags": [
         "habits",
         "focus",
-        "foundations"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-11",
-      "conceptSummary": "The slow hunch",
-      "tags": [
-        "curiosity",
-        "learning",
         "foundations"
       ],
       "theme": "Foundations"
