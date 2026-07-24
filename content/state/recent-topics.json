@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-24",
+      "slug": "clarity-of-subtraction",
+      "tags": [
+        "clarity",
+        "discipline",
+        "mindset",
+        "focus",
+        "decisions"
+      ],
+      "conceptSummary": "This essay connects to clarity by proposing that the discipline of knowing what to discard is a powerful, often overlooked, route to knowing what matters most, thereby cutting through noise by intentional subtraction."
+    },
+    {
       "date": "2026-07-23",
       "slug": "adjacent-possible-clarity",
       "tags": [
@@ -304,16 +316,6 @@
       "tags": [
         "decisions",
         "mindset",
-        "foundations"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-12",
-      "conceptSummary": "Clearing the decks",
-      "tags": [
-        "habits",
-        "focus",
         "foundations"
       ],
       "theme": "Foundations"
