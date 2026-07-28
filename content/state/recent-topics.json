@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-28",
+      "slug": "unlearn-clarity",
+      "tags": [
+        "clarity",
+        "learning",
+        "mindset",
+        "discipline",
+        "mental-models"
+      ],
+      "conceptSummary": "This essay connects to clarity by proposing that the discipline of actively unlearning ingrained assumptions is a powerful route to cutting through noise and knowing what truly matters, by revealing deeper, often obscured, truths."
+    },
+    {
       "date": "2026-07-24",
       "slug": "clarity-of-subtraction",
       "tags": [
@@ -307,16 +319,6 @@
         "decisions",
         "foundations",
         "mindset"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-15",
-      "conceptSummary": "The return policy",
-      "tags": [
-        "decisions",
-        "mindset",
-        "foundations"
       ],
       "theme": "Foundations"
     }
