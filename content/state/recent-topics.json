@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-07-29",
+      "slug": "clarity-unsaid",
+      "tags": [
+        "clarity",
+        "communication",
+        "focus",
+        "design"
+      ],
+      "conceptSummary": "This essay connects to clarity by proposing that the discipline of knowing what to omit is a powerful route to knowing what matters, thereby cutting through noise by intentional subtraction."
+    },
+    {
       "date": "2026-07-28",
       "slug": "unlearn-clarity",
       "tags": [
@@ -309,16 +320,6 @@
         "habits",
         "foundations",
         "decisions"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-16",
-      "conceptSummary": "On commitment and optionality",
-      "tags": [
-        "decisions",
-        "foundations",
-        "mindset"
       ],
       "theme": "Foundations"
     }
