@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-30",
+      "slug": "adjacent-possible",
+      "tags": [
+        "clarity",
+        "learning",
+        "decisions",
+        "mental-models",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
+    },
+    {
       "date": "2026-07-29",
       "slug": "clarity-unsaid",
       "tags": [
@@ -310,16 +322,6 @@
         "foundations",
         "design",
         "craft"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-17",
-      "conceptSummary": "The 2-minute rule, revisited",
-      "tags": [
-        "habits",
-        "foundations",
-        "decisions"
       ],
       "theme": "Foundations"
     }
