@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-07-31",
+      "slug": "adjacent-possible",
+      "tags": [
+        "clarity",
+        "learning",
+        "decisions",
+        "mental-models",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
+    },
+    {
       "date": "2026-07-30",
       "slug": "adjacent-possible",
       "tags": [
@@ -311,16 +323,6 @@
       "tags": [
         "learning",
         "foundations",
-        "craft"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-18",
-      "conceptSummary": "Why constraints clarify",
-      "tags": [
-        "foundations",
-        "design",
         "craft"
       ],
       "theme": "Foundations"
