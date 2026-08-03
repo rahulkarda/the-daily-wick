@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-03",
+      "slug": "resilience-small-bets",
+      "tags": [
+        "resilience",
+        "habits",
+        "discipline",
+        "learning",
+        "mindset"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from a reaction to adversity to a proactive, continuous process of making small, consistent 'bets' that build the capacity for recovery and adaptation."
+    },
+    {
       "date": "2026-07-31",
       "slug": "adjacent-possible",
       "tags": [
@@ -314,16 +326,6 @@
         "foundations",
         "mindset",
         "decisions"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-19",
-      "conceptSummary": "Writing things down",
-      "tags": [
-        "learning",
-        "foundations",
-        "craft"
       ],
       "theme": "Foundations"
     }
