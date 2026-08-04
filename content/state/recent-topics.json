@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-04",
+      "slug": "anti-fragile-mind",
+      "tags": [
+        "resilience",
+        "mindset",
+        "learning",
+        "mental-models",
+        "philosophy"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from simply 'bouncing back' to actively 'getting stronger' with every challenge, introducing the concept of anti-fragility."
+    },
+    {
       "date": "2026-08-03",
       "slug": "resilience-small-bets",
       "tags": [
@@ -316,16 +328,6 @@
         "foundations",
         "craft",
         "mental-models"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-22",
-      "conceptSummary": "The dead hand of defaults",
-      "tags": [
-        "foundations",
-        "mindset",
-        "decisions"
       ],
       "theme": "Foundations"
     }
