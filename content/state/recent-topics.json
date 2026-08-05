@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-05",
+      "slug": "rebound-effect",
+      "tags": [
+        "resilience",
+        "mindset",
+        "mental-models",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the forceful suppression of unwanted thoughts or feelings to the skill of acknowledging and observing them, thereby reducing the 'rebound effect' and fostering more sustainable recovery."
+    },
+    {
       "date": "2026-08-04",
       "slug": "anti-fragile-mind",
       "tags": [
@@ -318,16 +329,6 @@
         "habits",
         "foundations",
         "design"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-23",
-      "conceptSummary": "The problem with best practices",
-      "tags": [
-        "foundations",
-        "craft",
-        "mental-models"
       ],
       "theme": "Foundations"
     }
