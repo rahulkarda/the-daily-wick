@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-06",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "resilience",
+        "mindset",
+        "philosophy",
+        "connection",
+        "learning"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the foundational internal work of acknowledging and articulating our hidden burdens, thereby building a more robust and adaptive inner capacity for recovery."
+    },
+    {
       "date": "2026-08-05",
       "slug": "rebound-effect",
       "tags": [
@@ -319,16 +331,6 @@
         "decisions",
         "mindset",
         "foundations"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-24",
-      "conceptSummary": "The single source of truth",
-      "tags": [
-        "habits",
-        "foundations",
-        "design"
       ],
       "theme": "Foundations"
     }
