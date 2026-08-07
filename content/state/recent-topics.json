@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-07",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "mindset",
+        "philosophy"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the foundational internal work of acknowledging and articulating our hidden burdens, thereby building a more robust and adaptive inner capacity for recovery."
+    },
+    {
       "date": "2026-08-06",
       "slug": "weight-of-unsaid",
       "tags": [
@@ -321,16 +332,6 @@
         "foundations",
         "discipline",
         "craft"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-25",
-      "conceptSummary": "The sunk cost you live in",
-      "tags": [
-        "decisions",
-        "mindset",
-        "foundations"
       ],
       "theme": "Foundations"
     }
