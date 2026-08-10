@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-10",
+      "slug": "second-wind-skill",
+      "tags": [
+        "resilience",
+        "mindset",
+        "discipline",
+        "learning"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the active skill of pushing past perceived limits and finding renewed internal strength."
+    },
+    {
       "date": "2026-08-07",
       "slug": "weight-of-unsaid",
       "tags": [
@@ -322,16 +333,6 @@
         "discipline",
         "craft",
         "foundations"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-26",
-      "conceptSummary": "The useful constraint",
-      "tags": [
-        "foundations",
-        "discipline",
-        "craft"
       ],
       "theme": "Foundations"
     }
