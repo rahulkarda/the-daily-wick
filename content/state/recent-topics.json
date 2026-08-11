@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-11",
+      "slug": "second-bounce",
+      "tags": [
+        "resilience",
+        "learning",
+        "mindset",
+        "mental-models",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the active skill of pushing past perceived limits and finding renewed internal strength, focusing on post-adversity growth."
+    },
+    {
       "date": "2026-08-10",
       "slug": "second-wind-skill",
       "tags": [
@@ -323,16 +335,6 @@
         "foundations",
         "craft",
         "discipline"
-      ],
-      "theme": "Foundations"
-    },
-    {
-      "date": "2026-06-29",
-      "conceptSummary": "The quiet discipline",
-      "tags": [
-        "discipline",
-        "craft",
-        "foundations"
       ],
       "theme": "Foundations"
     }
