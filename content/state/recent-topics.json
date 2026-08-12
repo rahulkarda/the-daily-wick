@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-12",
+      "slug": "unshakeable-self-myth",
+      "tags": [
+        "resilience",
+        "mindset",
+        "philosophy",
+        "learning"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from an unshakeable inner fortress to the active capacity for acknowledging, integrating, and growing from the impact of adversity, rather than resisting or denying it."
+    },
+    {
       "date": "2026-08-11",
       "slug": "second-bounce",
       "tags": [
@@ -327,16 +338,6 @@
         "habits"
       ],
       "theme": "Attention"
-    },
-    {
-      "date": "2026-06-30",
-      "conceptSummary": "On building versus tending",
-      "tags": [
-        "foundations",
-        "craft",
-        "discipline"
-      ],
-      "theme": "Foundations"
     }
   ]
 }
