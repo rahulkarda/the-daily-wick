@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-13",
+      "slug": "weight-of-the-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "mindset",
+        "philosophy"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
+    },
+    {
       "date": "2026-08-12",
       "slug": "unshakeable-self-myth",
       "tags": [
@@ -325,16 +336,6 @@
       "tags": [
         "attention",
         "mindset",
-        "habits"
-      ],
-      "theme": "Attention"
-    },
-    {
-      "date": "2026-07-01",
-      "conceptSummary": "The cost of context switching",
-      "tags": [
-        "attention",
-        "focus",
         "habits"
       ],
       "theme": "Attention"
