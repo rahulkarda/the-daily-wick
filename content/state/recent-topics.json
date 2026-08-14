@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-14",
+      "slug": "good-enough-resilience",
+      "tags": [
+        "resilience",
+        "mindset",
+        "discipline",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from an unyielding pursuit of perfection to the strategic acceptance of 'good enough,' thereby conserving energy and fostering a more sustainable capacity for recovery and adaptation."
+    },
+    {
       "date": "2026-08-13",
       "slug": "weight-of-the-unsaid",
       "tags": [
@@ -327,16 +338,6 @@
         "attention",
         "curiosity",
         "mindset"
-      ],
-      "theme": "Attention"
-    },
-    {
-      "date": "2026-07-02",
-      "conceptSummary": "What you rehearse",
-      "tags": [
-        "attention",
-        "mindset",
-        "habits"
       ],
       "theme": "Attention"
     }
