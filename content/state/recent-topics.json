@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-17",
+      "slug": "quiet-strength-repair",
+      "tags": [
+        "resilience",
+        "mindset",
+        "learning",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' to the active, deliberate process of repair and strengthening after adversity, focusing on intentional mending rather than just passive recovery."
+    },
+    {
       "date": "2026-08-14",
       "slug": "good-enough-resilience",
       "tags": [
@@ -328,16 +339,6 @@
         "attention",
         "time",
         "decisions"
-      ],
-      "theme": "Attention"
-    },
-    {
-      "date": "2026-07-03",
-      "conceptSummary": "The second glance",
-      "tags": [
-        "attention",
-        "curiosity",
-        "mindset"
       ],
       "theme": "Attention"
     }
