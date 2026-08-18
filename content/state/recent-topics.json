@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-18",
+      "slug": "weight-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "mindset",
+        "communication",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
+    },
+    {
       "date": "2026-08-17",
       "slug": "quiet-strength-repair",
       "tags": [
@@ -331,16 +343,6 @@
         "mental-models"
       ],
       "conceptSummary": "This essay connects to clarity by reframing it not as the absence of bias, but as the disciplined awareness of one's own interpretive framework, leading to a more robust, 'intersubjective' understanding."
-    },
-    {
-      "date": "2026-07-06",
-      "conceptSummary": "The calendar lie",
-      "tags": [
-        "attention",
-        "time",
-        "decisions"
-      ],
-      "theme": "Attention"
     }
   ]
 }
