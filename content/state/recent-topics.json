@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-08-20",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "mindset",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
+    },
+    {
       "date": "2026-08-19",
       "slug": "controlled-failure",
       "tags": [
@@ -332,17 +343,6 @@
         "learning"
       ],
       "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
-    },
-    {
-      "date": "2026-07-08",
-      "slug": "tyranny-of-shoulds",
-      "tags": [
-        "clarity",
-        "mindset",
-        "philosophy",
-        "decisions"
-      ],
-      "conceptSummary": "This essay connects to clarity by defining it as the active removal of external and inherited 'shoulds' to reveal one's true priorities, thereby cutting through noise and knowing what truly matters."
     }
   ]
 }
