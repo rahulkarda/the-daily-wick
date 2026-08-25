@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-25",
+      "slug": "weight-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "mindset",
+        "communication",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
+    },
+    {
       "date": "2026-08-24",
       "slug": "principle-of-enough",
       "tags": [
@@ -332,17 +344,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
-    },
-    {
-      "date": "2026-07-13",
-      "slug": "clarity-of-the-no",
-      "tags": [
-        "clarity",
-        "decisions",
-        "focus",
-        "mindset"
-      ],
-      "conceptSummary": "This essay connects to clarity by defining it as an outcome of intentional subtraction and the discipline of saying 'no', thereby cutting through noise and knowing what matters by eliminating the superfluous."
     }
   ]
 }
