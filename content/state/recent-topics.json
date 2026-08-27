@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-27",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "communication",
+        "mindset",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
+    },
+    {
       "date": "2026-08-26",
       "slug": "resilience-small-bet",
       "tags": [
@@ -333,17 +345,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to clarity by exploring how an overabundance of choice can obscure what truly matters, and proposes intentional elimination as a discipline to cut through that noise."
-    },
-    {
-      "date": "2026-07-15",
-      "slug": "unsaid-clarity",
-      "tags": [
-        "clarity",
-        "communication",
-        "mindset",
-        "focus"
-      ],
-      "conceptSummary": "This essay connects to clarity by reframing it as the outcome of intentional omission and disciplined conciseness, thereby cutting through noise by highlighting what truly matters through subtraction."
     }
   ]
 }
