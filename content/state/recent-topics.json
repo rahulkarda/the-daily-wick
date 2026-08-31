@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-08-31",
+      "slug": "weight-unsaid",
+      "tags": [
+        "resilience",
+        "connection",
+        "mindset",
+        "communication",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
+    },
+    {
       "date": "2026-08-28",
       "slug": "quiet-strength-not-knowing",
       "tags": [
@@ -334,17 +346,6 @@
         "design"
       ],
       "conceptSummary": "This essay connects to clarity by reframing it as the outcome of intentional omission and disciplined conciseness, thereby cutting through noise by highlighting what truly matters through subtraction."
-    },
-    {
-      "date": "2026-07-17",
-      "slug": "clarity-of-no",
-      "tags": [
-        "clarity",
-        "decisions",
-        "focus",
-        "mindset"
-      ],
-      "conceptSummary": "This essay connects to clarity by defining it as an outcome of intentional subtraction and the discipline of saying 'no', thereby cutting through noise and knowing what matters by eliminating the superfluous."
     }
   ]
 }
