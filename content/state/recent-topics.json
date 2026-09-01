@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-09-01",
+      "slug": "patient-pursuit-better-work",
+      "tags": [
+        "craft",
+        "discipline",
+        "learning",
+        "mindset",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by defining craft not as a perfected outcome, but as the patient, continuous process of making small, intentional improvements."
+    },
+    {
       "date": "2026-08-31",
       "slug": "weight-unsaid",
       "tags": [
@@ -335,17 +347,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to clarity by proposing that deliberate constraints, rather than boundless choice, are a powerful discipline for cutting through noise and knowing what truly matters, by focusing energy and revealing deeper insights."
-    },
-    {
-      "date": "2026-07-20",
-      "slug": "clarity-unsaid",
-      "tags": [
-        "clarity",
-        "communication",
-        "focus",
-        "design"
-      ],
-      "conceptSummary": "This essay connects to clarity by reframing it as the outcome of intentional omission and disciplined conciseness, thereby cutting through noise by highlighting what truly matters through subtraction."
     }
   ]
 }
