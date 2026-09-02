@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-09-02",
+      "slug": "craftsmans-patience",
+      "tags": [
+        "craft",
+        "discipline",
+        "habits",
+        "learning",
+        "mindset"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing the role of patient, repetitive practice in building true skill, contrasting it with the modern desire for speed and instant results."
+    },
+    {
       "date": "2026-09-01",
       "slug": "patient-pursuit-better-work",
       "tags": [
@@ -335,18 +347,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to clarity by proposing that the discipline of knowing what to discard is a powerful, often overlooked, route to knowing what matters most, thereby cutting through noise by intentional subtraction."
-    },
-    {
-      "date": "2026-07-21",
-      "slug": "clarity-of-constraints",
-      "tags": [
-        "clarity",
-        "design",
-        "mental-models",
-        "decisions",
-        "focus"
-      ],
-      "conceptSummary": "This essay connects to clarity by proposing that deliberate constraints, rather than boundless choice, are a powerful discipline for cutting through noise and knowing what truly matters, by focusing energy and revealing deeper insights."
     }
   ]
 }
