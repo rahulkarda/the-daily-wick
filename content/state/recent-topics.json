@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-09-03",
+      "slug": "patient-pursuit-mastery",
+      "tags": [
+        "craft",
+        "discipline",
+        "learning",
+        "mindset",
+        "foundations"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing the patient pursuit of mastery through process-oriented work, rather than a results-driven mindset, aligning with the idea of 'the patient pursuit of better work.'"
+    },
+    {
       "date": "2026-09-02",
       "slug": "craftsmans-patience",
       "tags": [
@@ -335,18 +347,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to clarity by reframing it from a fixed, distant vision to an emergent, iterative understanding gained by exploring the 'adjacent possible,' thereby cutting through the noise of overwhelming long-term planning."
-    },
-    {
-      "date": "2026-07-22",
-      "slug": "clarity-of-no",
-      "tags": [
-        "clarity",
-        "decisions",
-        "focus",
-        "mindset",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to clarity by proposing that the discipline of knowing what to discard is a powerful, often overlooked, route to knowing what matters most, thereby cutting through noise by intentional subtraction."
     }
   ]
 }
