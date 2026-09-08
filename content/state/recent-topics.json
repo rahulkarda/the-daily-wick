@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-08",
+      "slug": "unseen-cut-craft",
+      "tags": [
+        "craft",
+        "design",
+        "focus",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work not as adding new skills, but as the deliberate, conscious process of unlearning ingrained habits or assumptions that impede further mastery."
+    },
+    {
       "date": "2026-09-07",
       "slug": "deliberate-undoing",
       "tags": [
@@ -333,18 +344,6 @@
         "design"
       ],
       "conceptSummary": "This essay connects to clarity by proposing that the discipline of knowing what to omit is a powerful route to knowing what matters, thereby cutting through noise by intentional subtraction."
-    },
-    {
-      "date": "2026-07-28",
-      "slug": "unlearn-clarity",
-      "tags": [
-        "clarity",
-        "learning",
-        "mindset",
-        "discipline",
-        "mental-models"
-      ],
-      "conceptSummary": "This essay connects to clarity by proposing that the discipline of actively unlearning ingrained assumptions is a powerful route to cutting through noise and knowing what truly matters, by revealing deeper, often obscured, truths."
     }
   ]
 }
