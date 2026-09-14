@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-14",
+      "slug": "deliberate-pause",
+      "tags": [
+        "craft",
+        "discipline",
+        "focus",
+        "mindset"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate act of introducing pauses, rather than continuous action, thereby enhancing the quality and thoughtfulness of the outcome."
+    },
+    {
       "date": "2026-09-11",
       "slug": "deliberate-pause",
       "tags": [
@@ -330,18 +341,6 @@
         "philosophy"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from simply 'bouncing back' to actively 'getting stronger' with every challenge, introducing the concept of anti-fragility."
-    },
-    {
-      "date": "2026-08-03",
-      "slug": "resilience-small-bets",
-      "tags": [
-        "resilience",
-        "habits",
-        "discipline",
-        "learning",
-        "mindset"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from a reaction to adversity to a proactive, continuous process of making small, consistent 'bets' that build the capacity for recovery and adaptation."
     }
   ]
 }
