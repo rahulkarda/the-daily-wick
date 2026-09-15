@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-15",
+      "slug": "unfinishing",
+      "tags": [
+        "craft",
+        "mindset",
+        "design",
+        "learning"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as an ongoing, iterative process that sometimes requires intentionally resisting definitive closure, thereby fostering continuous refinement rather than static completion."
+    },
+    {
       "date": "2026-09-14",
       "slug": "deliberate-pause",
       "tags": [
@@ -329,18 +340,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from the forceful suppression of unwanted thoughts or feelings to the skill of acknowledging and observing them, thereby reducing the 'rebound effect' and fostering more sustainable recovery."
-    },
-    {
-      "date": "2026-08-04",
-      "slug": "anti-fragile-mind",
-      "tags": [
-        "resilience",
-        "mindset",
-        "learning",
-        "mental-models",
-        "philosophy"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from simply 'bouncing back' to actively 'getting stronger' with every challenge, introducing the concept of anti-fragility."
     }
   ]
 }
