@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-16",
+      "slug": "patience-of-stonecutter",
+      "tags": [
+        "craft",
+        "discipline",
+        "mindset",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work is a cumulative process, where sustained, unglamorous effort, rather than a single breakthrough, leads to mastery."
+    },
+    {
       "date": "2026-09-15",
       "slug": "unfinishing",
       "tags": [
@@ -329,17 +340,6 @@
         "learning"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the foundational internal work of acknowledging and articulating our hidden burdens, thereby building a more robust and adaptive inner capacity for recovery."
-    },
-    {
-      "date": "2026-08-05",
-      "slug": "rebound-effect",
-      "tags": [
-        "resilience",
-        "mindset",
-        "mental-models",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from the forceful suppression of unwanted thoughts or feelings to the skill of acknowledging and observing them, thereby reducing the 'rebound effect' and fostering more sustainable recovery."
     }
   ]
 }
