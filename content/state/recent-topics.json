@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-18",
+      "slug": "craft-re-reading",
+      "tags": [
+        "craft",
+        "learning",
+        "mindset",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work involves not just acquiring new knowledge, but also the deliberate, iterative process of re-engaging with existing knowledge to deepen understanding and uncover new insights."
+    },
+    {
       "date": "2026-09-17",
       "slug": "deliberate-discomfort",
       "tags": [
@@ -328,17 +339,6 @@
         "learning"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the active skill of pushing past perceived limits and finding renewed internal strength."
-    },
-    {
-      "date": "2026-08-07",
-      "slug": "weight-of-unsaid",
-      "tags": [
-        "resilience",
-        "connection",
-        "mindset",
-        "philosophy"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the foundational internal work of acknowledging and articulating our hidden burdens, thereby building a more robust and adaptive inner capacity for recovery."
     }
   ]
 }
