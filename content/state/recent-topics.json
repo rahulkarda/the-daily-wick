@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-21",
+      "slug": "deliberate-bend",
+      "tags": [
+        "craft",
+        "design",
+        "mindset",
+        "learning"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the mastery of intentional, skillful deviation, rather than just strict adherence to process."
+    },
+    {
       "date": "2026-09-18",
       "slug": "craft-re-reading",
       "tags": [
@@ -328,17 +339,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the active skill of pushing past perceived limits and finding renewed internal strength, focusing on post-adversity growth."
-    },
-    {
-      "date": "2026-08-10",
-      "slug": "second-wind-skill",
-      "tags": [
-        "resilience",
-        "mindset",
-        "discipline",
-        "learning"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the active skill of pushing past perceived limits and finding renewed internal strength."
     }
   ]
 }
