@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-09-22",
+      "slug": "craft-of-unmaking",
+      "tags": [
+        "craft",
+        "design",
+        "mindset",
+        "learning",
+        "discipline"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work not as adding new skills, but as the deliberate, conscious process of unmaking and simplifying to reveal the essential core of mastery."
+    },
+    {
       "date": "2026-09-21",
       "slug": "deliberate-bend",
       "tags": [
@@ -327,18 +339,6 @@
         "learning"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from an unshakeable inner fortress to the active capacity for acknowledging, integrating, and growing from the impact of adversity, rather than resisting or denying it."
-    },
-    {
-      "date": "2026-08-11",
-      "slug": "second-bounce",
-      "tags": [
-        "resilience",
-        "learning",
-        "mindset",
-        "mental-models",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' from external forces to the active skill of pushing past perceived limits and finding renewed internal strength, focusing on post-adversity growth."
     }
   ]
 }
