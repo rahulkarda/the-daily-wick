@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-09-23",
+      "slug": "art-of-enough",
+      "tags": [
+        "craft",
+        "mindset",
+        "design",
+        "discipline",
+        "focus"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work includes the critical discipline of discerning when a piece is 'finished,' thereby preventing over-refinement and preserving the integrity of the work."
+    },
+    {
       "date": "2026-09-22",
       "slug": "craft-of-unmaking",
       "tags": [
@@ -328,17 +340,6 @@
         "philosophy"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
-    },
-    {
-      "date": "2026-08-12",
-      "slug": "unshakeable-self-myth",
-      "tags": [
-        "resilience",
-        "mindset",
-        "philosophy",
-        "learning"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from an unshakeable inner fortress to the active capacity for acknowledging, integrating, and growing from the impact of adversity, rather than resisting or denying it."
     }
   ]
 }
