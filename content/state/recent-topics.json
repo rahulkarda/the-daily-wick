@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-09-28",
+      "slug": "deliberate-error",
+      "tags": [
+        "craft",
+        "learning",
+        "discipline",
+        "mindset"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the deliberate and controlled exploration of errors to deepen understanding and accelerate mastery, rather than simply avoiding mistakes."
+    },
+    {
       "date": "2026-09-24",
       "slug": "deliberate-pause-craft",
       "tags": [
@@ -330,17 +341,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' to the active, deliberate process of repair and strengthening after adversity, focusing on intentional mending rather than just passive recovery."
-    },
-    {
-      "date": "2026-08-14",
-      "slug": "good-enough-resilience",
-      "tags": [
-        "resilience",
-        "mindset",
-        "discipline",
-        "focus"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from an unyielding pursuit of perfection to the strategic acceptance of 'good enough,' thereby conserving energy and fostering a more sustainable capacity for recovery and adaptation."
     }
   ]
 }
