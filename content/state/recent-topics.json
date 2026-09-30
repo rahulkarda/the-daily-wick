@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-09-30",
+      "slug": "craft-of-restraint",
+      "tags": [
+        "craft",
+        "discipline",
+        "mindset",
+        "communication",
+        "design"
+      ],
+      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate and skillful act of restraint and subtraction, rather than merely adding more elements."
+    },
+    {
       "date": "2026-09-28",
       "slug": "deliberate-error",
       "tags": [
@@ -330,17 +342,6 @@
         "foundations"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
-    },
-    {
-      "date": "2026-08-17",
-      "slug": "quiet-strength-repair",
-      "tags": [
-        "resilience",
-        "mindset",
-        "learning",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from merely 'bouncing back' to the active, deliberate process of repair and strengthening after adversity, focusing on intentional mending rather than just passive recovery."
     }
   ]
 }
