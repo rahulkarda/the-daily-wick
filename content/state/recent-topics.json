@@ -1,6 +1,18 @@
 {
   "window": [
     {
+      "date": "2026-10-01",
+      "slug": "weight-of-easy-path",
+      "tags": [
+        "friction",
+        "mindset",
+        "discipline",
+        "decisions",
+        "philosophy"
+      ],
+      "conceptSummary": "This essay connects to the 'Friction' theme by arguing that not all friction is bad; some forms of resistance are crucial for building capacity, deepening experience, and clarifying value, countering the modern obsession with total ease."
+    },
+    {
       "date": "2026-09-30",
       "slug": "craft-of-restraint",
       "tags": [
@@ -330,18 +342,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it as a skill that can be proactively developed through small, intentional 'failures,' rather than merely a reactive response to external adversity."
-    },
-    {
-      "date": "2026-08-18",
-      "slug": "weight-unsaid",
-      "tags": [
-        "resilience",
-        "connection",
-        "mindset",
-        "communication",
-        "foundations"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
     }
   ]
 }
