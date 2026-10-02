@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-02",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "friction",
+        "communication",
+        "connection",
+        "mindset"
+      ],
+      "conceptSummary": "This essay connects to the 'Friction' theme by arguing that avoiding necessary, short-term communicative friction often leads to greater, long-term relational resistance and strain."
+    },
+    {
       "date": "2026-10-01",
       "slug": "weight-of-easy-path",
       "tags": [
@@ -331,17 +342,6 @@
         "foundations"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
-    },
-    {
-      "date": "2026-08-19",
-      "slug": "controlled-failure",
-      "tags": [
-        "resilience",
-        "learning",
-        "mindset",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it as a skill that can be proactively developed through small, intentional 'failures,' rather than merely a reactive response to external adversity."
     }
   ]
 }
