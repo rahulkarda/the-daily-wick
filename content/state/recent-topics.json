@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-07",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "friction",
+        "communication",
+        "connection",
+        "mindset"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Friction' theme by arguing that avoiding necessary, small, communicative friction often leads to greater, long-term relational resistance and strain."
+    },
+    {
       "date": "2026-10-06",
       "slug": "weight-of-unsaid",
       "tags": [
@@ -330,18 +341,6 @@
         "foundations"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
-    },
-    {
-      "date": "2026-08-24",
-      "slug": "principle-of-enough",
-      "tags": [
-        "resilience",
-        "mindset",
-        "discipline",
-        "foundations",
-        "focus"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from limitless endurance to the strategic skill of recognizing and respecting personal boundaries, thereby ensuring sustainable recovery and preventing burnout."
     }
   ]
 }
