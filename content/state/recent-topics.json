@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-09",
+      "slug": "friction-of-truth",
+      "tags": [
+        "friction",
+        "communication",
+        "connection",
+        "mindset"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Friction' theme by arguing that avoiding necessary, short-term communicative friction often leads to greater, long-term relational resistance and strain."
+    },
+    {
       "date": "2026-10-08",
       "slug": "weight-of-the-unsaid",
       "tags": [
@@ -328,18 +339,6 @@
         "foundations"
       ],
       "conceptSummary": "This essay connects to resilience by reframing it from the individual, silent bearing of burdens to the active skill of acknowledging, articulating, and appropriately sharing our internal struggles, thereby fostering deeper connection and a more robust, collective capacity for recovery."
-    },
-    {
-      "date": "2026-08-26",
-      "slug": "resilience-small-bet",
-      "tags": [
-        "resilience",
-        "habits",
-        "discipline",
-        "learning",
-        "mindset"
-      ],
-      "conceptSummary": "This essay connects to resilience by reframing it from a reaction to adversity to a proactive, continuous process of making small, consistent 'bets' that build the capacity for recovery and adaptation."
     }
   ]
 }
