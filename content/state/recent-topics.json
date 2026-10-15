@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-15",
+      "slug": "weight-of-choice",
+      "tags": [
+        "friction",
+        "decisions",
+        "mindset",
+        "design"
+      ],
+      "conceptSummary": "This essay connects to the 'Friction' theme by arguing that excessive choice, often seen as ease, actually creates a psychological friction that paralyzes decision-making, and that useful constraints can reduce this cognitive load."
+    },
+    {
       "date": "2026-10-14",
       "slug": "unsaid-weight",
       "tags": [
@@ -325,18 +336,6 @@
         "mindset"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing the role of patient, repetitive practice in building true skill, contrasting it with the modern desire for speed and instant results."
-    },
-    {
-      "date": "2026-09-01",
-      "slug": "patient-pursuit-better-work",
-      "tags": [
-        "craft",
-        "discipline",
-        "learning",
-        "mindset",
-        "foundations"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by defining craft not as a perfected outcome, but as the patient, continuous process of making small, intentional improvements."
     }
   ]
 }
