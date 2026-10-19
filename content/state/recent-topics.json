@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-19",
+      "slug": "weight-of-ease",
+      "tags": [
+        "friction",
+        "mindset",
+        "discipline",
+        "design"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Friction' theme by arguing that while removing friction often seems desirable, an overemphasis on ease can diminish our inherent capacities and satisfaction, highlighting the unexpected costs of a friction-free existence."
+    },
+    {
       "date": "2026-10-16",
       "slug": "weight-unsaid",
       "tags": [
@@ -323,18 +334,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the discipline of knowing what to remove, rather than just what to add, thereby achieving greater precision and impact."
-    },
-    {
-      "date": "2026-09-03",
-      "slug": "patient-pursuit-mastery",
-      "tags": [
-        "craft",
-        "discipline",
-        "learning",
-        "mindset",
-        "foundations"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing the patient pursuit of mastery through process-oriented work, rather than a results-driven mindset, aligning with the idea of 'the patient pursuit of better work.'"
     }
   ]
 }
