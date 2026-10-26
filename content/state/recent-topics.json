@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-26",
+      "slug": "inertia-convenience",
+      "tags": [
+        "friction",
+        "habits",
+        "decisions",
+        "mindset"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Friction' theme by arguing that an overemphasis on convenience, a form of friction removal, leads to an inertia that stifles growth and fulfillment, highlighting the unexpected costs of ease."
+    },
+    {
       "date": "2026-10-23",
       "slug": "price-perfect-efficiency",
       "tags": [
@@ -323,17 +334,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as a continuous process fueled by intellectual humility and a willingness to acknowledge unknowns, rather than a linear path to static expertise."
-    },
-    {
-      "date": "2026-09-09",
-      "slug": "deliberate-constraint",
-      "tags": [
-        "craft",
-        "design",
-        "focus",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate and conscious act of imposing constraints, which refines skill and deepens understanding, rather than merely accumulating more."
     }
   ]
 }
