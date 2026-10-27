@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-27",
+      "slug": "weight-of-unsaid",
+      "tags": [
+        "friction",
+        "communication",
+        "connection",
+        "mindset"
+      ],
+      "conceptSummary": "This essay connects to the 'Friction' theme by arguing that avoiding necessary communicative friction leads to a heavier, more damaging internal and relational resistance over time, highlighting the hidden costs of an overemphasis on ease in communication."
+    },
+    {
       "date": "2026-10-26",
       "slug": "inertia-convenience",
       "tags": [
@@ -323,17 +334,6 @@
         "mindset"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate act of introducing pauses, rather than continuous action, thereby enhancing the quality and thoughtfulness of the outcome."
-    },
-    {
-      "date": "2026-09-10",
-      "slug": "humility-of-craft",
-      "tags": [
-        "craft",
-        "learning",
-        "mindset",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as a continuous process fueled by intellectual humility and a willingness to acknowledge unknowns, rather than a linear path to static expertise."
     }
   ]
 }
