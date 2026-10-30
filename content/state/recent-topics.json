@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-10-30",
+      "slug": "unspoken-words-weight",
+      "tags": [
+        "friction",
+        "communication",
+        "connection",
+        "mindset"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Friction' theme by arguing that avoiding necessary communicative friction leads to a heavier, more damaging internal and relational resistance over time, highlighting the hidden costs of an overemphasis on ease in communication."
+    },
+    {
       "date": "2026-10-28",
       "slug": "weight-of-unsaid",
       "tags": [
@@ -323,17 +334,6 @@
         "learning"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as an ongoing, iterative process that sometimes requires intentionally resisting definitive closure, thereby fostering continuous refinement rather than static completion."
-    },
-    {
-      "date": "2026-09-14",
-      "slug": "deliberate-pause",
-      "tags": [
-        "craft",
-        "discipline",
-        "focus",
-        "mindset"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate act of introducing pauses, rather than continuous action, thereby enhancing the quality and thoughtfulness of the outcome."
     }
   ]
 }
