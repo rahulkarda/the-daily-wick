@@ -1,6 +1,16 @@
 {
   "window": [
     {
+      "date": "2026-11-02",
+      "slug": "unsaid-thanks",
+      "tags": [
+        "gratitude",
+        "connection",
+        "mindset"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Gratitude' theme by focusing on the importance of *expressing* gratitude, not just feeling it, as a way to fully realize its benefits and prevent it from becoming an internal burden."
+    },
+    {
       "date": "2026-10-30",
       "slug": "unspoken-words-weight",
       "tags": [
@@ -323,17 +333,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work is a cumulative process, where sustained, unglamorous effort, rather than a single breakthrough, leads to mastery."
-    },
-    {
-      "date": "2026-09-15",
-      "slug": "unfinishing",
-      "tags": [
-        "craft",
-        "mindset",
-        "design",
-        "learning"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as an ongoing, iterative process that sometimes requires intentionally resisting definitive closure, thereby fostering continuous refinement rather than static completion."
     }
   ]
 }
