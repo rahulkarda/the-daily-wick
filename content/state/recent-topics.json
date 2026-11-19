@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-11-19",
+      "slug": "quiet-rebellion-enough",
+      "tags": [
+        "gratitude",
+        "mindset",
+        "philosophy",
+        "attention"
+      ],
+      "conceptSummary": "This essay connects to the 'Gratitude' theme by arguing that it's a quiet, foundational practice of recognizing inherent 'enoughness' rather than a superficial emotion, thereby countering the pervasive cultural pressure for perpetual striving and fostering a deeper sense of contentment."
+    },
+    {
       "date": "2026-11-04",
       "slug": "enduring-return-kindness",
       "tags": [
@@ -321,17 +332,6 @@
         "learning"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the mastery of intentional, skillful deviation, rather than just strict adherence to process."
-    },
-    {
-      "date": "2026-09-18",
-      "slug": "craft-re-reading",
-      "tags": [
-        "craft",
-        "learning",
-        "mindset",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work involves not just acquiring new knowledge, but also the deliberate, iterative process of re-engaging with existing knowledge to deepen understanding and uncover new insights."
     }
   ]
 }
