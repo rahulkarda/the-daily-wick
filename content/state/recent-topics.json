@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-11-20",
+      "slug": "quiet-abundance",
+      "tags": [
+        "gratitude",
+        "attention",
+        "mindset",
+        "foundations"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Gratitude' theme by focusing on recognizing the inherent 'enoughness' in the quiet, ordinary aspects of daily life, rather than waiting for grand events."
+    },
+    {
       "date": "2026-11-19",
       "slug": "quiet-rebellion-enough",
       "tags": [
@@ -321,17 +332,6 @@
         "discipline"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work not as adding new skills, but as the deliberate, conscious process of unmaking and simplifying to reveal the essential core of mastery."
-    },
-    {
-      "date": "2026-09-21",
-      "slug": "deliberate-bend",
-      "tags": [
-        "craft",
-        "design",
-        "mindset",
-        "learning"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the mastery of intentional, skillful deviation, rather than just strict adherence to process."
     }
   ]
 }
