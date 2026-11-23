@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-11-23",
+      "slug": "gift-ordinary",
+      "tags": [
+        "gratitude",
+        "attention",
+        "mindset",
+        "foundations"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Gratitude' theme by focusing on recognizing the inherent 'enoughness' in the quiet, ordinary aspects of daily life, rather than waiting for grand events."
+    },
+    {
       "date": "2026-11-20",
       "slug": "quiet-abundance",
       "tags": [
@@ -320,18 +331,6 @@
         "focus"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work includes the critical discipline of discerning when a piece is 'finished,' thereby preventing over-refinement and preserving the integrity of the work."
-    },
-    {
-      "date": "2026-09-22",
-      "slug": "craft-of-unmaking",
-      "tags": [
-        "craft",
-        "design",
-        "mindset",
-        "learning",
-        "discipline"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work not as adding new skills, but as the deliberate, conscious process of unmaking and simplifying to reveal the essential core of mastery."
     }
   ]
 }
