@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-11-25",
+      "slug": "unacknowledged-gifts",
+      "tags": [
+        "gratitude",
+        "connection",
+        "mindset",
+        "communication"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Gratitude' theme by focusing on the subtle burden of unexpressed appreciation, highlighting that true 'enoughness' includes the completion of the gratitude circuit through outward acknowledgment."
+    },
+    {
       "date": "2026-11-24",
       "slug": "unspoken-gratitude-burden",
       "tags": [
@@ -318,18 +329,6 @@
         "mindset"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the deliberate and controlled exploration of errors to deepen understanding and accelerate mastery, rather than simply avoiding mistakes."
-    },
-    {
-      "date": "2026-09-24",
-      "slug": "deliberate-pause-craft",
-      "tags": [
-        "craft",
-        "discipline",
-        "focus",
-        "mindset",
-        "stillness"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work includes the critical discipline of discerning when and how to pause, thereby enhancing the quality and thoughtfulness of the outcome."
     }
   ]
 }
