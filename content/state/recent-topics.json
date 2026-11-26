@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-11-26",
+      "slug": "quiet-abundance-present",
+      "tags": [
+        "gratitude",
+        "attention",
+        "mindset",
+        "stillness"
+      ],
+      "conceptSummary": "This essay connects to the 'Gratitude' theme by exploring how 'enoughness' is not a static state of having, but a dynamic, present-moment awareness, thereby countering the pervasive cultural pressure for perpetual striving and fostering a deeper sense of contentment."
+    },
+    {
       "date": "2026-11-25",
       "slug": "unacknowledged-gifts",
       "tags": [
@@ -318,17 +329,6 @@
         "design"
       ],
       "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate and skillful act of restraint and subtraction, rather than merely adding more elements."
-    },
-    {
-      "date": "2026-09-28",
-      "slug": "deliberate-error",
-      "tags": [
-        "craft",
-        "learning",
-        "discipline",
-        "mindset"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by reframing the patient pursuit of better work as the deliberate and controlled exploration of errors to deepen understanding and accelerate mastery, rather than simply avoiding mistakes."
     }
   ]
 }
