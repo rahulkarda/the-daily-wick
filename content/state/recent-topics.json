@@ -1,6 +1,17 @@
 {
   "window": [
     {
+      "date": "2026-11-27",
+      "slug": "quiet-permission-enough",
+      "tags": [
+        "gratitude",
+        "mindset",
+        "attention",
+        "stillness"
+      ],
+      "conceptSummary": "This micro-essay connects to the 'Gratitude' theme by redefining 'enoughness' not as an outcome of achievement, but as an active, present-moment recognition of inherent sufficiency, thereby fostering deeper contentment."
+    },
+    {
       "date": "2026-11-26",
       "slug": "quiet-abundance-present",
       "tags": [
@@ -317,18 +328,6 @@
         "philosophy"
       ],
       "conceptSummary": "This essay connects to the 'Friction' theme by arguing that not all friction is bad; some forms of resistance are crucial for building capacity, deepening experience, and clarifying value, countering the modern obsession with total ease."
-    },
-    {
-      "date": "2026-09-30",
-      "slug": "craft-of-restraint",
-      "tags": [
-        "craft",
-        "discipline",
-        "mindset",
-        "communication",
-        "design"
-      ],
-      "conceptSummary": "This essay connects to the 'Craft' theme by emphasizing that the patient pursuit of better work often involves the deliberate and skillful act of restraint and subtraction, rather than merely adding more elements."
     }
   ]
 }
